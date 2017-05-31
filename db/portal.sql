@@ -143,9 +143,9 @@ CREATE TABLE `tbl_blog_post` (
   `user_id` int(11) unsigned DEFAULT NULL,
   `category_id` int(11) unsigned DEFAULT NULL,
   `title` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `description` text COLLATE utf8_bin COMMENT 'خلاصه',
-  `content` text COLLATE utf8_bin COMMENT 'متن کامل',
-  `keyWord` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT 'کلمات کلیدی',
+  `description` text COLLATE utf8_bin COMMENT '',
+  `content` text COLLATE utf8_bin COMMENT '',
+  `keyWord` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '',
   `createDatetime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
@@ -190,7 +190,7 @@ DROP TABLE IF EXISTS `tbl_contact_us`;
 CREATE TABLE `tbl_contact_us` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `phoneNumber` varchar(20) COLLATE utf8_bin DEFAULT NULL COMMENT 'شماره تماس',
+  `phoneNumber` varchar(20) COLLATE utf8_bin DEFAULT NULL COMMENT '',
   `email` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `subject` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `body` text COLLATE utf8_bin,
@@ -201,8 +201,8 @@ CREATE TABLE `tbl_contact_us` (
 -- ----------------------------
 -- Records of tbl_contact_us
 -- ----------------------------
-INSERT INTO `tbl_contact_us` VALUES ('1', 'آرش', '09122335202', 'arash@yahoo.com', 'تست', 0xD985D8AAD986, '2016-02-24 14:21:37');
-INSERT INTO `tbl_contact_us` VALUES ('2', 'آرش', '09122335202', 'arash@yahoo.com', 'تست', 0xD985D8AAD986, '2016-02-27 17:35:00');
+INSERT INTO `tbl_contact_us` VALUES ('1', 'lorem', '09122222222', 'lorem@yahoo.com', 'lorem', 0xD985D8AAD986, '2016-02-24 14:21:37');
+INSERT INTO `tbl_contact_us` VALUES ('2', 'lorem', '09122222222', 'lorem@yahoo.com', 'lorem', 0xD985D8AAD986, '2016-02-27 17:35:00');
 
 -- ----------------------------
 -- Table structure for tbl_faqs
@@ -257,7 +257,7 @@ CREATE TABLE `tbl_opportunity` (
 -- ----------------------------
 -- Records of tbl_opportunity
 -- ----------------------------
-INSERT INTO `tbl_opportunity` VALUES ('1', 'آرش', '09122335202', 'upload/resume/Bu-XIP3kO7ZpGH5Mc5iXZDSDxQSMY5jt.pdf', 'Arash@yahoo.com', '2016-02-24 14:14:49');
+INSERT INTO `tbl_opportunity` VALUES ('1', 'lorem', '09122222222', 'upload/resume/Bu-XIP3kO7ZpGH5Mc5iXZDSDxQSMY5jt.pdf', 'lorem@yahoo.com', '2016-02-24 14:14:49');
 
 -- ----------------------------
 -- Table structure for tbl_order
@@ -278,7 +278,7 @@ CREATE TABLE `tbl_order` (
 -- ----------------------------
 -- Records of tbl_order
 -- ----------------------------
-INSERT INTO `tbl_order` VALUES ('1', '123', 'طراحان صنعت خاورمیانه', '123', '123', '123@123.123', 0xD8B4D8B1D8AD20D9BED8B1D988DA98D98720, '2016-02-24 13:52:47');
+INSERT INTO `tbl_order` VALUES ('1', '123', '123', '123', '123', '123@123.123', 0xD8B4D8B1D8AD20D9BED8B1D988DA98D98720, '2016-02-24 13:52:47');
 
 -- ----------------------------
 -- Table structure for tbl_sample
