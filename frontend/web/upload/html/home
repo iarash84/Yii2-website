@@ -1,0 +1,114 @@
+
+<div class="container">
+    <div class="section">
+
+        <!--   Icon Section   -->
+        <div class="row">
+            <div class="col s12 m4">
+                <img src="/img/support.png" alt="">                <h5 class="center">Lorem ipsum dolor sit amet</h5>
+                <div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab, aliquam cupiditate dignissimos
+                    distinctio in itaque neque perferendis porro possimus quod saepe vero voluptatum! Aut autem
+                    doloremque laudantium neque rerum, soluta?
+                </div>
+                <div>Accusamus aliquam aliquid architecto aut, beatae culpa ex exercitationem expedita harum id
+                    minima natus nesciunt nihil obcaecati odit perferendis quas qui quibusdam quos sit. Aliquam
+                    exercitationem, reiciendis. A, dolore, earum?
+                </div>
+            </div>
+
+            <div class="col s12 m4">
+                <img src="/img/icon-mobile.png" alt="">                <h5 class="center">Lorem ipsum dolor sit amet</h5>
+                <div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab, aliquam cupiditate dignissimos
+                    distinctio in itaque neque perferendis porro possimus quod saepe vero voluptatum! Aut autem
+                    doloremque laudantium neque rerum, soluta?
+                </div>
+                <div>Accusamus aliquam aliquid architecto aut, beatae culpa ex exercitationem expedita harum id
+                    minima natus nesciunt nihil obcaecati odit perferendis quas qui quibusdam quos sit. Aliquam
+                    exercitationem, reiciendis. A, dolore, earum?
+                </div>
+            </div>
+
+            <div class="col s12 m4">
+                <img src="/img/responsive.png" alt="">                <h5 class="center">Lorem ipsum dolor sit amet</h5>
+                <div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab, aliquam cupiditate dignissimos
+                    distinctio in itaque neque perferendis porro possimus quod saepe vero voluptatum! Aut autem
+                    doloremque laudantium neque rerum, soluta?
+                </div>
+                <div>Accusamus aliquam aliquid architecto aut, beatae culpa ex exercitationem expedita harum id
+                    minima natus nesciunt nihil obcaecati odit perferendis quas qui quibusdam quos sit. Aliquam
+                    exercitationem, reiciendis. A, dolore, earum?
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="parallax-container valign-wrapper">
+    <div class="section no-pad-bot">
+        <div class="container">
+            <div class="row center">
+
+                <h2 style="text-align: center; color: red;">
+                    <strong>Lorem ipsum dolor sit amet</strong>
+                </h2>
+                <div class="hr hr-short hr-center avia-builder-el-10 el_before_av_button avia-builder-el-first ">
+<span class="hr-inner ">
+<span class="hr-inner-style"></span>
+</span>
+                </div>
+                <h3 class="header center blue-text blue-lighten-2" style="direction: rtl; text-align: center;">Adipisci beatae, dolores eligendi et exercitationem id impedit neque,.</h3>
+            </div>
+        </div>
+    </div>
+    <div class="parallax"><img src="/img/background2.jpg" alt="Unsplashed background img 2"></div>
+</div>
+
+<div class="container">
+    <div class="section">
+
+        <div class="row">
+            <div class="col s12 center">
+                <img src="/img/logo.png" width="149" height="117" alt="">                <h1 style="text-align: center;">My Company</h1>
+                <p style="text-align: justify;">
+                    <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda eligendi magni pariatur possimus tempora? Adipisci beatae, dolores eligendi et exercitationem id impedit neque, nobis numquam odio porro soluta suscipit ut.</span>
+                    <span>Ad consequuntur culpa doloribus ducimus fugit incidunt ipsam ipsum laboriosam libero, molestiae non nostrum quisquam repellendus saepe sapiente suscipit unde vel voluptatem voluptates voluptatibus. Aliquam dolor ducimus laborum nisi quaerat.</span>
+                    <span>Accusamus accusantium alias, aperiam architecto assumenda atque cupiditate error explicabo facere fugit illo incidunt, ipsa, maxime neque nesciunt nostrum odit perspiciatis quas quia rem reprehenderit sequi sint sunt veritatis voluptates!</span>
+                    <span>Accusantium aliquid commodi debitis dicta distinctio enim eum harum, laudantium, modi necessitatibus nesciunt nobis non odio perferendis porro possimus praesentium sed sequi totam vero! Itaque reprehenderit saepe veritatis voluptas voluptate.</span>
+                    <span>Accusamus doloremque ea et exercitationem incidunt ipsam natus, provident quasi quo sapiente sunt voluptate. Accusantium assumenda consequuntur delectus incidunt ipsum omnis, pariatur quae quis quos, recusandae sequi sunt suscipit veritatis.</span>
+            </div>
+        </div>
+
+        <div class="row">
+            <h5>
+                Technology Project Planning and Management
+            </h5>
+            <div class="row">
+                <div class="col s2" style="margin-top: 20px">
+                    <img src="/img/technologies_1_color.png" width="101" height="26" alt="">                </div>
+                <div class="col s2" style="margin-top: 20px">
+                    <img src="/img/technologies_2_color.png" width="92" height="22" alt="">                </div>
+                <div class="col s2" style="margin-top: 20px">
+                    <img src="/img/technologies_3_color.png" width="55" height="29" alt="">                </div>
+                <div class="col s2">
+                    <img src="/img/technologies_5_color.png" width="64" height="62" alt="">                </div>
+                <div class="col s2">
+                    <img src="/img/technologies_6_color.png" width="36" height="66" alt="">                </div>
+                <div class="col s2">
+                    <img src="/img/technologies_7_color.png" width="73" height="68" alt="">                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="parallax-container valign-wrapper">
+    <div class="section no-pad-bot">
+        <div class="container">
+            <div class="row center">
+
+            </div>
+        </div>
+    </div>
+    <div class="parallax"><img src="/img/background3.jpg" alt="Unsplashed background img 3"></div>
+</div>
