@@ -362,4 +362,4 @@ CREATE TABLE `user` (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('1', 'admin', '3eNTGCsPlG8qtNjs1f6JJoIJNHB2ENbr', '$2y$13$hGF50LVblVTaLs.55TIvB.9DFJpeqnciQN0tKyz7sBV7OZliKZU2O', null, 'arash_pm84@yahoo.com', '10', '1456041729', '1496123006');
+INSERT INTO `user` VALUES ('1', 'admin', '3eNTGCsPlG8qtNjs1f6JJoIJNHB2ENbr', '$2y$13$hGF50LVblVTaLs.55TIvB.9DFJpeqnciQN0tKyz7sBV7OZliKZU2O', null, 'lorem@yahoo.com', '10', '1456041729', '1496123006');
