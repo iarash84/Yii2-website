@@ -3,9 +3,9 @@ return [
     'components' => [
         'db' => [
             'class' => 'yii\db\Connection',
-            'dsn' => 'mysql:host=localhost;dbname=portal',
-            'username' => 'root',
-            'password' => '',
+            'dsn' => sprintf('mysql:host=%s;port=%s;dbname=%s', getenv('DB_HOST') ?: '127.0.0.1', getenv('DB_PORT') ?: '3306', getenv('DB_NAME') ?: 'yii2_website'),
+            'username' => getenv('DB_USER') ?: 'root',
+            'password' => getenv('DB_PASSWORD') !== false ? getenv('DB_PASSWORD') : '',
             'charset' => 'utf8mb4',
         ],
         'mailer' => [
@@ -14,7 +14,7 @@ return [
             // send all mails to a file by default. You have to set
             // 'useFileTransport' to false and configure a transport
             // for the mailer to send real emails.
-            'useFileTransport' => true,
+            'useFileTransport' => filter_var(getenv('MAIL_USE_FILE_TRANSPORT') ?: '1', FILTER_VALIDATE_BOOLEAN),
         ],
     ],
 ];

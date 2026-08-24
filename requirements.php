@@ -49,6 +49,30 @@ if (extension_loaded('gd')) {
  * Adjust requirements according to your application specifics.
  */
 $requirements = array(
+    array(
+        'name' => 'Frontend runtime is writable',
+        'mandatory' => true,
+        'condition' => is_dir(__DIR__ . '/frontend/runtime') && is_writable(__DIR__ . '/frontend/runtime'),
+        'by' => 'Application logs, cache and sessions',
+    ),
+    array(
+        'name' => 'Published assets directory is writable',
+        'mandatory' => true,
+        'condition' => is_dir(__DIR__ . '/frontend/web/assets') && is_writable(__DIR__ . '/frontend/web/assets'),
+        'by' => 'Yii asset manager',
+    ),
+    array(
+        'name' => 'Public upload directory is writable',
+        'mandatory' => true,
+        'condition' => is_dir(__DIR__ . '/frontend/web/upload') && is_writable(__DIR__ . '/frontend/web/upload'),
+        'by' => 'Validated image uploads',
+    ),
+    array(
+        'name' => 'Private resume storage is writable',
+        'mandatory' => true,
+        'condition' => is_dir(__DIR__ . '/storage/resumes') && is_writable(__DIR__ . '/storage/resumes'),
+        'by' => 'Protected resume uploads',
+    ),
     // Database :
     array(
         'name' => 'PDO extension',
@@ -65,7 +89,7 @@ $requirements = array(
     ),
     array(
         'name' => 'PDO MySQL extension',
-        'mandatory' => false,
+        'mandatory' => true,
         'condition' => extension_loaded('pdo_mysql'),
         'by' => 'All DB-related classes',
         'memo' => 'Required for MySQL database.',

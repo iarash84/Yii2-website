@@ -1,6 +1,7 @@
 <?php
-defined('YII_DEBUG') or define('YII_DEBUG', true);
-defined('YII_ENV') or define('YII_ENV', 'dev');
+require(__DIR__ . '/../../common/config/env.php');
+defined('YII_DEBUG') or define('YII_DEBUG', filter_var(getenv('YII_DEBUG') ?: '1', FILTER_VALIDATE_BOOLEAN));
+defined('YII_ENV') or define('YII_ENV', getenv('YII_ENV') ?: 'dev');
 
 require(__DIR__ . '/../../vendor/autoload.php');
 require(__DIR__ . '/../../vendor/yiisoft/yii2/Yii.php');

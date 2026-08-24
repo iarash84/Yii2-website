@@ -1,59 +1,70 @@
-# Yii2 Website
+# وب‌سایت شرکتی مبتنی بر Yii2
 
-An older company website based on the Yii 2 Advanced Project Template, updated
-to run on PHP 8.2 and Yii 2.0.55.
+این پروژه بر پایه Yii 2 Advanced ساخته شده و برای اجرا با PHP 8.2 و
+Yii 2.0.55 به‌روزرسانی شده است.
 
-## Requirements
+## پیش‌نیازها
 
-- PHP 8.2 with `mbstring`, `openssl`, `pdo_mysql`, and `fileinfo`
+- PHP 8.2 به همراه افزونه‌های `mbstring`، `openssl`، `pdo_mysql` و `fileinfo`
 - Composer 2
-- MySQL or MariaDB
+- MySQL یا MariaDB با پشتیبانی از `utf8mb4`
 
-Enabling PHP's `zip` extension is strongly recommended because Composer uses it
-to install distribution archives. With XAMPP, uncomment `extension=zip` in
-`C:\xampp\php\php.ini` and restart the terminal/web server.
+فعال‌کردن افزونه‌های `zip`، `intl` و `gd` نیز توصیه می‌شود. افزونه `gd` برای
+نمایش CAPTCHA لازم است.
 
-## Local setup
+## نصب محلی
 
 ```powershell
 composer install
 php init --env=Development --overwrite=All
 ```
 
-Create the database and load the included snapshot:
+فایل تنظیمات محیطی را بسازید و مقادیر آن را تغییر دهید:
 
 ```powershell
-C:\xampp\mysql\bin\mysql.exe -u root -e "CREATE DATABASE IF NOT EXISTS portal CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
-cmd.exe /d /c "C:\xampp\mysql\bin\mysql.exe --default-character-set=utf8 -u root portal < db\portal.sql"
+Copy-Item .env.example .env
 ```
 
-The development database defaults are in
-`common/config/main-local.php`: database `portal`, user `root`, and an empty
-password. Change that ignored local file if your MySQL credentials differ.
+رمز دیتابیس و رمز مدیر فقط در `.env` قرار می‌گیرند و این فایل وارد Git نمی‌شود.
+دیتابیس خالی را ایجاد کنید:
 
-## Run
+```powershell
+C:\xampp\mysql\bin\mysql.exe -u root -e "CREATE DATABASE yii2_website CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+```
 
-Start the application:
+سپس محیط و دسترسی پوشه‌ها را بررسی و migrationها را اجرا کنید:
+
+```powershell
+php yii install/check
+php yii migrate --interactive=0
+php yii seed
+```
+
+فرمان `seed` تنظیمات پایه، مدیر ارشد و در حالت پیش‌فرض یک نوشته نمونه ایجاد
+می‌کند. برای نصب بدون محتوای نمونه از `php yii seed 0` استفاده کنید.
+
+## اجرا
+
+برنامه را با وب‌سرور داخلی PHP اجرا کنید:
 
 ```powershell
 php yii serve --docroot=frontend/web 127.0.0.1:8080
 ```
 
-- Website: <http://127.0.0.1:8080/>
-- Management: <http://127.0.0.1:8080/admin>
+- سایت: <http://127.0.0.1:8080/>
+- مدیریت: <http://127.0.0.1:8080/admin>
 
-For Apache/XAMPP, point the virtual-host document root at `frontend/web`; do
-not expose the repository root.
+در Apache یا XAMPP باید Document Root روی `frontend/web` تنظیم شود. ریشه مخزن
+نباید به‌صورت عمومی در دسترس وب قرار بگیرد.
 
-## Checks
+## بررسی سلامت نصب
 
 ```powershell
 php requirements.php
-php yii help
+php yii install/check
 composer validate --no-check-publish
 composer audit --locked
 ```
 
-The historical Codeception 2 test integration was removed because it does not
-run on PHP 8.2. The old tests remain under `tests/` as migration material for a
-future test-suite upgrade.
+ساخت دیتابیس صرفاً از طریق migration انجام می‌شود و پروژه هیچ وابستگی‌ای به
+فایل dump قدیمی ندارد.
