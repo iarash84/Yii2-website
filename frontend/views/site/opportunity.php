@@ -1,12 +1,11 @@
 <?php
 
 /* @var $this yii\web\View */
-/* @var $form yii\bootstrap\ActiveForm */
+/* @var $form yii\widgets\ActiveForm */
 /* @var $model \frontend\models\ContactForm */
 
-use kartik\file\FileInput;
 use yii\helpers\Html;
-use yii\bootstrap\ActiveForm;
+use yii\widgets\ActiveForm;
 use yii\captcha\Captcha;
 
 $this->title = Yii::t('app','Job opportunity');;
@@ -34,18 +33,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
             <?= $form->field($model, 'email') ?>
 
-            <?= $form->field($model, 'resume')->widget(FileInput::classname(), [
-                'pluginOptions' => [
-                    'showUpload' => false,
-                    'showCaption' => false,
-                    'previewFileType' => 'any',
-                    'showRemove' => true,
-                    'browseClass' => 'btn btn-info',
-                    'removeClass' => 'btn btn-danger',
-                    'removeIcon' => '<i class="glyphicon glyphicon-trash"></i> '
-                ]
-            ]);
-            ?>
+            <?= $form->field($model, 'resume')->fileInput([
+                'accept' => 'application/pdf',
+                'aria-describedby' => 'resume-help',
+            ])->hint(Yii::t('app', 'Upload a PDF file within the allowed size.'), ['id' => 'resume-help']) ?>
 
 
             <?= $form->field($model, 'verifyCode')->widget(Captcha::className(), [

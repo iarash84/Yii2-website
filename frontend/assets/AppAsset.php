@@ -19,24 +19,12 @@ class AppAsset extends AssetBundle
     public $baseUrl = '@web';
     public $css = [
         'css/fonts.css',
-        'css/style.css',
-        'css/site.css',
+        'css/design-system.css',
     ];
     public $js = [
-        'js/init.js',
-        'js/materialize.js',
+        'js/app.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',
-        'yii\bootstrap\BootstrapAsset',
     ];
-
-    public function init()
-    {
-        array_unshift(
-            $this->css,
-            \Yii::$app->languageManager->isRtl() ? 'css/materialize-rtl.css' : 'css/materialize.css'
-        );
-        parent::init();
-    }
 }

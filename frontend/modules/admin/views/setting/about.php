@@ -1,40 +1,19 @@
 <?php
 
-use yii\bootstrap\Tabs;
 use yii\helpers\Html;
-
-/* @var $this yii\web\View */
-/* @var $model frontend\models\Setting */
+use yii\helpers\HtmlPurifier;
 
 $this->title = Yii::t('app', 'About');
-$this->params['breadcrumbs'][] = Yii::t('app', 'About');
+$this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="setting-update">
-
-    <div class="box box-default">
-        <div class="box-header with-border">
-            <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
-        </div>
-        <div class="box-body">
-
-
-            <?= Tabs::widget([
-                'navType' => 'nav-tabs nav-justified',
-                'items' => [
-                    [
-                        'label' => Yii::t('app' ,'View'),
-                        'content' =>  '<br />'.$model->getLocalizedContent(),
-                        'active' => true
-                    ],
-                    [
-                        'label' => Yii::t('app' ,'Update'),
-                        'content' =>  '<br />'.$this->render('_form', ['model' => $model]),
-                    ],
-                ],
-            ]);
-            ?>
-
-
-        </div>
-    </div>
+<div class="page-header"><h1><?= Html::encode($this->title) ?></h1></div>
+<div class="card-grid admin-panels">
+    <section class="card">
+        <h2><?= Yii::t('app', 'View') ?></h2>
+        <div class="prose"><?= HtmlPurifier::process($model->getLocalizedContent()) ?></div>
+    </section>
+    <section class="card">
+        <h2><?= Yii::t('app', 'Update') ?></h2>
+        <?= $this->render('_form', ['model' => $model]) ?>
+    </section>
 </div>

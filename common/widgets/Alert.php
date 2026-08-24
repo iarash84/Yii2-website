@@ -26,7 +26,7 @@ namespace common\widgets;
  * @author Kartik Visweswaran <kartikv2@gmail.com>
  * @author Alexander Makarov <sam@rmcreative.ru>
  */
-class Alert extends \yii\bootstrap\Widget
+class Alert extends \yii\base\Widget
 {
     /**
      * @var array the alert types configuration for the flash messages.
@@ -65,11 +65,16 @@ class Alert extends \yii\bootstrap\Widget
                     /* assign unique id to each alert box */
                     $this->options['id'] = $this->getId() . '-' . $type . '-' . $i;
 
-                    echo \yii\bootstrap\Alert::widget([
-                        'body' => $message,
-                        'closeButton' => $this->closeButton,
-                        'options' => $this->options,
-                    ]);
+                    echo \yii\helpers\Html::tag('div',
+                        \yii\helpers\Html::tag('span', $message)
+                        . \yii\helpers\Html::button('×', [
+                            'class' => 'alert-close',
+                            'type' => 'button',
+                            'aria-label' => \Yii::t('app', 'Close'),
+                            'data-dismiss-alert' => true,
+                        ]),
+                        array_merge($this->options, ['role' => $type === 'error' ? 'alert' : 'status'])
+                    );
                 }
 
                 $session->removeFlash($type);

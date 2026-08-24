@@ -1,6 +1,5 @@
 <?php
 
-use kartik\icons\Icon;
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
@@ -12,7 +11,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="carousel-index">
     <div class="box box-default">
         <div class="box-header with-border">
-            <h3 class="box-title"><?= Icon::show('plusgames', [], Icon::WHHG).Html::encode($this->title) ?></h3>
+            <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
 
         </div><!-- /.box-header -->
         <div class="box-body">

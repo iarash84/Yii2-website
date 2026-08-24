@@ -3,7 +3,6 @@
 namespace frontend\models;
 
 use common\models\User;
-use kartik\icons\Icon;
 use Yii;
 use yii\helpers\Html;
 
@@ -289,7 +288,7 @@ class Setting extends \yii\db\ActiveRecord
 
         if($model == null || empty($model->content))
             return null;
-        return '<li>'.Html::a(Icon::show('googleplus', [], Icon::WHHG),$model->content,['class'=>"grey-text text-lighten-3"]).'</li>';
+        return '<li>'.Html::a('Google Plus',$model->content,['rel'=>'noopener noreferrer']).'</li>';
     }
 
     /**
@@ -323,7 +322,7 @@ class Setting extends \yii\db\ActiveRecord
 
         if($model == null || empty($model->content))
             return null;
-        return '<li>'.Html::a(Icon::show('twitter', [], Icon::WHHG),$model->content,['class'=>"grey-text text-lighten-3"]).'</li>';
+        return '<li>'.Html::a('Twitter',$model->content,['rel'=>'noopener noreferrer']).'</li>';
     }
 
     /**
@@ -356,7 +355,7 @@ class Setting extends \yii\db\ActiveRecord
 
         if($model == null || empty($model->content))
             return null;
-        return '<li>'.Html::a(Icon::show('linkedin', [], Icon::WHHG),$model->content,['class'=>"grey-text text-lighten-3"]).'</li>';
+        return '<li>'.Html::a('LinkedIn',$model->content,['rel'=>'noopener noreferrer']).'</li>';
     }
 
     /**
@@ -389,7 +388,7 @@ class Setting extends \yii\db\ActiveRecord
 
         if($model == null || empty($model->content))
             return null;
-        return '<li>'.Html::a(Icon::show('moviereelalt', [], Icon::WHHG),$model->content,['class'=>"grey-text text-lighten-3"]).'</li>';
+        return '<li>'.Html::a('Aparat',$model->content,['rel'=>'noopener noreferrer']).'</li>';
     }
 
     /**
@@ -422,7 +421,7 @@ class Setting extends \yii\db\ActiveRecord
 
         if($model == null || empty($model->content))
             return null;
-        return '<li>'.Html::a(Icon::show('yui', [], Icon::WHHG),$model->content,['class'=>"grey-text text-lighten-3"]).'</li>';
+        return '<li>'.Html::a('Telegram',$model->content,['rel'=>'noopener noreferrer']).'</li>';
     }
 
     /**
@@ -455,7 +454,7 @@ class Setting extends \yii\db\ActiveRecord
 
         if($model == null || empty($model->content))
             return null;
-        return '<li>'.Html::a(Icon::show('youtube', [], Icon::WHHG),$model->content,['class'=>"grey-text text-lighten-3"]).'</li>';
+        return '<li>'.Html::a('YouTube',$model->content,['rel'=>'noopener noreferrer']).'</li>';
     }
 
     /**
@@ -488,7 +487,7 @@ class Setting extends \yii\db\ActiveRecord
 
         if($model == null || empty($model->content))
             return null;
-        return '<li>'.Html::a(Icon::show('instagramtwo', [], Icon::WHHG),$model->content,['class'=>"grey-text text-lighten-3"]).'</li>';
+        return '<li>'.Html::a('Instagram',$model->content,['rel'=>'noopener noreferrer']).'</li>';
     }
 
 
@@ -526,7 +525,7 @@ class Setting extends \yii\db\ActiveRecord
 
         if($model == null || empty($model->content))
             return null;
-        return '<li>'.Html::a(Icon::show('facebook', [], Icon::WHHG),$model->content,['class'=>"grey-text text-lighten-3"]).'</li>';
+        return '<li>'.Html::a('Facebook',$model->content,['rel'=>'noopener noreferrer']).'</li>';
     }
 
     /**

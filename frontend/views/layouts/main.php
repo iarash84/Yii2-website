@@ -1,21 +1,22 @@
 <?php
 
-/* @var $this \yii\web\View */
-/* @var $content string */
-
-use kartik\icons\Icon;
+use common\widgets\Alert;
+use frontend\assets\AppAsset;
+use frontend\models\Setting;
 use yii\helpers\Html;
 use yii\widgets\Breadcrumbs;
-use frontend\assets\AppAsset;
-use common\widgets\Alert;
 
 AppAsset::register($this);
-$cookies = Yii::$app->request->cookies;;
-
-Icon::map($this, Icon::WHHG);
-$footerSetting = new \frontend\models\Setting();
 $languageManager = Yii::$app->languageManager;
 $isRtl = $languageManager->isRtl();
+$settings = new Setting();
+$route = Yii::$app->controller->route;
+$isAdmin = Yii::$app->controller->module !== null
+    && Yii::$app->controller->module->id === 'admin';
+$current = static function ($routePrefix) use ($route) {
+    return strpos($route, $routePrefix) === 0 ? 'page' : null;
+};
+
 $this->registerMetaTag(['name' => 'content-language', 'content' => $languageManager->getLocale()]);
 foreach ($languageManager->languages as $code => $language) {
     $this->registerLinkTag([
@@ -34,202 +35,134 @@ $this->registerLinkTag([
     'href' => $languageManager->getLanguageUrl($languageManager->activeLanguage),
 ]);
 ?>
-
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
-
 <html lang="<?= Html::encode($languageManager->getLocale()) ?>" dir="<?= $isRtl ? 'rtl' : 'ltr' ?>">
 <head>
     <meta charset="<?= Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#11685e">
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
 </head>
-<body dir="<?= $isRtl ? 'rtl' : 'ltr' ?>">
+<body>
 <?php $this->beginBody() ?>
-
-<?php
-if(Yii::$app->user->isGuest) { ?>
-    <!--Logout Mode-->
-    <nav class="teal" role="navigation">
-        <div class="nav-wrapper">
-            <?= Html::a(Html::encode($footerSetting->companyName), ['/site/index'], ['class' => 'brand-logo site-brand']) ?>
-            <ul id="nav-mobile" class="right hide-on-med-and-down">
-
-                <li><?= Html::a(Yii::t('app','Login'),['/site/login']) ?></li>
-                <li><?= Html::a(Yii::t('app','Blog'),['/blog/index']) ?></li>
-                <li><?= Html::a(Yii::t('app','Job opportunity'),['/site/opportunity']) ?></li>
-                <li><?= Html::a(Yii::t('app','Order app'),['/site/order']) ?></li>
-                <li><?= Html::a(Yii::t('app','Sample Project'),['/site/sample']) ?></li>
-                <li><?= Html::a(Yii::t('app','Contact'),['/site/contact']) ?></li>
-                <li><?= Html::a(Yii::t('app','About'),['/site/about']) ?></li>
-                <li><?= Html::a(Yii::t('app','Home'),['/site/index']) ?></li>
-                <li class="language-selector">
-                    <?php foreach ($languageManager->languages as $code => $language): ?>
-                        <?= Html::a(Html::encode($language['label']), $languageManager->getLanguageUrl($code), [
-                            'lang' => $language['locale'],
-                            'hreflang' => $language['locale'],
-                            'class' => $code === $languageManager->activeLanguage ? 'active' : null,
-                        ]) ?>
-                    <?php endforeach; ?>
-                </li>
-
-            </ul>
-        </div>
-    </nav>
-
-<?php }else { ?>
-
-    <!-- Login Mode-->
-    <ul id="blogDropdown" class="dropdown-content">
-        <li><?= Html::a(Yii::t('app','Blog'),['/admin/blog/index']) ?></li>
-        <li class="divider"></li>
-        <li><?= Html::a(Yii::t('app','Category'),['/admin/category/index']) ?></li>
-        <li class="divider"></li>
-        <li><?= Html::a(Yii::t('app','New Post'),['/admin/blog/create']) ?></li>
-    </ul>
-
-
-    <ul id="userDropdown" class="dropdown-content">
-        <?php if(Yii::$app->user->can('manageUsers')){ ?>
-            <li><?= Html::a(Yii::t('app','User Management'),['/admin/user/index']) ?></li>
-        <?php } ?>
-        <li class="divider"></li>
-        <li><?= Html::a(Yii::t('app','Change Password'),['/changepass']) ?></li>
-        <li class="divider"></li>
-        <?php if(Yii::$app->user->can('manageUsers')){ ?>
-            <li><?= Html::a(Yii::t('app','Log'),['/admin/user/log']) ?></li>
-            <li class="divider"></li>
-        <?php } ?>
-        <li><?= Html::a(Yii::t('app', 'Logout'), ['/logout'], ['data-method' => 'post']) ?></li>
-    </ul>
-
-    <ul id="settingDropdown" class="dropdown-content">
-        <li><?= Html::a(Yii::t('app','Setting'),['/admin/setting/index']) ?></li>
-        <li class="divider"></li>
-        <li><?= Html::a(Yii::t('app','Home Update'),['/admin/setting/home']) ?></li>
-        <li class="divider"></li>
-        <li><?= Html::a(Yii::t('app','Carousel'),['/admin/carousel/index']) ?></li>
-        <li class="divider"></li>
-        <li><?= Html::a(Yii::t('app','Social Network'),['/admin/setting/social']) ?></li>
-        <li class="divider"></li>
-        <li><?= Html::a(Yii::t('app','System'),['/admin/setting/system']) ?></li>
-    </ul>
-
-
-    <nav class="teal navbar-fixed-top">
-        <div class="nav-wrapper">
-            <?= Html::a(Html::encode($footerSetting->companyName), ['/site/index'], ['class' => 'brand-logo site-brand']) ?>
-            <ul id="nav-mobile" class="right hide-on-med-and-down">
-
-                <li><?= Html::a(Yii::t('app','User Area'). '(' . Yii::$app->user->identity->username . ')','#!',['class'=>'dropdown-button' , 'data-activates'=>'userDropdown']) ?></li>
-                <li><?= Html::a(Yii::t('app','Blog'),'#!',['class'=>'dropdown-button' , 'data-activates'=>'blogDropdown']) ?></li>
-                <li><?= Html::a(Yii::t('app','Setting'),'#!',['class'=>'dropdown-button' , 'data-activates'=>'settingDropdown']) ?></li>
-                <li><?= Html::a(Yii::t('app','Job opportunity'),['/admin/opportunity/index']) ?></li>
-                <li><?= Html::a(Yii::t('app','Order app'),['/admin/order/index']) ?></li>
-                <li><?= Html::a(Yii::t('app','Sample Project'),['/site/sample']) ?></li>
-                <li><?= Html::a(Yii::t('app','Contact'),['/admin/contact/index']) ?></li>
-                <li><?= Html::a(Yii::t('app','About'),['/site/about']) ?></li>
-                <li><?= Html::a(Yii::t('app','Home'),['/site/index']) ?></li>
-
-            </ul>
-        </div>
-    </nav><br /><br /><br />
-
-<?php    }
-if(isset($this->params['breadcrumbs'])){ ?>
-    <div class="container">
-        <?= Breadcrumbs::widget([
-            'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-        ]) ?>
-        <?= Alert::widget() ?>
-        <?= $content ?>
-    </div>
-<?php }else{ echo $content; }?>
-
-<footer class="page-footer teal">
-    <div class="container">
-        <div class="row">
-
-            <div class="col l4 offset-12 s12">
-                <h5 class="white-text"><?= Yii::t('app','Useful links')?></h5>
-                <ul>
-                    <li><?= Html::a(Yii::t('app','About'),['/site/about'],['class'=>"grey-text text-lighten-3"]) ?></li>
-                    <li><?= Html::a(Yii::t('app','Contact'),['/site/contact'],['class'=>"grey-text text-lighten-3"]) ?></li>
-                    <li><?= Html::a(Yii::t('app','Sample Project'),['/site/sample'],['class'=>"grey-text text-lighten-3"]) ?></li>
-                    <li><?= Html::a(Yii::t('app','Blog'),['/blog/index'],['class'=>"grey-text text-lighten-3"]) ?></li>
-                    <li><?= Html::a(Yii::t('app','FAQS'),['/site/faqs'],['class'=>"grey-text text-lighten-3"]) ?></li>
-                    <li><?= Html::a(Yii::t('app','Order app'),['/site/order'],['class'=>"grey-text text-lighten-3"]) ?></li>
-                    <li><?= Html::a(Yii::t('app','Job opportunity'),['/site/opportunity'],['class'=>"grey-text text-lighten-3"]) ?></li>
+<div class="site-shell">
+    <a class="skip-link" href="#main-content"><?= Yii::t('app', 'Skip to main content') ?></a>
+    <header class="site-header">
+        <div class="container header-row">
+            <?= Html::a(
+                Html::tag('span', 'B', ['class' => 'brand-mark', 'aria-hidden' => 'true'])
+                . Html::tag('span', Html::encode($settings->companyName ?: Yii::t('app', 'My Company'))),
+                ['/site/index'],
+                ['class' => 'brand', 'aria-label' => Yii::t('app', 'Home')]
+            ) ?>
+            <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false"
+                    aria-controls="primary-navigation" aria-label="<?= Yii::t('app', 'Open menu') ?>">☰</button>
+            <nav id="primary-navigation" class="primary-nav" data-primary-nav
+                 aria-label="<?= Yii::t('app', 'Main navigation') ?>">
+                <ul class="nav-list">
+                    <?php if (!$isAdmin): ?>
+                        <li><?= Html::a(Yii::t('app', 'Home'), ['/site/index'], ['aria-current' => $route === 'site/index' ? 'page' : null]) ?></li>
+                        <li><?= Html::a(Yii::t('app', 'Blog'), ['/blog/index'], ['aria-current' => $current('blog/')]) ?></li>
+                        <li><?= Html::a(Yii::t('app', 'Sample Project'), ['/site/sample'], ['aria-current' => $current('site/sample')]) ?></li>
+                        <li><?= Html::a(Yii::t('app', 'About'), ['/site/about'], ['aria-current' => $current('site/about')]) ?></li>
+                        <li><?= Html::a(Yii::t('app', 'Contact'), ['/site/contact'], ['aria-current' => $current('site/contact')]) ?></li>
+                        <li><?= Html::a(Yii::t('app', 'Order app'), ['/site/order'], ['class' => 'btn']) ?></li>
+                    <?php endif; ?>
+                    <?php if (Yii::$app->user->isGuest): ?>
+                        <li><?= Html::a(Yii::t('app', 'Login'), ['/site/login']) ?></li>
+                    <?php else: ?>
+                        <li class="nav-menu">
+                            <details>
+                                <summary class="nav-summary"><?= Html::encode(Yii::$app->user->identity->username) ?></summary>
+                                <ul class="nav-submenu">
+                                    <li><?= Html::a(Yii::t('app', 'Admin panel'), ['/admin']) ?></li>
+                                    <li><?= Html::a(Yii::t('app', 'Change Password'), ['/admin/user/change']) ?></li>
+                                    <li><?= Html::a(Yii::t('app', 'Logout'), ['/site/logout'], ['data-method' => 'post']) ?></li>
+                                </ul>
+                            </details>
+                        </li>
+                    <?php endif; ?>
+                    <?php if (!$isAdmin): ?>
+                        <li class="language-nav" aria-label="<?= Yii::t('app', 'Language') ?>">
+                            <?php foreach ($languageManager->languages as $code => $language): ?>
+                                <?= Html::a(Html::encode($language['label']), $languageManager->getLanguageUrl($code), [
+                                    'lang' => $language['locale'],
+                                    'hreflang' => $language['locale'],
+                                    'class' => $code === $languageManager->activeLanguage ? 'active' : null,
+                                    'aria-current' => $code === $languageManager->activeLanguage ? 'true' : null,
+                                ]) ?>
+                            <?php endforeach; ?>
+                        </li>
+                    <?php endif; ?>
                 </ul>
-            </div>
-
-            <div class="col l6 s12">
-                <h5 class="white-text"><?= Yii::t('app' , 'Address')?></h5>
-                <address class="margin-bottom-40 grey-text text-lighten-3">
-                    <?= Icon::show('map-marker', [], Icon::WHHG) ?>
-                    <?= $footerSetting->address ?>
-                    <br>
-                    <?= Icon::show('envelope', [], Icon::WHHG) ?>
-                    <?= Yii::t('app','Postal Code').' : '.$footerSetting->postalCode ?>
-                    <br>
-                    <?= Icon::show('phoneold', [], Icon::WHHG) ?>
-                    <?= Yii::t('app','PhoneNumber').' : '.$footerSetting->phoneNumber ?>
-                    <br>
-                    <?= Icon::show('phonebook', [], Icon::WHHG) ?>
-                    <?= Yii::t('app','FaxNumber').' : '.$footerSetting->faxNumber ?>
-                    <br>
-                    <?= Icon::show('at', [], Icon::WHHG) ?>
-                    <?= Yii::t('app','Email').' : '.$footerSetting->email ?>
-                    <br>
-                    <?= Icon::show('time', [], Icon::WHHG) ?>
-                    <?= Yii::t('app','Working Hours').' : '.$footerSetting->workingHours ?>
-                </address>
-            </div>
+            </nav>
         </div>
-    </div>
-    <div class="footer-copyright">
-        <div class="container">
-            <div class="row">
-                <div class="col s5">
+    </header>
 
-                    <ul class="social-footer list-unstyled list-inline pull-right">
-                        <?= $footerSetting->facebookLink ?>
-                        <?= $footerSetting->twitterLink ?>
-                        <?= $footerSetting->linkedinLink ?>
-                        <?= $footerSetting->googlePlusLink ?>
-                        <?= $footerSetting->aparatLink ?>
-                        <?= $footerSetting->telegramLink ?>
-                        <?= $footerSetting->instagramLink ?>
-                        <?= $footerSetting->youtubeLink ?>
+    <main id="main-content" class="site-main" tabindex="-1">
+        <div class="container <?= $isAdmin ? 'admin-shell' : 'content-shell' ?>">
+            <?php if ($isAdmin): ?>
+                <aside class="admin-sidebar card" aria-label="<?= Yii::t('app', 'Admin panel') ?>">
+                    <h2><?= Yii::t('app', 'Admin panel') ?></h2>
+                    <ul class="admin-nav">
+                        <li><?= Html::a(Yii::t('app', 'Dashboard'), ['/admin']) ?></li>
+                        <li><?= Html::a(Yii::t('app', 'Blog'), ['/admin/blog/index']) ?></li>
+                        <li><?= Html::a(Yii::t('app', 'Category'), ['/admin/category/index']) ?></li>
+                        <li><?= Html::a(Yii::t('app', 'Carousel'), ['/admin/carousel/index']) ?></li>
+                        <li><?= Html::a(Yii::t('app', 'Contact'), ['/admin/contact/index']) ?></li>
+                        <li><?= Html::a(Yii::t('app', 'Order app'), ['/admin/order/index']) ?></li>
+                        <li><?= Html::a(Yii::t('app', 'Job opportunity'), ['/admin/opportunity/index']) ?></li>
+                        <?php if (Yii::$app->user->can('manageSettings')): ?>
+                            <li><?= Html::a(Yii::t('app', 'Setting'), ['/admin/setting/index']) ?></li>
+                        <?php endif; ?>
+                        <?php if (Yii::$app->user->can('manageUsers')): ?>
+                            <li><?= Html::a(Yii::t('app', 'User Management'), ['/admin/user/index']) ?></li>
+                        <?php endif; ?>
                     </ul>
-                </div>
-
-                <div class="col s7">
-                    <p style="padding-right:15px;" rel="home" class="grey-text text-lighten-3">
-                    <p>&copy; 2017 KyiiPortal.com<p>
-                    </p>
-                </div>
-
-            </div>
+                </aside>
+                <section class="admin-content">
+            <?php else: ?>
+                <section>
+            <?php endif; ?>
+                    <?= Breadcrumbs::widget([
+                        'links' => $this->params['breadcrumbs'] ?? [],
+                        'options' => ['class' => 'breadcrumbs', 'aria-label' => Yii::t('app', 'Breadcrumb')],
+                        'homeLink' => ['label' => Yii::t('app', 'Home'), 'url' => ['/site/index']],
+                    ]) ?>
+                    <?= Alert::widget() ?>
+                    <?= $content ?>
+                </section>
         </div>
-    </div>
+    </main>
 
-</footer>
-<button id="scroll-to-top" type="button" aria-label="Scroll to top">&uarr;</button>
-<?php
-$this->registerJs(<<<'JS'
-const scrollButton = document.getElementById('scroll-to-top');
-const toggleScrollButton = () => {
-    scrollButton.classList.toggle('is-visible', window.scrollY > 300);
-};
-window.addEventListener('scroll', toggleScrollButton, {passive: true});
-scrollButton.addEventListener('click', () => window.scrollTo({top: 0, behavior: 'smooth'}));
-toggleScrollButton();
-JS
-);
-?>
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <section>
+                    <h2><?= Html::encode($settings->companyName ?: Yii::t('app', 'My Company')) ?></h2>
+                    <p><?= Html::encode($settings->address) ?></p>
+                    <p class="ltr"><?= Html::encode($settings->email) ?><br><?= Html::encode($settings->phoneNumber) ?></p>
+                </section>
+                <nav aria-label="<?= Yii::t('app', 'Useful links') ?>">
+                    <h2><?= Yii::t('app', 'Useful links') ?></h2>
+                    <ul class="footer-links">
+                        <li><?= Html::a(Yii::t('app', 'About'), ['/site/about']) ?></li>
+                        <li><?= Html::a(Yii::t('app', 'Contact'), ['/site/contact']) ?></li>
+                        <li><?= Html::a(Yii::t('app', 'Blog'), ['/blog/index']) ?></li>
+                        <li><?= Html::a(Yii::t('app', 'FAQS'), ['/site/faqs']) ?></li>
+                        <li><?= Html::a(Yii::t('app', 'Order app'), ['/site/order']) ?></li>
+                        <li><?= Html::a(Yii::t('app', 'Job opportunity'), ['/site/opportunity']) ?></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="footer-bottom">&copy; <?= date('Y') ?> <?= Html::encode($settings->companyName ?: Yii::t('app', 'My Company')) ?></div>
+        </div>
+    </footer>
+</div>
+<button id="scroll-to-top" type="button" aria-label="<?= Yii::t('app', 'Scroll to top') ?>">↑</button>
 <?php $this->endBody() ?>
 </body>
 </html>

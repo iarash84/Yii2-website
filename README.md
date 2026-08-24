@@ -67,6 +67,17 @@ ADMIN_LANGUAGE=fa
 تولید می‌شوند. محتوای ترجمه‌شده بلاگ، دسته‌بندی و تنظیمات متنی نیز در جدول
 `content_translation` ذخیره می‌شود و در صورت نبود ترجمه از زبان fallback استفاده می‌کند.
 
+## سیستم طراحی رابط کاربری
+
+رابط کاربری از design system داخلی پروژه در `frontend/web/css/design-system.css` استفاده
+می‌کند. رنگ‌ها، فاصله‌ها، تایپوگرافی، دکمه‌ها، فرم‌ها، پیام‌ها، جدول‌ها، کارت‌ها،
+وضعیت‌های loading و empty و breakpointهای موبایل با CSS custom property تعریف شده‌اند.
+Asset سراسری سایت Bootstrap یا Materialize را بارگذاری نمی‌کند و رفتارهای navigation،
+alert و loading در فایل کوچک `frontend/web/js/app.js` پیاده‌سازی شده‌اند.
+
+هنگام توسعه صفحه جدید از tokenها و componentهای همین design system استفاده کنید تا
+پشتیبانی responsive، دسترس‌پذیری و RTL/LTR بدون CSS پراکنده حفظ شود.
+
 - سایت: <http://127.0.0.1:8080/>
 - مدیریت: <http://127.0.0.1:8080/admin>
 

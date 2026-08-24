@@ -9,19 +9,10 @@ use yii\helpers\Html;
 
 $this->title = $name;
 ?>
-<div class="site-error">
-
+<div class="card empty-state site-error" role="alert">
+    <span class="error-code" aria-hidden="true"><?= (int) ($exception->statusCode ?? 500) ?></span>
     <h1><?= Html::encode($this->title) ?></h1>
-
-    <div class="alert alert-danger">
-        <?= nl2br(Html::encode($message)) ?>
-    </div>
-
-    <p>
-        The above error occurred while the Web server was processing your request.
-    </p>
-    <p>
-        Please contact us if you think this is a server error. Thank you.
-    </p>
-
+    <p><?= nl2br(Html::encode($message)) ?></p>
+    <p class="text-muted"><?= Yii::t('app', 'Please try again or contact us if the problem continues.') ?></p>
+    <?= Html::a(Yii::t('app', 'Back to home'), ['/site/index'], ['class' => 'btn']) ?>
 </div>

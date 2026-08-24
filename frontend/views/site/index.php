@@ -1,35 +1,48 @@
 <?php
 
-/* @var $this yii\web\View */
-use frontend\models\Carousel as CarouselModel;
+use frontend\models\Carousel;
 use frontend\models\Setting;
-use yii\bootstrap\Carousel;
 use yii\helpers\Html;
+use yii\helpers\HtmlPurifier;
 
-$this->title = Yii::t('app' ,'My Company');
-
-
-$carousels = CarouselModel::find()->orderBy('order_num')->all();
-$items = [];
-foreach($carousels as $item){
-    $items[] = [
-        'content' => Html::a(Html::img($item->image,['style'=>"height:480px;width: 100%;"] ), $item->link),
-        'caption' => '<h3>' . $item->title . '</h3>'.'<p>'.$item->text.'</p>',
-        'options' => [ ],
-    ];
-}
-
+$this->title = Yii::t('app', 'My Company');
+$slides = Carousel::find()->where(['status' => 1])->orderBy('order_num')->all();
+$hero = reset($slides) ?: null;
+$home = Setting::findOne(['type' => 'Home']);
 ?>
+<section class="hero" aria-labelledby="home-hero-title">
+    <?php if ($hero !== null): ?>
+        <?= Html::img($hero->image, ['alt' => '', 'loading' => 'eager']) ?>
+    <?php endif; ?>
+    <div class="hero-content">
+        <p class="text-overline"><?= Yii::t('app', 'Welcome') ?></p>
+        <h1 id="home-hero-title"><?= Html::encode($hero && $hero->title ? $hero->title : $this->title) ?></h1>
+        <?php if ($hero && $hero->text): ?>
+            <?= HtmlPurifier::process($hero->text) ?>
+        <?php else: ?>
+            <p><?= Yii::t('app', 'We build reliable digital products for growing businesses.') ?></p>
+        <?php endif; ?>
+        <div class="hero-actions">
+            <?= Html::a(Yii::t('app', 'Order app'), ['/site/order'], ['class' => 'btn']) ?>
+            <?= Html::a(Yii::t('app', 'Contact'), ['/site/contact'], ['class' => 'btn btn-secondary']) ?>
+        </div>
+    </div>
+</section>
 
-<?= Carousel::widget ( [
-    'items' => $items,
-    'options' => [
-        'style' => 'width:100%;height: 480px', // set the width of the container if you like
-        'dir' => 'ltr'
-    ]
-] );
-?>
+<section class="section" aria-labelledby="services-title">
+    <div class="section-heading">
+        <p class="text-overline"><?= Yii::t('app', 'Our services') ?></p>
+        <h2 id="services-title"><?= Yii::t('app', 'From idea to a dependable product') ?></h2>
+    </div>
+    <div class="card-grid">
+        <article class="card"><span class="card-icon" aria-hidden="true">01</span><h3><?= Yii::t('app', 'Product strategy') ?></h3><p><?= Yii::t('app', 'Clear planning based on your users and business goals.') ?></p></article>
+        <article class="card"><span class="card-icon" aria-hidden="true">02</span><h3><?= Yii::t('app', 'Web development') ?></h3><p><?= Yii::t('app', 'Secure and maintainable implementation for the web.') ?></p></article>
+        <article class="card"><span class="card-icon" aria-hidden="true">03</span><h3><?= Yii::t('app', 'Ongoing support') ?></h3><p><?= Yii::t('app', 'Continuous improvement after the initial release.') ?></p></article>
+    </div>
+</section>
 
-
-<?php $home = Setting::findOne(['type' => 'Home']); ?>
-<?= $home ? \yii\helpers\HtmlPurifier::process($home->getLocalizedContent()) : $this->render('_home') ?>
+<?php if ($home !== null && trim((string) $home->getLocalizedContent()) !== ''): ?>
+    <section class="card prose" aria-label="<?= Yii::t('app', 'About') ?>">
+        <?= HtmlPurifier::process($home->getLocalizedContent()) ?>
+    </section>
+<?php endif; ?>

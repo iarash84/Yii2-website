@@ -1,22 +1,20 @@
 <?php
 
-/* @var $this yii\web\View */
-
-use sjaakp\bandoneon\Bandoneon;
 use yii\helpers\Html;
+use yii\helpers\HtmlPurifier;
 
-
-
-$this->title = Yii::t('app' ,'FAQS');
+$this->title = Yii::t('app', 'FAQS');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="site-about">
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <?php Bandoneon::begin() ?>
-    <?php foreach($models as $model) {  ?>
-        <h4 class="form-control" ><?= $model->question ?></h4>
-        <div class="box-body"><?= $model->respons ?></div>
-    <?php } ?>
-    <?php Bandoneon::end() ?>
+<div class="page-header"><h1><?= Html::encode($this->title) ?></h1></div>
+<div class="faq-list">
+    <?php if (!$models): ?>
+        <div class="card empty-state"><?= Yii::t('app', 'No content is available yet.') ?></div>
+    <?php endif; ?>
+    <?php foreach ($models as $model): ?>
+        <details class="card faq-item">
+            <summary><?= Html::encode($model->question) ?></summary>
+            <div class="faq-answer"><?= HtmlPurifier::process($model->respons) ?></div>
+        </details>
+    <?php endforeach; ?>
 </div>
