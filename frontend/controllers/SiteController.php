@@ -21,6 +21,8 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\web\UploadedFile;
+use common\components\SecureUpload;
+use frontend\components\PublicRateLimiter;
 
 /**
  * Site controller
@@ -47,7 +49,7 @@ class SiteController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    //'logout' => ['post'],
+                    'logout' => ['post'],
                 ],
             ],
         ];
@@ -118,6 +120,9 @@ class SiteController extends Controller
      */
     public function actionOrder()
     {
+        if (Yii::$app->request->isPost) {
+            PublicRateLimiter::enforce('order');
+        }
         $model = new OrderForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->saveOrder()) {
@@ -155,18 +160,16 @@ class SiteController extends Controller
      */
     public function actionOpportunity()
     {
+        if (Yii::$app->request->isPost) {
+            PublicRateLimiter::enforce('opportunity');
+        }
         $model = new OpportunityForm();
+        $model->resume = UploadedFile::getInstance($model, 'resume');
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
             $opportunity= new Opportunity();
-            $model->resume = UploadedFile::getInstance($model, 'resume');
-
             if (!empty($model->resume)) {
-
-                // generate a unique file name
-                $relativePath = 'upload/resume/' . Yii::$app->security->generateRandomString() . "." . $model->resume->extension;
-                $model->resume->saveAs(Yii::getAlias('@webroot/' . $relativePath));
-                $opportunity->resume = $relativePath;
+                $opportunity->resume = SecureUpload::storeResume($model->resume);
             }
 
             $opportunity->name = $model->name;
@@ -208,6 +211,9 @@ class SiteController extends Controller
      */
     public function actionContact()
     {
+        if (Yii::$app->request->isPost) {
+            PublicRateLimiter::enforce('contact');
+        }
         $model = new ContactForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->saveContact()) {
@@ -246,6 +252,10 @@ class SiteController extends Controller
      * @return mixed
      */
     public function actionRequestPasswordReset(){
+
+        if (Yii::$app->request->isPost) {
+            PublicRateLimiter::enforce('password-reset', 3, 900);
+        }
 
         $model = new PasswordResetRequestForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {

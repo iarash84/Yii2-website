@@ -9,6 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
+use common\components\SecureUpload;
 
 /**
  * CarouselController implements the CRUD actions for Carousel model.
@@ -22,6 +23,8 @@ class CarouselController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['post'],
+                    'up' => ['post'],
+                    'down' => ['post'],
                 ],
             ],
         ];
@@ -58,8 +61,7 @@ class CarouselController extends Controller
 
             if (!empty($model->image)) {
                 // generate a unique file name
-                $file_upload_path = 'upload/image/' . Yii::$app->security->generateRandomString() . "." . $model->image->extension;
-                $model->image->saveAs(Yii::getAlias('@webroot/' . $file_upload_path));
+                $file_upload_path = SecureUpload::storeImage($model->image);
                 $model->image =  $file_upload_path;
                 $model->status = "1";
                 $model->user_id = Yii::$app->user->identity->getId();
@@ -99,8 +101,7 @@ class CarouselController extends Controller
                 $model->image = UploadedFile::getInstance($model, 'image');
 
 
-                $file_upload_path = 'upload/image/' . Yii::$app->security->generateRandomString() . "." . $model->image->extension;
-                $model->image->saveAs(Yii::getAlias('@webroot/' . $file_upload_path));
+                $file_upload_path = SecureUpload::storeImage($model->image);
                 $model->image =  $file_upload_path;
             }else{
                 $model->image = $image;

@@ -27,6 +27,7 @@ class User extends ActiveRecord implements IdentityInterface
     const STATUS_ACTIVE = 10;
     public $password;
     public $isSuperAdmin;
+    public $role;
 
     /**
      * @inheritdoc
@@ -55,7 +56,8 @@ class User extends ActiveRecord implements IdentityInterface
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
             ['isSuperAdmin', 'boolean'],
-            [['password'] , 'string','min'=>6, 'max'=>20],
+            ['role', 'in', 'range' => ['editor', 'admin', 'superAdmin']],
+            ['password', \common\validators\PasswordValidator::class, 'skipOnEmpty' => true],
         ];
     }
 
@@ -71,6 +73,7 @@ class User extends ActiveRecord implements IdentityInterface
             'password' => Yii::t('app', 'Password'),
             'created_at' => Yii::t('app', 'Create Date Time'),
             'isSuperAdmin' => Yii::t('app', 'User Management Access'),
+            'role' => Yii::t('app', 'Role'),
         ];
     }
 

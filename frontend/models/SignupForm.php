@@ -13,7 +13,7 @@ class SignupForm extends Model
     public $username;
     public $email;
     public $password;
-    public $isSuperAdmin;
+    public $role = 'editor';
 
     /**
      * @inheritdoc
@@ -26,8 +26,8 @@ class SignupForm extends Model
             ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This username has already been taken.'],
             ['username', 'string', 'min' => 2, 'max' => 255],
 
-            // isSuperAdmin must be a boolean value
-            ['isSuperAdmin', 'boolean'],
+            ['role', 'required'],
+            ['role', 'in', 'range' => ['editor', 'admin', 'superAdmin']],
 
             ['email', 'filter', 'filter' => 'trim'],
             ['email', 'required'],
@@ -36,7 +36,7 @@ class SignupForm extends Model
             ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This email address has already been taken.'],
 
             ['password', 'required'],
-            ['password', 'string', 'min' => 6],
+            ['password', \common\validators\PasswordValidator::class],
         ];
     }
 
@@ -49,7 +49,7 @@ class SignupForm extends Model
             'username' => Yii::t('app', 'User Name'),
             'email' => Yii::t('app', 'Email'),
             'password' => Yii::t('app', 'Password'),
-            'isSuperAdmin' => Yii::t('app', 'User Management Access'),
+            'role' => Yii::t('app', 'Role'),
         ];
     }
 
@@ -69,15 +69,18 @@ class SignupForm extends Model
         $user->email = $this->email;
         $user->setPassword($this->password);
         $user->generateAuthKey();
-        $response = $user->save() ? $user : null;
-
-        if($this->isSuperAdmin) {
-            $authAssignment = new AuthAssignment();
-            $authAssignment->user_id = $user->id;
-            $authAssignment->item_name = "superAdmin";
-            $authAssignment->save();
+        if (!$user->save()) {
+            return null;
         }
-        
-        return $response;
+
+        $role = Yii::$app->authManager->getRole($this->role);
+        if ($role === null) {
+            $user->delete();
+            $this->addError('role', Yii::t('app', 'Invalid role.'));
+            return null;
+        }
+        Yii::$app->authManager->assign($role, $user->id);
+
+        return $user;
     }
 }

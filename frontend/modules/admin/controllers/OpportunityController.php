@@ -80,6 +80,24 @@ class OpportunityController extends Controller
         ]);
     }
 
+    public function actionDownload($id)
+    {
+        $model = $this->findModel($id);
+        $fileName = basename((string) $model->resume);
+        if ($fileName === '' || $fileName !== $model->resume) {
+            throw new NotFoundHttpException(Yii::t('app', 'File not found.'));
+        }
+        $path = Yii::getAlias('@storage/resumes/' . $fileName);
+        if (!is_file($path)) {
+            throw new NotFoundHttpException(Yii::t('app', 'File not found.'));
+        }
+
+        return Yii::$app->response->sendFile($path, 'resume-' . $model->id . '.pdf', [
+            'mimeType' => 'application/pdf',
+            'inline' => false,
+        ]);
+    }
+
     /**
      * Creates a new Opportunity model.
      * If creation is successful, the browser will be redirected to the 'view' page.
@@ -106,7 +124,11 @@ class OpportunityController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        $path = Yii::getAlias('@storage/resumes/' . basename((string) $model->resume));
+        if ($model->delete() && is_file($path)) {
+            unlink($path);
+        }
 
         return $this->redirect(['index']);
     }

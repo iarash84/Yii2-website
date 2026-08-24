@@ -37,7 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
         </div>
         <hr>
-        <?= $model->content ?>
+        <?= \yii\helpers\HtmlPurifier::process($model->content) ?>
         <hr>
     </article>
 

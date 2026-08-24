@@ -67,25 +67,32 @@ class LoginForm extends Model
      */
     public function login()
     {
-
+        if ($this->isRateLimited()) {
+            $this->addError('password', Yii::t('app', 'Too many login attempts. Please try again later.'));
+            return false;
+        }
         $model = new Log();
 
-        $model->user = $this->username;
-        $model->ip = $_SERVER['REMOTE_ADDR'];
-        $model->userAgent = $_SERVER['HTTP_USER_AGENT'];
+        $model->user = mb_substr((string) $this->username, 0, 50);
+        $model->ip = $this->clientIp();
+        $model->userAgent = mb_substr((string) Yii::$app->request->userAgent, 0, 1000);
 
 
         if (!$this->validate()) {
-            $model->password = $this->password;
             $model->success = 0;
             $model->save(false);
+            $this->recordFailedAttempt();
             return false;
         }
 
-        $model->password = '******';
         $model->success = 1;
         $model->save(false);
-        return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600 * 24 * 30 : 0);
+        Yii::$app->cache->delete($this->rateLimitKey());
+        $loggedIn = Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600 * 24 * 30 : 0);
+        if ($loggedIn) {
+            Yii::$app->session->regenerateID(true);
+        }
+        return $loggedIn;
 
     }
 
@@ -101,5 +108,26 @@ class LoginForm extends Model
         }
 
         return $this->_user;
+    }
+
+    private function isRateLimited()
+    {
+        return (int) Yii::$app->cache->get($this->rateLimitKey()) >= 5;
+    }
+
+    private function recordFailedAttempt()
+    {
+        $key = $this->rateLimitKey();
+        Yii::$app->cache->set($key, (int) Yii::$app->cache->get($key) + 1, 900);
+    }
+
+    private function rateLimitKey()
+    {
+        return 'login:' . hash('sha256', mb_strtolower(trim((string) $this->username)) . '|' . $this->clientIp());
+    }
+
+    private function clientIp()
+    {
+        return mb_substr((string) Yii::$app->request->userIP, 0, 45);
     }
 }

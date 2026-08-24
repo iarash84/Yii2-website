@@ -32,4 +32,4 @@ foreach($carousels as $item){
 
 
 <?php $home = Setting::findOne(['type' => 'Home']); ?>
-<?= $home ? $home->content : $this->render('_home') ?>
+<?= $home ? \yii\helpers\HtmlPurifier::process($home->content) : $this->render('_home') ?>

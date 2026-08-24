@@ -40,11 +40,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <?= Html::a('<span class="glyphicon glyphicon-arrow-up"></span>', ['/admin/carousel/up', 'id' => $item->primaryKey], [
                                         'title' => Yii::t('app', 'Move up'),
                                         'class' => 'btn btn-default move-up',
+                                        'data-method' => 'post',
                                     ]); ?>
 
                                     <?= Html::a('<span class="glyphicon glyphicon-arrow-down"></span>', ['/admin/carousel/down', 'id' => $item->primaryKey], [
                                         'title' => Yii::t('app', 'Move down'),
                                         'class' => 'btn btn-default move-down',
+                                        'data-method' => 'post',
                                     ]); ?>
 
                                     <?= Html::a('<span class="glyphicon glyphicon-pencil"></span>', ['/admin/carousel/update', 'id' => $item->primaryKey], [

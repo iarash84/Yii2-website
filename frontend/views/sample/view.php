@@ -43,7 +43,7 @@ use yii\helpers\Html;
                     <b ><?= $model->title ?></b>
 
                     <p style="text-align: justify;">
-                        <?= $model->content ?>
+                        <?= \yii\helpers\HtmlPurifier::process($model->content) ?>
                     </p>
                 </div>
                 <div class="card-action">

@@ -45,7 +45,7 @@ class ResetPasswordForm extends Model
     {
         return [
             ['password', 'required'],
-            ['password', 'string', 'min' => 6],
+            ['password', \common\validators\PasswordValidator::class],
         ];
     }
 
@@ -58,6 +58,7 @@ class ResetPasswordForm extends Model
     {
         $user = $this->_user;
         $user->setPassword($this->password);
+        $user->generateAuthKey();
         $user->removePasswordResetToken();
 
         return $user->save(false);

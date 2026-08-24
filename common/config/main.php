@@ -12,6 +12,11 @@ return [
         'session' => [
             'class' => 'yii\web\Session',
             'savePath' => '@runtime',
+            'cookieParams' => [
+                'httpOnly' => true,
+                'sameSite' => 'Lax',
+                'secure' => YII_ENV_PROD,
+            ],
         ],
     ],
 ];

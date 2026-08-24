@@ -64,15 +64,17 @@ if(Yii::$app->user->isGuest) { ?>
 
 
     <ul id="userDropdown" class="dropdown-content">
-        <?php if(Yii::$app->user->can('usersManagement')){ ?>
+        <?php if(Yii::$app->user->can('manageUsers')){ ?>
             <li><?= Html::a(Yii::t('app','User Management'),['/admin/user/index']) ?></li>
         <?php } ?>
         <li class="divider"></li>
         <li><?= Html::a(Yii::t('app','Change Password'),['/changepass']) ?></li>
         <li class="divider"></li>
-        <li><?= Html::a(Yii::t('app','Log'),['/admin/user/log']) ?></li>
-        <li class="divider"></li>
-        <li><?= Html::a(Yii::t('app', 'Logout') ,['/logout']) ?></li>
+        <?php if(Yii::$app->user->can('manageUsers')){ ?>
+            <li><?= Html::a(Yii::t('app','Log'),['/admin/user/log']) ?></li>
+            <li class="divider"></li>
+        <?php } ?>
+        <li><?= Html::a(Yii::t('app', 'Logout'), ['/logout'], ['data-method' => 'post']) ?></li>
     </ul>
 
     <ul id="settingDropdown" class="dropdown-content">

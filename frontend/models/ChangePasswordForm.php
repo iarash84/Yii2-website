@@ -27,7 +27,7 @@ class ChangePasswordForm extends Model
             //[['oldPassword, newPassword, newPassword'], 'required'],
             [['oldPassword'], 'findPasswords', 'skipOnEmpty' => false, 'skipOnError' => false],
             [['newPassword'], 'checkPasswords', 'skipOnEmpty' => false, 'skipOnError' => false],
-            [['newPassword'] , 'string','min'=>6, 'max'=>20],
+            ['newPassword', \common\validators\PasswordValidator::class],
             ['repeatPassword', 'compare', 'compareAttribute'=>'newPassword']
         ];
     }

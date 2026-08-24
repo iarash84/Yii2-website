@@ -19,8 +19,10 @@ use yii\bootstrap\ActiveForm;
 
     <?= $form->field($model, 'password')->passwordInput() ?>
 
-    <?= $form->field($model, 'isSuperAdmin')->checkbox([
-        'template' => "<div>{input} {label}</div>",
+    <?= $form->field($model, 'role')->dropDownList([
+        'editor' => Yii::t('app', 'Editor'),
+        'admin' => Yii::t('app', 'Admin'),
+        'superAdmin' => Yii::t('app', 'Super Admin'),
     ]) ?>
 
     <div class="form-group">

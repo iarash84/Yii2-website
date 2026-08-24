@@ -31,7 +31,13 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'name',
             'phoneNumber',
-            'resume',
+            [
+                'attribute' => 'resume',
+                'format' => 'raw',
+                'value' => $model->resume
+                    ? \yii\helpers\Html::a(Yii::t('app', 'Download resume'), ['download', 'id' => $model->id])
+                    : null,
+            ],
             'email:email',
             'createDateTime',
         ],

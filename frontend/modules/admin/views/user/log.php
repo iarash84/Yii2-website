@@ -35,12 +35,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => 'yii\grid\DataColumn',
                 'headerOptions' => ['style'=>'text-align:center;'],
                 'contentOptions' => ['style'=>'text-align:center;'],
-                'attribute' => 'password'
-            ],
-            [
-                'class' => 'yii\grid\DataColumn',
-                'headerOptions' => ['style'=>'text-align:center;'],
-                'contentOptions' => ['style'=>'text-align:center;'],
                 'attribute' => 'ip'
             ],
             [

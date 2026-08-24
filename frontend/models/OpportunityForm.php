@@ -24,7 +24,8 @@ class OpportunityForm extends Model
         return [
             // name, email, subject and body are required
             [['name', 'email'], 'required'],
-            [['resume'], 'file', 'extensions' => 'pdf'],
+            [['resume'], 'file', 'extensions' => ['pdf'], 'mimeTypes' => ['application/pdf'],
+                'maxSize' => 5 * 1024 * 1024, 'checkExtensionByMimeType' => true],
             // email has to be a valid email address
             ['email', 'email'],
             ['email', 'filter', 'filter' => 'trim'],

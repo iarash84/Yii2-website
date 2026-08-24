@@ -9,7 +9,7 @@ $params = array_merge(
 return [
     'id' => 'app-frontend',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log'],
+    'bootstrap' => ['log', 'frontend\components\SecurityHeaders'],
     'language' => 'fa_IR',
     'sourceLanguage' => 'en_US',
     'controllerNamespace' => 'frontend\controllers',
@@ -19,6 +19,9 @@ return [
         ],
     ],
     'components' => [
+        'request' => [
+            'enableCsrfValidation' => true,
+        ],
         'i18n' => [
             'translations' => [
                 'app*' => [
@@ -31,6 +34,12 @@ return [
         'user' => [
             'identityClass' => 'common\models\User',
             'enableAutoLogin' => true,
+            'identityCookie' => [
+                'name' => '_identity',
+                'httpOnly' => true,
+                'sameSite' => 'Lax',
+                'secure' => YII_ENV_PROD,
+            ],
         ],
         'authManager' => [
             'class' => 'yii\rbac\DbManager',

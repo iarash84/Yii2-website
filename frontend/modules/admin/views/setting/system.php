@@ -9,8 +9,8 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="setting-system">
 
     <div class="form-group" style="padding: 10px">
-        <?= Html::a('<i class="glyphicon glyphicon-flash"></i>'. Yii::t('app', 'Flush cache') , ['/admin/setting/flush'], ['class' => 'btn btn-info', 'style' => 'margin : 10px']) ?>
-        <?= Html::a('<i class="glyphicon glyphicon-trash"></i>'. Yii::t('app', 'Clear assets') , ['/admin/setting/clear'], ['class' => 'btn btn-primary' , 'style' => 'margin : 10px']) ?>
+        <?= Html::a('<i class="glyphicon glyphicon-flash"></i>'. Yii::t('app', 'Flush cache') , ['/admin/setting/flush'], ['class' => 'btn btn-info', 'style' => 'margin : 10px', 'data-method' => 'post']) ?>
+        <?= Html::a('<i class="glyphicon glyphicon-trash"></i>'. Yii::t('app', 'Clear assets') , ['/admin/setting/clear'], ['class' => 'btn btn-primary' , 'style' => 'margin : 10px', 'data-method' => 'post']) ?>
 
     </div>
 

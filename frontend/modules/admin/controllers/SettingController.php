@@ -12,6 +12,7 @@ use frontend\models\Setting;
 use yii\filters\AccessControl;
 use yii\helpers\FileHelper;
 use yii\web\Controller;
+use yii\filters\VerbFilter;
 
 /**
  * SettingController implements the CRUD actions for Setting model.
@@ -30,7 +31,14 @@ class SettingController extends Controller
                         'roles' => ['@'],
                     ],
                 ],
-            ]
+            ],
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'flush' => ['post'],
+                    'clear' => ['post'],
+                ],
+            ],
         ];
     }
 

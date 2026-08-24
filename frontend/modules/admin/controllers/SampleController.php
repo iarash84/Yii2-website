@@ -10,6 +10,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
+use common\components\SecureUpload;
 
 /**
  * SampleController implements the CRUD actions for Sample model.
@@ -28,7 +29,13 @@ class SampleController extends Controller
                         'roles' => ['@'],
                     ],
                 ],
-            ]
+            ],
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'delete' => ['post'],
+                ],
+            ],
         ];
     }
 
@@ -44,8 +51,7 @@ class SampleController extends Controller
 
         if (!empty($model->image)) {
 
-            $file_upload_path = 'upload/image/' . Yii::$app->security->generateRandomString() . "." . $model->image->extension;
-            $model->image->saveAs(Yii::getAlias('@webroot/' . $file_upload_path));
+            $file_upload_path = SecureUpload::storeImage($model->image);
             $model->user_id = Yii::$app->user->identity->getId();
             if ($model->load(Yii::$app->request->post())) {
 
@@ -85,8 +91,7 @@ class SampleController extends Controller
                 if (!empty($image) && file_exists(Yii::getAlias('@webroot/' . $image)))
                     unlink(Yii::getAlias('@webroot/' . $image));
 
-                $file_upload_path = 'upload/image/' . Yii::$app->security->generateRandomString() . "." . $model->image->extension;
-                $model->image->saveAs(Yii::getAlias('@webroot/' . $file_upload_path));
+                $file_upload_path = SecureUpload::storeImage($model->image);
 
                 $model->image = $file_upload_path;
             }else{

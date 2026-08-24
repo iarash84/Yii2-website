@@ -17,7 +17,7 @@ use yii\helpers\Html;
             </div>
         </div>
         <hr>
-        <?= $model->description ?>
+        <?= \yii\helpers\HtmlPurifier::process($model->description) ?>
         <p class="text-right">
             <?= Html::a(Yii::t('app','continue reading...'),['blog/view','id' => $model->id, 'subject' => str_replace(' ','_',trim($model->title))],['class'=>'text-right']); ?>
         </p>

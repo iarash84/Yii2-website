@@ -9,7 +9,6 @@ use Yii;
  *
  * @property string $id
  * @property string $user
- * @property string $password
  * @property integer $success
  * @property string $ip
  * @property string $userAgent
@@ -35,8 +34,7 @@ class Log extends \yii\db\ActiveRecord
             [['userAgent'], 'string'],
             [['createDateTime'], 'safe'],
             [['user'], 'string', 'max' => 50],
-            [['password'], 'string', 'max' => 100],
-            [['ip'], 'string', 'max' => 20]
+            [['ip'], 'string', 'max' => 45]
         ];
     }
 
@@ -48,7 +46,6 @@ class Log extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'user' => Yii::t('app', 'User'),
-            'password' => Yii::t('app', 'Password'),
             'success' => Yii::t('app', 'Success'),
             'ip' => Yii::t('app', 'Ip'),
             'userAgent' => Yii::t('app', 'User Agent'),
