@@ -165,6 +165,9 @@ class SettingController extends Controller
             $setting->content = $model->pageContent;
             $setting->save();
             $setting->saveTranslations(Yii::$app->request->post('translations', []));
+            Yii::$app->session->setFlash('success', Yii::t('app', 'Thank you! Update successfully completed!'));
+
+            return $this->redirect(['home']);
         } else {
             $model->pageName = "home";
             $model->pageContent = $setting ? $setting->content : '';
@@ -187,7 +190,7 @@ class SettingController extends Controller
     {
         Yii::$app->cache->flush();
         Yii::$app->session->setFlash('success', Yii::t('app', 'Cache flushed'));
-        return $this->render('system');
+        return $this->redirect(['system']);
     }
 
     public function actionClear()
@@ -202,7 +205,7 @@ class SettingController extends Controller
             }
         }
         Yii::$app->session->setFlash('success', Yii::t('app', 'Assets cleared'));
-        return $this->render('system');
+        return $this->redirect(['system']);
     }
 
 

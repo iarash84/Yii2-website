@@ -39,4 +39,24 @@ class LocalizationTest extends DatabaseTestCase
         self::assertSame('اخبار', $category->getLocalized('title'));
         self::assertSame('اخبار', $category->getLocalized('title', 'de'));
     }
+
+    public function testAdminSettingPagesHavePersianTranslations(): void
+    {
+        Yii::$app->languageManager->activate('fa');
+
+        $messages = [
+            'Home Update',
+            'Homepage content',
+            'System',
+            'System tools',
+            'Flush cache',
+            'Clear assets',
+            'Cache flushed',
+            'Assets cleared',
+        ];
+
+        foreach ($messages as $message) {
+            self::assertNotSame($message, Yii::t('app', $message));
+        }
+    }
 }

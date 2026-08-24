@@ -148,6 +148,23 @@ return [
     'Portfolio items will be displayed here after they are added.' => 'پس از افزودن نمونه‌کار، پروژه‌ها در این بخش نمایش داده می‌شوند.',
     'View project' => 'مشاهده پروژه',
     'General settings' => 'تنظیمات عمومی',
+    'Home Update' => 'ویرایش صفحه اصلی',
+    'Homepage content' => 'محتوای صفحه اصلی',
+    'Manage the content displayed below the homepage hero section.' => 'محتوایی را که زیر بخش معرفی صفحه اصلی نمایش داده می‌شود مدیریت کنید.',
+    'Default language content' => 'محتوای زبان پیش‌فرض',
+    'Edit the primary content first, then complete the available translations.' => 'ابتدا محتوای اصلی را ویرایش کنید و سپس ترجمه‌های زبان‌های دیگر را تکمیل کنید.',
+    'System' => 'سیستم',
+    'System tools' => 'ابزارهای سیستم',
+    'Safely maintain temporary files and generated resources.' => 'فایل‌های موقت و منابع تولیدشده را با اطمینان مدیریت کنید.',
+    'Application cache' => 'حافظه پنهان برنامه',
+    'Remove cached application data so fresh values are generated on the next request.' => 'داده‌های ذخیره‌شده موقت را پاک کنید تا در درخواست بعدی اطلاعات تازه تولید شود.',
+    'Flush cache' => 'پاک‌سازی کش',
+    'Generated assets' => 'فایل‌های تولیدشده',
+    'Delete published CSS and JavaScript copies. They will be rebuilt automatically.' => 'نسخه‌های منتشرشده CSS و JavaScript را حذف کنید؛ این فایل‌ها به‌صورت خودکار دوباره ساخته می‌شوند.',
+    'Clear assets' => 'پاک‌سازی فایل‌های تولیدشده',
+    'Are you sure you want to clear generated assets?' => 'آیا از پاک‌سازی فایل‌های تولیدشده اطمینان دارید؟',
+    'Cache flushed' => 'کش با موفقیت پاک‌سازی شد.',
+    'Assets cleared' => 'فایل‌های تولیدشده با موفقیت پاک‌سازی شدند.',
 
 
 ];
