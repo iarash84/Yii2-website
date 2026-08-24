@@ -51,7 +51,7 @@
     },
     "scripts": {
         "test:prepare": "php tests/bin/install-test.php --keep",
-        "test": "phpunit --configuration phpunit.xml",
+        "test": "phpunit --configuration phpunit.xml.dist",
         "test:install": "php tests/bin/install-test.php",
         "lint": "php tests/bin/php-lint.php",
         "style": "phpcs --standard=phpcs.xml",
