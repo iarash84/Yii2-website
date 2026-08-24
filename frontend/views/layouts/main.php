@@ -142,6 +142,7 @@ $this->registerLinkTag([
                             <li><?= Html::a(Icon::show('posts') . Yii::t('app', 'Category'), ['/admin/category/index'], ['aria-current' => $current('admin/category')]) ?></li>
                             <li><?= Html::a(Icon::show('briefcase') . Yii::t('app', 'Sample Project'), ['/admin/sample/index'], ['aria-current' => $current('admin/sample')]) ?></li>
                             <li><?= Html::a(Icon::show('image') . Yii::t('app', 'Carousel'), ['/admin/carousel/index'], ['aria-current' => $current('admin/carousel')]) ?></li>
+                            <li><?= Html::a(Icon::show('posts') . Yii::t('app', 'FAQ management'), ['/admin/faqs/index'], ['aria-current' => $current('admin/faqs')]) ?></li>
                         <?php endif; ?>
                         <?php if (Yii::$app->user->can('manageMenus')): ?>
                             <li><?= Html::a(Icon::show('menu') . Yii::t('app', 'Menu management'), ['/admin/menu/index'], ['aria-current' => $current('admin/menu')]) ?></li>
@@ -165,7 +166,11 @@ $this->registerLinkTag([
                             <li><?= Html::a(Icon::show('posts') . Yii::t('app', 'About'), ['/admin/setting/about'], ['aria-current' => $route === 'admin/setting/about' ? 'page' : null]) ?></li>
                             <li><?= Html::a(Icon::show('external') . Yii::t('app', 'Social Network'), ['/admin/setting/social'], ['aria-current' => $route === 'admin/setting/social' ? 'page' : null]) ?></li>
                             <li><?= Html::a(Icon::show('settings') . Yii::t('app', 'System'), ['/admin/setting/system'], ['aria-current' => $route === 'admin/setting/system' ? 'page' : null]) ?></li>
+                            <li><?= Html::a(Icon::show('external') . Yii::t('app', 'Email settings'), ['/admin/setting/email'], ['aria-current' => $route === 'admin/setting/email' ? 'page' : null]) ?></li>
                         <?php endif; ?>
+                        <?php if (Yii::$app->user->can('viewAudit')): ?><li><?= Html::a(Icon::show('posts') . Yii::t('app', 'Admin activity'), ['/admin/audit/index'], ['aria-current' => $current('admin/audit')]) ?></li><?php endif; ?>
+                        <?php if (Yii::$app->user->can('exportData')): ?><li><?= Html::a(Icon::show('arrow-down') . Yii::t('app', 'Data export'), ['/admin/export/index'], ['aria-current' => $current('admin/export')]) ?></li><?php endif; ?>
+                        <?php if (Yii::$app->user->can('manageBackup')): ?><li><?= Html::a(Icon::show('settings') . Yii::t('app', 'Backup and restore'), ['/admin/backup/index'], ['aria-current' => $current('admin/backup')]) ?></li><?php endif; ?>
                         <?php if (Yii::$app->user->can('manageUsers')): ?>
                             <li><?= Html::a(Icon::show('users') . Yii::t('app', 'User Management'), ['/admin/user/index'], ['aria-current' => $current('admin/user')]) ?></li>
                         <?php endif; ?>

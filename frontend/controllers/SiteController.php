@@ -23,6 +23,7 @@ use yii\filters\AccessControl;
 use yii\web\UploadedFile;
 use common\components\SecureUpload;
 use frontend\components\PublicRateLimiter;
+use frontend\services\NotificationService;
 
 /**
  * Site controller
@@ -122,6 +123,7 @@ class SiteController extends Controller
         $model = new OrderForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->saveOrder()) {
+                NotificationService::formSubmitted('order', $model->attributes);
                 Yii::$app->session->setFlash('success', Yii::t('app','Thank you for your order. We will respond to you as soon as possible.'));
             } else {
                 Yii::$app->session->setFlash('error', Yii::t('app','There was an error when adding your contact.'));
@@ -172,6 +174,7 @@ class SiteController extends Controller
             $opportunity->email = $model->email;
             $opportunity->phoneNumber = $model->phoneNumber;
             $opportunity->save();
+            NotificationService::formSubmitted('opportunity', $model->attributes);
             Yii::$app->session->setFlash('success', Yii::t('app', 'Your resume uploaded successfully. We will respond to you as soon as possible.'));
 
             return $this->refresh();
@@ -196,7 +199,7 @@ class SiteController extends Controller
      */
     public function actionFaqs()
     {
-        $models = Faqs::find()->all();
+        $models = Faqs::find()->where(['status' => 1])->orderBy(['sort_order' => SORT_ASC, 'id' => SORT_ASC])->all();
         return $this->render('faqs', ['models' => $models]);
     }
 
@@ -213,6 +216,7 @@ class SiteController extends Controller
         $model = new ContactForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->saveContact()) {
+                NotificationService::formSubmitted('contact', $model->attributes);
                 Yii::$app->session->setFlash('success', Yii::t('app','Thank you for contacting us. We will respond to you as soon as possible.'));
             } else {
                 Yii::$app->session->setFlash('error', 'There was an error when adding your contact.');

@@ -15,6 +15,8 @@ use Yii;
  */
 class Faqs extends \yii\db\ActiveRecord
 {
+    use \frontend\models\traits\TranslatableContent;
+    public function translatedAttributes() { return ['question', 'respons']; }
     /**
      * @inheritdoc
      */
@@ -29,7 +31,8 @@ class Faqs extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['userId'], 'integer'],
+            [['question', 'respons'], 'required'],
+            [['userId', 'status', 'sort_order'], 'integer'],
             [['respons'], 'string'],
             [['createDateTime'], 'safe'],
             [['question'], 'string', 'max' => 150]
@@ -47,6 +50,8 @@ class Faqs extends \yii\db\ActiveRecord
             'question' => Yii::t('app', 'Question'),
             'respons' => Yii::t('app', 'Respons'),
             'createDateTime' => Yii::t('app', 'Create Date Time'),
+            'status' => Yii::t('app', 'Published'),
+            'sort_order' => Yii::t('app', 'Display order'),
         ];
     }
 }

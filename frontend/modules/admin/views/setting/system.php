@@ -27,6 +27,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 'data-method' => 'post',
             ]) ?>
         </article>
+        <article class="system-tool-card card">
+            <span class="card-icon"><?= Icon::show('settings') ?></span><h2><?= Yii::t('app', 'Maintenance mode') ?></h2><p class="text-muted"><?= Yii::t('app', 'Temporarily close public pages while administrators retain access.') ?></p>
+            <?= Html::beginForm(['/admin/setting/maintenance'], 'post') ?>
+            <label><?= Html::checkbox('enabled', filter_var(\frontend\models\SystemSetting::getValue('maintenance_enabled', '0'), FILTER_VALIDATE_BOOLEAN)) ?> <?= Yii::t('app','Enable maintenance mode') ?></label>
+            <?= Html::textarea('message', \frontend\models\SystemSetting::getValue('maintenance_message'), ['class'=>'form-control','rows'=>3,'placeholder'=>Yii::t('app','Maintenance message')]) ?>
+            <div class="form-actions"><?= Html::submitButton(Yii::t('app','Save'), ['class'=>'btn']) ?></div><?= Html::endForm() ?>
+        </article>
 
         <article class="system-tool-card system-tool-card-warning card">
             <span class="card-icon"><?= Icon::show('delete') ?></span>

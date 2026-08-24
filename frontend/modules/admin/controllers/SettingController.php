@@ -9,6 +9,8 @@ use frontend\models\HtmlForm;
 use frontend\models\SocialForm;
 use Yii;
 use frontend\models\Setting;
+use frontend\models\EmailSettingsForm;
+use frontend\models\SystemSetting;
 use yii\filters\AccessControl;
 use yii\helpers\FileHelper;
 use yii\web\Controller;
@@ -37,6 +39,7 @@ class SettingController extends Controller
                 'actions' => [
                     'flush' => ['post'],
                     'clear' => ['post'],
+                    'maintenance' => ['post'],
                 ],
             ],
         ];
@@ -183,6 +186,26 @@ class SettingController extends Controller
     public function actionSystem()
     {
         return $this->render('system');
+    }
+
+    public function actionEmail()
+    {
+        $model = new EmailSettingsForm();
+        $model->loadSettings();
+        if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->saveSettings()) {
+            Yii::$app->session->setFlash('success', Yii::t('app', 'Email settings saved.'));
+            return $this->redirect(['email']);
+        }
+        return $this->render('email', ['model' => $model]);
+    }
+
+    public function actionMaintenance()
+    {
+        SystemSetting::put('maintenance_enabled', Yii::$app->request->post('enabled', '0'));
+        SystemSetting::put('maintenance_message', trim((string) Yii::$app->request->post('message')));
+        Yii::$app->cache->flush();
+        Yii::$app->session->setFlash('success', Yii::t('app', 'Maintenance settings saved.'));
+        return $this->redirect(['system']);
     }
 
 
