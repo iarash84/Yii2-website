@@ -33,6 +33,12 @@ return [
         'languageBootstrap' => [
             'class' => 'frontend\components\LanguageBootstrap',
         ],
+        'formatter' => [
+            'class' => 'frontend\components\LocalizedFormatter',
+            'dateFormat' => 'php:Y/m/d',
+            'datetimeFormat' => 'php:Y/m/d H:i',
+            'timeFormat' => 'php:H:i',
+        ],
         'request' => [
             'enableCsrfValidation' => true,
         ],

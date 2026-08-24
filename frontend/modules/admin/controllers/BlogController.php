@@ -7,6 +7,7 @@ use frontend\models\Category;
 use Yii;
 use frontend\models\Blog;
 use frontend\models\BlogSearch;
+use frontend\models\BlogTag;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\helpers\Url;
@@ -76,6 +77,7 @@ class BlogController extends Controller
             'searchModel' => $searchModel,
             'categoryModels'=>$categoryModels,
             'dataProvider' => $dataProvider,
+            'tagModels' => BlogTag::find()->orderBy(['name' => SORT_ASC])->all(),
         ]);
     }
 
@@ -112,6 +114,7 @@ class BlogController extends Controller
             'searchModel' => $searchModel,
             'categoryModels'=>$categoryModels,
             'dataProvider' => $dataProvider,
+            'tagModels' => BlogTag::find()->orderBy(['name' => SORT_ASC])->all(),
         ]);
     }
 
@@ -128,7 +131,8 @@ class BlogController extends Controller
         if ($model->load(Yii::$app->request->post())) {
 
             $model->user_id = Yii::$app->user->identity->getId();
-            if ($model->save() && $model->saveTranslations(Yii::$app->request->post('translations', []))) {
+            if ($model->save() && $model->syncTags($model->hashtags)
+                && $model->saveTranslations(Yii::$app->request->post('translations', []))) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
@@ -155,7 +159,7 @@ class BlogController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()
+        if ($model->load(Yii::$app->request->post()) && $model->save() && $model->syncTags($model->hashtags)
             && $model->saveTranslations(Yii::$app->request->post('translations', []))) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {

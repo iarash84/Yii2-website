@@ -40,6 +40,7 @@ class SettingController extends Controller
                     'flush' => ['post'],
                     'clear' => ['post'],
                     'maintenance' => ['post'],
+                    'date-format' => ['post'],
                 ],
             ],
         ];
@@ -203,6 +204,18 @@ class SettingController extends Controller
         SystemSetting::put('maintenance_message', trim((string) Yii::$app->request->post('message')));
         Yii::$app->cache->flush();
         Yii::$app->session->setFlash('success', Yii::t('app', 'Maintenance settings saved.'));
+        return $this->redirect(['system']);
+    }
+
+    public function actionDateFormat()
+    {
+        $calendar = Yii::$app->request->post('calendar', 'gregorian');
+        if (!in_array($calendar, ['gregorian', 'jalali'], true)) {
+            throw new \yii\web\BadRequestHttpException(Yii::t('app', 'Invalid date format.'));
+        }
+        SystemSetting::put('date_calendar', $calendar);
+        Yii::$app->cache->flush();
+        Yii::$app->session->setFlash('success', Yii::t('app', 'Date display settings saved.'));
         return $this->redirect(['system']);
     }
 

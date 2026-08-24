@@ -39,6 +39,7 @@ use yii\grid\GridView;
                 'headerOptions' => ['style'=>'text-align:center;'],
                 'contentOptions' => ['style'=>'text-align:center;'],
                 'attribute' => 'createDateTime',
+                'format' => 'datetime',
             ],
             [
                 'class' => 'yii\grid\ActionColumn' ,

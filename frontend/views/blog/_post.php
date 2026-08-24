@@ -15,7 +15,7 @@ use frontend\widgets\Icon;
 
             </div>
             <div class="group2 col-sm-6 col-md-6">
-                <time datetime="<?= Html::encode($model->createDatetime) ?>"><?= Html::encode($model->createDatetime) ?></time>
+                <time datetime="<?= Html::encode($model->createDatetime) ?>"><?= Yii::$app->formatter->asDatetime($model->createDatetime) ?></time>
             </div>
         </div>
         <hr>

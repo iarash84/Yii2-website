@@ -42,7 +42,7 @@ $this->registerLinkTag([
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
-<html lang="<?= Html::encode($languageManager->getLocale()) ?>" dir="<?= $isRtl ? 'rtl' : 'ltr' ?>">
+<html lang="<?= Html::encode($languageManager->getLocale()) ?>" dir="<?= $isRtl ? 'rtl' : 'ltr' ?>" data-theme="light">
 <head>
     <meta charset="<?= Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -97,6 +97,7 @@ $this->registerLinkTag([
                     <?php endif; ?>
                     <?php if (!$isAdmin): ?>
                         <li><?= Html::a(Icon::show('posts') . Yii::t('app', 'Search'), ['/search/index']) ?></li>
+                        <li><button class="theme-toggle" type="button" data-theme-toggle data-dark-label="<?= Yii::t('app', 'Dark mode') ?>" data-light-label="<?= Yii::t('app', 'Light mode') ?>" aria-label="<?= Yii::t('app', 'Switch color theme') ?>"><?= Icon::show('moon') ?><span data-theme-label><?= Yii::t('app', 'Dark mode') ?></span></button></li>
                     <?php endif; ?>
                     <?php if (Yii::$app->user->isGuest): ?>
                         <li><?= Html::a(Yii::t('app', 'Login'), ['/site/login']) ?></li>
@@ -140,10 +141,10 @@ $this->registerLinkTag([
                             <li class="admin-nav-label"><?= Yii::t('app', 'Content') ?></li>
                             <li><?= Html::a(Icon::show('posts') . Yii::t('app', 'Blog'), ['/admin/blog/index'], ['aria-current' => $current('admin/blog')]) ?></li>
                             <li><?= Html::a(Icon::show('plus') . Yii::t('app', 'Create Post'), ['/admin/blog/create']) ?></li>
-                            <li><?= Html::a(Icon::show('posts') . Yii::t('app', 'Category'), ['/admin/category/index'], ['aria-current' => $current('admin/category')]) ?></li>
+                            <li><?= Html::a(Icon::show('tag') . Yii::t('app', 'Category'), ['/admin/category/index'], ['aria-current' => $current('admin/category')]) ?></li>
                             <li><?= Html::a(Icon::show('briefcase') . Yii::t('app', 'Sample Project'), ['/admin/sample/index'], ['aria-current' => $current('admin/sample')]) ?></li>
                             <li><?= Html::a(Icon::show('image') . Yii::t('app', 'Carousel'), ['/admin/carousel/index'], ['aria-current' => $current('admin/carousel')]) ?></li>
-                            <li><?= Html::a(Icon::show('posts') . Yii::t('app', 'FAQ management'), ['/admin/faqs/index'], ['aria-current' => $current('admin/faqs')]) ?></li>
+                            <li><?= Html::a(Icon::show('help') . Yii::t('app', 'FAQ management'), ['/admin/faqs/index'], ['aria-current' => $current('admin/faqs')]) ?></li>
                         <?php endif; ?>
                         <?php if (Yii::$app->user->can('manageMenus')): ?>
                             <li><?= Html::a(Icon::show('menu') . Yii::t('app', 'Menu management'), ['/admin/menu/index'], ['aria-current' => $current('admin/menu')]) ?></li>
@@ -157,21 +158,21 @@ $this->registerLinkTag([
                         <?php if (Yii::$app->user->can('viewSubmissions')): ?>
                             <li class="admin-nav-label"><?= Yii::t('app', 'Requests') ?></li>
                             <li><?= Html::a(Icon::show('inbox') . Yii::t('app', 'Contact'), ['/admin/contact/index'], ['aria-current' => $current('admin/contact')]) ?></li>
-                            <li><?= Html::a(Icon::show('posts') . Yii::t('app', 'Order app'), ['/admin/order/index'], ['aria-current' => $current('admin/order')]) ?></li>
+                            <li><?= Html::a(Icon::show('briefcase') . Yii::t('app', 'Order app'), ['/admin/order/index'], ['aria-current' => $current('admin/order')]) ?></li>
                             <li><?= Html::a(Icon::show('users') . Yii::t('app', 'Job opportunity'), ['/admin/opportunity/index'], ['aria-current' => $current('admin/opportunity')]) ?></li>
                         <?php endif; ?>
                         <?php if (Yii::$app->user->can('manageSettings')): ?>
                             <li class="admin-nav-label"><?= Yii::t('app', 'System') ?></li>
                             <li><?= Html::a(Icon::show('settings') . Yii::t('app', 'General settings'), ['/admin/setting/index'], ['aria-current' => $route === 'admin/setting/index' ? 'page' : null]) ?></li>
-                            <li><?= Html::a(Icon::show('posts') . Yii::t('app', 'Home Update'), ['/admin/setting/home'], ['aria-current' => $route === 'admin/setting/home' ? 'page' : null]) ?></li>
-                            <li><?= Html::a(Icon::show('posts') . Yii::t('app', 'About'), ['/admin/setting/about'], ['aria-current' => $route === 'admin/setting/about' ? 'page' : null]) ?></li>
+                            <li><?= Html::a(Icon::show('home') . Yii::t('app', 'Home Update'), ['/admin/setting/home'], ['aria-current' => $route === 'admin/setting/home' ? 'page' : null]) ?></li>
+                            <li><?= Html::a(Icon::show('pages') . Yii::t('app', 'About'), ['/admin/setting/about'], ['aria-current' => $route === 'admin/setting/about' ? 'page' : null]) ?></li>
                             <li><?= Html::a(Icon::show('external') . Yii::t('app', 'Social Network'), ['/admin/setting/social'], ['aria-current' => $route === 'admin/setting/social' ? 'page' : null]) ?></li>
-                            <li><?= Html::a(Icon::show('settings') . Yii::t('app', 'System'), ['/admin/setting/system'], ['aria-current' => $route === 'admin/setting/system' ? 'page' : null]) ?></li>
-                            <li><?= Html::a(Icon::show('external') . Yii::t('app', 'Email settings'), ['/admin/setting/email'], ['aria-current' => $route === 'admin/setting/email' ? 'page' : null]) ?></li>
+                            <li><?= Html::a(Icon::show('activity') . Yii::t('app', 'System'), ['/admin/setting/system'], ['aria-current' => $route === 'admin/setting/system' ? 'page' : null]) ?></li>
+                            <li><?= Html::a(Icon::show('mail') . Yii::t('app', 'Email settings'), ['/admin/setting/email'], ['aria-current' => $route === 'admin/setting/email' ? 'page' : null]) ?></li>
                         <?php endif; ?>
-                        <?php if (Yii::$app->user->can('viewAudit')): ?><li><?= Html::a(Icon::show('posts') . Yii::t('app', 'Admin activity'), ['/admin/audit/index'], ['aria-current' => $current('admin/audit')]) ?></li><?php endif; ?>
+                        <?php if (Yii::$app->user->can('viewAudit')): ?><li><?= Html::a(Icon::show('activity') . Yii::t('app', 'Admin activity'), ['/admin/audit/index'], ['aria-current' => $current('admin/audit')]) ?></li><?php endif; ?>
                         <?php if (Yii::$app->user->can('exportData')): ?><li><?= Html::a(Icon::show('arrow-down') . Yii::t('app', 'Data export'), ['/admin/export/index'], ['aria-current' => $current('admin/export')]) ?></li><?php endif; ?>
-                        <?php if (Yii::$app->user->can('manageBackup')): ?><li><?= Html::a(Icon::show('settings') . Yii::t('app', 'Backup and restore'), ['/admin/backup/index'], ['aria-current' => $current('admin/backup')]) ?></li><?php endif; ?>
+                        <?php if (Yii::$app->user->can('manageBackup')): ?><li><?= Html::a(Icon::show('database') . Yii::t('app', 'Backup and restore'), ['/admin/backup/index'], ['aria-current' => $current('admin/backup')]) ?></li><?php endif; ?>
                         <?php if (Yii::$app->user->can('manageUsers')): ?>
                             <li><?= Html::a(Icon::show('users') . Yii::t('app', 'User Management'), ['/admin/user/index'], ['aria-current' => $current('admin/user')]) ?></li>
                         <?php endif; ?>
@@ -219,7 +220,7 @@ $this->registerLinkTag([
                     </ul>
                 </nav>
             </div>
-            <div class="footer-bottom">&copy; <?= date('Y') ?> <?= Html::encode($settings->companyName ?: Yii::t('app', 'My Company')) ?></div>
+            <div class="footer-bottom">&copy; <?= Yii::$app->formatter->asYear(time()) ?> <?= Html::encode($settings->companyName ?: Yii::t('app', 'My Company')) ?></div>
         </div>
     </footer>
 </div>

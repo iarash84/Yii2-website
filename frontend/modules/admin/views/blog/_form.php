@@ -35,6 +35,11 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'keyWord')->textInput(['maxlength' => true]) ?>
 
+    <?= $form->field($model, 'hashtags')->textInput([
+        'maxlength' => true,
+        'placeholder' => Yii::t('app', '#technology, #design'),
+    ])->hint(Yii::t('app', 'Separate hashtags with commas or spaces.')) ?>
+
     <?= $this->render('@app/modules/admin/views/_translation_fields', ['model' => $model]) ?>
 
     <div class="form-group">

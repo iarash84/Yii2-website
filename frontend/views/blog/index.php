@@ -36,6 +36,18 @@ $this->params['breadcrumbs'][] = $this->title;
                     ?>
                 </ul>
             </div>
+            <?php if ($tagModels): ?>
+                <div class="panel blog-tags-filter">
+                    <div class="panel-heading"><h2><?= Yii::t('app', 'Hashtags') ?></h2></div>
+                    <div class="tag-cloud">
+                        <?php foreach ($tagModels as $tag): ?>
+                            <?= Html::a('#' . Html::encode($tag->name), ['/blog/index', 'BlogSearch[tag]' => $tag->slug], [
+                                'class' => 'tag-chip' . ($searchModel->tag === $tag->slug ? ' is-active' : ''),
+                            ]) ?>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            <?php endif; ?>
         </div>
 
         <div class="col s9">

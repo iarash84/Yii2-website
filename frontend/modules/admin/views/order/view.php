@@ -34,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'website',
             'email:email',
             'description:ntext',
-            'createDateTime',
+            ['attribute' => 'createDateTime', 'format' => 'datetime'],
         ],
     ]) ?>
 

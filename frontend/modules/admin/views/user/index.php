@@ -38,7 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class' => 'yii\grid\DataColumn',
                 'value' => function ($data) {
-                    return $data->created_at;//Yii::$app->DateTimeConverter->gregorian_to_jalali($data->created_at);
+                    return Yii::$app->formatter->asDatetime($data->created_at);
                 },
                 'headerOptions' => ['style'=>'text-align:center;'],
                 'contentOptions' => ['style'=>'text-align:center;'],

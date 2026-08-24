@@ -33,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'email:email',
             'subject',
             'body:ntext',
-            'createDateTime',
+            ['attribute' => 'createDateTime', 'format' => 'datetime'],
         ],
     ]) ?>
 

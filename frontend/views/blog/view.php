@@ -36,11 +36,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
             </div>
             <div class="group2 col-sm-6 col-md-6">
-                <time datetime="<?= Html::encode($model->createDatetime) ?>"><?= Html::encode($model->createDatetime) ?></time>
+                <time datetime="<?= Html::encode($model->createDatetime) ?>"><?= Yii::$app->formatter->asDatetime($model->createDatetime) ?></time>
             </div>
         </div>
         <hr>
         <?= \yii\helpers\HtmlPurifier::process($model->getLocalized('content')) ?>
+        <?php if ($model->tags): ?><div class="tag-cloud" aria-label="<?= Yii::t('app', 'Hashtags') ?>"><?php foreach ($model->tags as $tag): ?><?= Html::a('#' . Html::encode($tag->name), ['/blog/index', 'BlogSearch[tag]' => $tag->slug], ['class' => 'tag-chip']) ?><?php endforeach; ?></div><?php endif; ?>
         <hr>
     </article>
 

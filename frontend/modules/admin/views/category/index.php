@@ -55,6 +55,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'headerOptions' => ['style'=>'text-align:center;'],
                 'contentOptions' => ['style'=>'text-align:center;'],
                 'attribute' => 'createDatetime',
+                'format' => 'datetime',
             ],
             [
                 'class' => 'yii\grid\ActionColumn' ,

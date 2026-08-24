@@ -5,6 +5,7 @@ namespace frontend\controllers;
 use frontend\models\Blog;
 use frontend\models\BlogSearch;
 use frontend\models\Category;
+use frontend\models\BlogTag;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -19,6 +20,7 @@ class BlogController extends Controller
             'searchModel' => $searchModel,
             'categoryModels' => Category::find()->all(),
             'dataProvider' => $searchModel->search(\Yii::$app->request->queryParams),
+            'tagModels' => BlogTag::find()->joinWith('posts')->groupBy('blog_tag.id')->orderBy(['blog_tag.name' => SORT_ASC])->all(),
         ]);
     }
 
@@ -32,12 +34,13 @@ class BlogController extends Controller
     public function actionCategory($id)
     {
         $searchModel = new BlogSearch();
-        $query = Blog::find()->andWhere(['category_id' => $id]);
+        $query = Blog::find()->with(['tags', 'category', 'user'])->andWhere(['category_id' => $id])->orderBy(['createDatetime' => SORT_DESC, 'id' => SORT_DESC]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'categoryModels' => Category::find()->all(),
             'dataProvider' => new ActiveDataProvider(['query' => $query]),
+            'tagModels' => BlogTag::find()->orderBy(['name' => SORT_ASC])->all(),
         ]);
     }
 

@@ -21,6 +21,15 @@ class Icon
         'inbox' => 'M4 4h16v16H4V4Zm0 11h5l2 2h2l2-2h5',
         'briefcase' => 'M3 7h18v13H3V7Zm5 0V4h8v3m-13 5h18',
         'menu' => 'M4 6h16M4 12h16M4 18h16',
+        'tag' => 'M20 13 13 20 4 11V4h7l9 9ZM8 8h.01',
+        'pages' => 'M6 2h9l5 5v15H6V2Zm9 0v6h5M9 13h8m-8 4h8',
+        'help' => 'M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Zm-3-13a3 3 0 1 1 5 2c-1 1-2 1.5-2 3m0 4h.01',
+        'home' => 'm3 11 9-8 9 8v10h-6v-6H9v6H3V11Z',
+        'mail' => 'M3 5h18v14H3V5Zm0 1 9 7 9-7',
+        'activity' => 'M3 12h4l2-7 4 14 2-7h6',
+        'database' => 'M4 6c0-2 16-2 16 0v12c0 2-16 2-16 0V6Zm0 0c0 2 16 2 16 0M4 12c0 2 16 2 16 0',
+        'moon' => 'M20 15a8 8 0 0 1-11-11 9 9 0 1 0 11 11Z',
+        'calendar' => 'M4 5h16v16H4V5Zm4-3v6m8-6v6M4 10h16',
     ];
 
     public static function show($name, array $options = [])

@@ -19,6 +19,18 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="system-tool-grid">
         <article class="system-tool-card card">
+            <span class="card-icon"><?= Icon::show('calendar') ?></span>
+            <h2><?= Yii::t('app', 'Date display') ?></h2>
+            <p class="text-muted"><?= Yii::t('app', 'Choose the calendar used for dates and times throughout the website.') ?></p>
+            <?= Html::beginForm(['/admin/setting/date-format'], 'post') ?>
+            <?= Html::dropDownList('calendar', \frontend\models\SystemSetting::getValue('date_calendar', 'gregorian'), [
+                'gregorian' => Yii::t('app', 'Gregorian calendar'),
+                'jalali' => Yii::t('app', 'Jalali calendar'),
+            ], ['class' => 'form-control', 'aria-label' => Yii::t('app', 'Date display')]) ?>
+            <div class="form-actions"><?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn']) ?></div>
+            <?= Html::endForm() ?>
+        </article>
+        <article class="system-tool-card card">
             <span class="card-icon"><?= Icon::show('settings') ?></span>
             <h2><?= Yii::t('app', 'Application cache') ?></h2>
             <p class="text-muted"><?= Yii::t('app', 'Remove cached application data so fresh values are generated on the next request.') ?></p>
