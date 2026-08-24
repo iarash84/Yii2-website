@@ -19,7 +19,7 @@ $footerSetting = new \frontend\models\Setting();
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
 
-<html>
+<html lang="fa-IR" dir="rtl">
 <head>
     <meta charset="<?= Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -27,7 +27,7 @@ $footerSetting = new \frontend\models\Setting();
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
 </head>
-<body>
+<body dir="rtl">
 <?php $this->beginBody() ?>
 
 <?php
@@ -35,7 +35,7 @@ if(Yii::$app->user->isGuest) { ?>
     <!--Logout Mode-->
     <nav class="teal" role="navigation">
         <div class="nav-wrapper">
-            <a href="<?= Yii::$app->homeUrl ?>" class="brand-logo" style="margin-left: 15px;"><?= $footerSetting->companyName ?></a>
+            <a href="<?= Yii::$app->homeUrl ?>" class="brand-logo site-brand"><?= Html::encode($footerSetting->companyName) ?></a>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
 
                 <li><?= Html::a(Yii::t('app','Login'),['/site/login']) ?></li>
@@ -88,9 +88,9 @@ if(Yii::$app->user->isGuest) { ?>
     </ul>
 
 
-    <nav class="teal navbar-fixed-top" dir="ltr">
+    <nav class="teal navbar-fixed-top">
         <div class="nav-wrapper">
-            <a href="<?= Yii::$app->homeUrl ?>" class="brand-logo" style="margin-left: 15px;"><?= $footerSetting->companyName ?></a>
+            <a href="<?= Yii::$app->homeUrl ?>" class="brand-logo site-brand"><?= Html::encode($footerSetting->companyName) ?></a>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
 
                 <li><?= Html::a(Yii::t('app','User Area'). '(' . Yii::$app->user->identity->username . ')','#!',['class'=>'dropdown-button' , 'data-activates'=>'userDropdown']) ?></li>
@@ -187,7 +187,19 @@ if(isset($this->params['breadcrumbs'])){ ?>
     </div>
 
 </footer>
-<?php echo uran1980\yii\widgets\scrollToTop\ScrollToTop::widget(); ?>
+<button id="scroll-to-top" type="button" aria-label="Scroll to top">&uarr;</button>
+<?php
+$this->registerJs(<<<'JS'
+const scrollButton = document.getElementById('scroll-to-top');
+const toggleScrollButton = () => {
+    scrollButton.classList.toggle('is-visible', window.scrollY > 300);
+};
+window.addEventListener('scroll', toggleScrollButton, {passive: true});
+scrollButton.addEventListener('click', () => window.scrollTo({top: 0, behavior: 'smooth'}));
+toggleScrollButton();
+JS
+);
+?>
 <?php $this->endBody() ?>
 </body>
 </html>

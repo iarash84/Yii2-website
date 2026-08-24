@@ -1,8 +1,55 @@
 html,
 body {
     height: 100%;
-    font-family: 'IranSansZ', serif;
+    direction: rtl;
+    text-align: right;
+    font-family: 'IranSansZ', Tahoma, Arial, sans-serif;
     /*background-image: url("../img/bg2.jpg");*/
+}
+
+button,
+input,
+optgroup,
+select,
+textarea {
+    font-family: inherit;
+}
+
+input[type="email"],
+input[type="tel"],
+input[type="url"],
+.ltr {
+    direction: ltr;
+    text-align: left;
+}
+
+.site-brand {
+    margin-right: 15px;
+    margin-left: 0;
+}
+
+.breadcrumb,
+.pagination,
+.dropdown-content,
+.collection,
+.table,
+table,
+th,
+td,
+label,
+.help-block,
+.alert,
+.modal-content {
+    direction: rtl;
+    text-align: right;
+}
+
+.pull-right {
+    float: left !important;
+}
+
+.pull-left {
+    float: right !important;
 }
 
 a{
@@ -91,7 +138,8 @@ a.desc:after {
 .error-summary {
     color: #a94442;
     background: #fdf7f7;
-    border-left: 3px solid #eed3d7;
+    border-right: 3px solid #eed3d7;
+    border-left: 0;
     padding: 10px 20px;
     margin: 0 0 15px 0;
 }
@@ -105,4 +153,29 @@ a.scroll-to-top-link {
     bottom: 50px !important;
     right: 40px;
 
+}
+#scroll-to-top {
+    position: fixed;
+    right: 1.5rem;
+    bottom: 1.5rem;
+    z-index: 1000;
+    display: none;
+    width: 3rem;
+    height: 3rem;
+    border: 0;
+    border-radius: 50%;
+    color: #fff;
+    background: #333;
+    font-size: 1.5rem;
+    cursor: pointer;
+    opacity: .8;
+}
+
+#scroll-to-top.is-visible {
+    display: block;
+}
+
+#scroll-to-top:hover,
+#scroll-to-top:focus {
+    opacity: 1;
 }
