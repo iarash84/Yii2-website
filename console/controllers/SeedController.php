@@ -12,10 +12,6 @@ class SeedController extends Controller
     public function actionIndex($demo = true)
     {
         $password = (string) getenv('ADMIN_PASSWORD');
-        if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z\d]).{12,72}$/', $password)) {
-            $this->stderr("ADMIN_PASSWORD must satisfy the project password policy.\n");
-            return ExitCode::CONFIG;
-        }
 
         $transaction = Yii::$app->db->beginTransaction();
         try {
@@ -38,12 +34,24 @@ class SeedController extends Controller
     {
         $username = getenv('ADMIN_USERNAME') ?: 'admin';
         $email = getenv('ADMIN_EMAIL') ?: 'admin@example.com';
-        $user = User::findOne(['username' => $username]) ?: new User();
+        $user = User::findOne(['username' => $username]);
+        $isNewUser = $user === null;
+        if ($isNewUser) {
+            $user = new User();
+        }
+        if (
+            ($isNewUser || $password !== '')
+            && !preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z\d]).{12,72}$/', $password)
+        ) {
+            throw new \RuntimeException('ADMIN_PASSWORD must satisfy the project password policy.');
+        }
         $user->username = $username;
         $user->email = $email;
         $user->status = User::STATUS_ACTIVE;
-        $user->setPassword($password);
-        $user->generateAuthKey();
+        if ($isNewUser || $password !== '') {
+            $user->setPassword($password);
+            $user->generateAuthKey();
+        }
         if (!$user->save()) {
             throw new \RuntimeException(implode(' ', $user->getFirstErrors()));
         }
@@ -133,32 +141,44 @@ class SeedController extends Controller
             ],
         ];
         foreach ($portfolioItems as $item) {
-            $sampleExists = Yii::$app->db->createCommand(
-                'SELECT 1 FROM {{%tbl_sample}} WHERE title=:title LIMIT 1',
+            $sampleId = Yii::$app->db->createCommand(
+                'SELECT id FROM {{%tbl_sample}} WHERE title=:title LIMIT 1',
                 [':title' => $item['title']]
             )->queryScalar();
-            if (!$sampleExists) {
-                Yii::$app->db->createCommand()->insert('tbl_sample', array_merge($item, [
-                    'user_id' => $userId,
-                    'url_link' => '#',
-                ]))->execute();
+
+            $sample = array_merge($item, [
+                'user_id' => $userId,
+                'url_link' => '#',
+            ]);
+            if ($sampleId) {
+                Yii::$app->db->createCommand()->update('tbl_sample', $sample, ['id' => $sampleId])->execute();
+            } else {
+                Yii::$app->db->createCommand()->insert('tbl_sample', $sample)->execute();
             }
         }
 
-        $carouselExists = Yii::$app->db->createCommand(
-            'SELECT 1 FROM {{%tbl_carousel}} WHERE image=:image LIMIT 1',
-            [':image' => 'img/portfolio/hero-studio.webp']
+        $carouselTitle = 'راهکارهای دیجیتال قابل اعتماد';
+        $carouselId = Yii::$app->db->createCommand(
+            'SELECT id FROM {{%tbl_carousel}} WHERE title=:title OR image=:image ORDER BY id LIMIT 1',
+            [
+                ':title' => $carouselTitle,
+                ':image' => 'img/portfolio/hero-studio.webp',
+            ]
         )->queryScalar();
-        if (!$carouselExists) {
-            Yii::$app->db->createCommand()->insert('tbl_carousel', [
-                'user_id' => $userId,
-                'image' => 'img/portfolio/hero-studio.webp',
-                'link' => '',
-                'title' => 'راهکارهای دیجیتال قابل اعتماد',
-                'text' => '<p>طراحی و توسعه محصولاتی که برای رشد کسب‌وکار ساخته شده‌اند.</p>',
-                'order_num' => 1,
-                'status' => 1,
-            ])->execute();
+
+        $carousel = [
+            'user_id' => $userId,
+            'image' => 'img/portfolio/hero-studio.webp',
+            'link' => '',
+            'title' => $carouselTitle,
+            'text' => '<p>طراحی و توسعه محصولاتی که برای رشد کسب‌وکار ساخته شده‌اند.</p>',
+            'order_num' => 1,
+            'status' => 1,
+        ];
+        if ($carouselId) {
+            Yii::$app->db->createCommand()->update('tbl_carousel', $carousel, ['id' => $carouselId])->execute();
+        } else {
+            Yii::$app->db->createCommand()->insert('tbl_carousel', $carousel)->execute();
         }
     }
 }

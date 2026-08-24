@@ -1,9 +1,9 @@
 <?php
 
 use frontend\widgets\Icon;
+use frontend\helpers\MediaUrl;
 use yii\helpers\Html;
 use yii\helpers\HtmlPurifier;
-use yii\helpers\Url;
 
 $models = $dataProvider->models;
 ?>
@@ -21,7 +21,7 @@ $models = $dataProvider->models;
         <?php foreach ($models as $model): ?>
             <article class="portfolio-card card">
                 <div class="portfolio-media">
-                    <?= Html::img(Url::to('@web/' . ltrim($model->image, '/')), [
+                    <?= Html::img(MediaUrl::image($model->image, 'img/portfolio/commerce-experience.webp'), [
                         'alt' => Html::encode($model->title),
                         'loading' => 'lazy',
                         'width' => 768,

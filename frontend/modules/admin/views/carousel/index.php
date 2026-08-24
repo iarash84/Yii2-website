@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use frontend\widgets\Icon;
+use frontend\helpers\MediaUrl;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -33,7 +34,10 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?php foreach($dataProvider->models as $item) : ?>
                         <tr data-id="<?= $item->primaryKey ?>">
 
-                            <td><?= Html::img($item->image,['style'=>"width: 550px;"]) ?></td>
+                            <td><?= Html::img(MediaUrl::image($item->image, 'img/portfolio/hero-studio.webp'), [
+                                'alt' => Html::encode($item->title),
+                                'style' => 'width: 550px;',
+                            ]) ?></td>
                             <td>
                                 <div class="btn-group btn-group-sm" role="group">
 
