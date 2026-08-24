@@ -39,6 +39,26 @@ class UploadSecurityTest extends TestCase
         unlink($path);
     }
 
+    public function testValidMediaFileUsesServerGeneratedName(): void
+    {
+        $temp = $this->tempFile(base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII='));
+        $file = $this->uploadedFile('customer-name.png', $temp, 'image/png');
+        $relative = SecureUpload::storeMedia($file);
+        self::assertStringStartsWith('upload/media/', $relative);
+        self::assertStringNotContainsString('customer-name', $relative);
+        $path = Yii::getAlias('@webroot/' . $relative);
+        self::assertFileExists($path);
+        unlink($path);
+    }
+
+    public function testExecutableMediaIsRejected(): void
+    {
+        $temp = $this->tempFile('<?php echo "unsafe";');
+        $file = $this->uploadedFile('unsafe.php', $temp, 'application/x-php');
+        $this->expectException(BadRequestHttpException::class);
+        SecureUpload::storeMedia($file);
+    }
+
     private function uploadedFile(string $name, string $temp, string $type): UploadedFile
     {
         return new UploadedFile([

@@ -28,6 +28,17 @@ class SecureUpload
         return $name;
     }
 
+    public static function storeMedia(UploadedFile $file)
+    {
+        self::validate($file, ['png', 'jpg', 'jpeg', 'gif', 'webp', 'pdf'], [
+            'image/png', 'image/jpeg', 'image/gif', 'image/webp', 'application/pdf',
+        ], 10 * 1024 * 1024);
+        $extension = strtolower($file->extension);
+        $relative = 'upload/media/' . Yii::$app->security->generateRandomString(40) . '.' . $extension;
+        self::save($file, Yii::getAlias('@webroot/' . $relative));
+        return $relative;
+    }
+
     private static function validate($file, array $extensions, array $mimeTypes, $maxSize)
     {
         $model = DynamicModel::validateData(['file' => $file], [[

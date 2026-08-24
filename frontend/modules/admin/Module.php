@@ -42,6 +42,12 @@ class Module extends \yii\base\Module
         if ($controllerId === 'menu') {
             return 'manageMenus';
         }
+        if ($controllerId === 'page') {
+            return 'managePages';
+        }
+        if ($controllerId === 'media') {
+            return 'manageMedia';
+        }
 
         if (in_array($controllerId, ['blog', 'category', 'carousel', 'sample'], true)) {
             return 'manageContent';

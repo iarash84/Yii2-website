@@ -36,7 +36,7 @@ $this->registerLinkTag([
 ]);
 $this->registerLinkTag([
     'rel' => 'canonical',
-    'href' => $languageManager->getLanguageUrl($languageManager->activeLanguage),
+    'href' => $this->params['canonicalUrl'] ?? $languageManager->getLanguageUrl($languageManager->activeLanguage),
 ]);
 ?>
 <?php $this->beginPage() ?>
@@ -94,6 +94,9 @@ $this->registerLinkTag([
                             <li><?= Html::a(Yii::t('app', 'Order app'), ['/site/order'], ['class' => 'btn']) ?></li>
                         <?php endif; ?>
                     <?php endif; ?>
+                    <?php if (!$isAdmin): ?>
+                        <li><?= Html::a(Icon::show('posts') . Yii::t('app', 'Search'), ['/search/index']) ?></li>
+                    <?php endif; ?>
                     <?php if (Yii::$app->user->isGuest): ?>
                         <li><?= Html::a(Yii::t('app', 'Login'), ['/site/login']) ?></li>
                     <?php else: ?>
@@ -142,6 +145,12 @@ $this->registerLinkTag([
                         <?php endif; ?>
                         <?php if (Yii::$app->user->can('manageMenus')): ?>
                             <li><?= Html::a(Icon::show('menu') . Yii::t('app', 'Menu management'), ['/admin/menu/index'], ['aria-current' => $current('admin/menu')]) ?></li>
+                        <?php endif; ?>
+                        <?php if (Yii::$app->user->can('managePages')): ?>
+                            <li><?= Html::a(Icon::show('posts') . Yii::t('app', 'Dynamic pages'), ['/admin/page/index'], ['aria-current' => $current('admin/page')]) ?></li>
+                        <?php endif; ?>
+                        <?php if (Yii::$app->user->can('manageMedia')): ?>
+                            <li><?= Html::a(Icon::show('image') . Yii::t('app', 'Media library'), ['/admin/media/index'], ['aria-current' => $current('admin/media')]) ?></li>
                         <?php endif; ?>
                         <?php if (Yii::$app->user->can('viewSubmissions')): ?>
                             <li class="admin-nav-label"><?= Yii::t('app', 'Requests') ?></li>
