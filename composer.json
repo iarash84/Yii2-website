@@ -56,7 +56,7 @@
         "lint": "php tests/bin/php-lint.php",
         "style": "phpcs --standard=phpcs.xml",
         "analyse": "phpstan analyse --configuration=phpstan.neon --no-progress",
-        "security:audit": "composer audit --locked",
+        "security:audit": "composer audit --locked --abandoned=report",
         "ci": [
             "@check:composer",
             "@security:audit",

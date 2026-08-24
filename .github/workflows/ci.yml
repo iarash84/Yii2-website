@@ -57,7 +57,7 @@ jobs:
         run: composer check:composer
 
       - name: ممیزی امنیتی
-        run: composer audit --locked
+        run: composer security:audit
 
       - name: بررسی syntax پی‌اچ‌پی
         run: composer lint

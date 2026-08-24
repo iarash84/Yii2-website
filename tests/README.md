@@ -20,7 +20,7 @@ composer test:install
 composer lint
 composer style
 composer analyse
-composer audit --locked
+composer security:audit
 ```
 
 فایل‌های قدیمی `tests/codeception` صرفاً برای مراجعه تاریخی نگهداری می‌شوند و

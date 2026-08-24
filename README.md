@@ -63,7 +63,7 @@ php yii serve --docroot=frontend/web 127.0.0.1:8080
 php requirements.php
 php yii install/check
 composer validate --no-check-publish
-composer audit --locked
+composer security:audit
 composer lint
 composer style
 composer analyse
