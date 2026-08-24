@@ -1,8 +1,27 @@
-# Tests
+# تست‌ها
 
-The files under `tests/codeception` are the historical frontend, common, and
-console tests inherited from the Yii 2 Advanced template. Their old Codeception
-integration is not compatible with PHP 8.2 and is retained only as migration
-material until the test suite is rebuilt.
+مجموعه تست فعال پروژه با PHPUnit 10 در پوشه‌های `tests/unit` و
+`tests/integration` قرار دارد. تست‌ها همیشه از دیتابیس مستقل
+`yii2_website_test` استفاده می‌کنند و اطلاعات محیط توسعه را تغییر نمی‌دهند.
 
-Backend tests were removed together with the standalone backend application.
+```powershell
+composer test:prepare
+composer test
+composer test:install
+```
+
+- `test:prepare` دیتابیس تست را از صفر با migrationها می‌سازد.
+- `test` تست‌های واحد و یکپارچه را اجرا می‌کند.
+- `test:install` نصب روی دیتابیس خالی را آزمایش و سپس دیتابیس موقت را حذف می‌کند.
+
+کنترل‌های کیفیت دیگر:
+
+```powershell
+composer lint
+composer style
+composer analyse
+composer audit --locked
+```
+
+فایل‌های قدیمی `tests/codeception` صرفاً برای مراجعه تاریخی نگهداری می‌شوند و
+در مجموعه تست فعال اجرا نمی‌شوند.

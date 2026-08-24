@@ -1,0 +1,78 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main, master]
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --host=127.0.0.1 --user=root"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    env:
+      TEST_DB_HOST: 127.0.0.1
+      TEST_DB_PORT: 3306
+      TEST_DB_NAME: yii2_website_test
+      TEST_DB_USER: root
+      TEST_DB_PASSWORD: ""
+
+    steps:
+      - name: دریافت سورس
+        uses: actions/checkout@v6.0.2
+
+      - name: راه‌اندازی PHP
+        uses: shivammathur/setup-php@2.35.3
+        with:
+          php-version: "8.2"
+          extensions: mbstring, intl, pdo_mysql, fileinfo, gd, zip
+          coverage: none
+          tools: composer:v2
+
+      - name: کش Composer
+        uses: actions/cache@v5
+        with:
+          path: ~/.cache/composer/files
+          key: composer-${{ runner.os }}-${{ hashFiles('composer.lock') }}
+          restore-keys: composer-${{ runner.os }}-
+
+      - name: نصب وابستگی‌ها
+        run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: اعتبارسنجی Composer
+        run: composer check:composer
+
+      - name: ممیزی امنیتی
+        run: composer audit --locked
+
+      - name: بررسی syntax پی‌اچ‌پی
+        run: composer lint
+
+      - name: بررسی Coding Style
+        run: composer style
+
+      - name: تحلیل ایستا
+        run: composer analyse
+
+      - name: آماده‌سازی دیتابیس تست
+        run: composer test:prepare
+
+      - name: اجرای تست‌های خودکار
+        run: composer test
+
+      - name: آزمون نصب از صفر
+        run: composer test:install

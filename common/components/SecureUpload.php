@@ -42,7 +42,7 @@ class SecureUpload
     private static function save(UploadedFile $file, $path)
     {
         FileHelper::createDirectory(dirname($path), 0750, true);
-        if (!$file->saveAs($path, true)) {
+        if (!$file->saveAs($path, !YII_ENV_TEST)) {
             throw new BadRequestHttpException(Yii::t('app', 'File upload failed.'));
         }
     }

@@ -1,0 +1,21 @@
+parameters:
+    level: 1
+    bootstrapFiles:
+        - tests/static-bootstrap.php
+    paths:
+        - common/models
+        - common/components
+        - common/validators
+        - frontend/components
+        - frontend/controllers
+        - frontend/models
+        - frontend/modules/admin/Module.php
+        - frontend/modules/admin/controllers
+        - console/controllers
+        - console/migrations
+        - tests/Support
+        - tests/unit
+        - tests/integration
+    universalObjectCratesClasses:
+        - yii\db\ActiveRecord
+    treatPhpDocTypesAsCertain: false

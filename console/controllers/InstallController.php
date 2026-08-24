@@ -16,12 +16,14 @@ class InstallController extends Controller
                 $errors[] = "Environment variable {$variable} is not configured.";
             }
         }
-        foreach ([
+        foreach (
+            [
             Yii::getAlias('@frontend/runtime'),
             Yii::getAlias('@frontend/web/assets'),
             Yii::getAlias('@frontend/web/upload'),
             Yii::getAlias('@storage/resumes'),
-        ] as $directory) {
+            ] as $directory
+        ) {
             if (!is_dir($directory) || !is_writable($directory)) {
                 $errors[] = "Directory is not writable: {$directory}";
             }

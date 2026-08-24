@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<ruleset name="Yii2 Website">
+    <description>PSR-12 checks for maintained and newly added project code.</description>
+    <arg name="colors"/>
+    <arg name="extensions" value="php"/>
+    <arg value="n"/>
+    <rule ref="PSR12">
+        <!-- Yii migration class names intentionally follow timestamp naming. -->
+        <exclude name="PSR1.Classes.ClassDeclaration.MissingNamespace"/>
+        <exclude name="Squiz.Classes.ValidClassName.NotCamelCaps"/>
+    </rule>
+    <file>common/components</file>
+    <file>common/validators</file>
+    <file>frontend/components</file>
+    <file>console/controllers/InstallController.php</file>
+    <file>console/controllers/SeedController.php</file>
+    <file>console/migrations/m260822_000001_create_application_schema.php</file>
+    <file>console/migrations/m260823_000001_create_security_rbac.php</file>
+    <file>console/migrations/m260823_000002_remove_logged_passwords.php</file>
+    <file>console/migrations/m260824_000001_finalize_install_schema.php</file>
+    <file>tests/bootstrap.php</file>
+    <file>tests/Support</file>
+    <file>tests/bin</file>
+    <file>tests/unit</file>
+    <file>tests/integration</file>
+</ruleset>

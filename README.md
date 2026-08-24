@@ -64,6 +64,12 @@ php requirements.php
 php yii install/check
 composer validate --no-check-publish
 composer audit --locked
+composer lint
+composer style
+composer analyse
+composer test:prepare
+composer test
+composer test:install
 ```
 
 ساخت دیتابیس صرفاً از طریق migration انجام می‌شود و پروژه هیچ وابستگی‌ای به

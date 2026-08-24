@@ -22,11 +22,13 @@ class m260822_000001_create_application_schema extends Migration
 
     public function safeDown()
     {
-        foreach ([
+        foreach (
+            [
             'tbl_setting', 'tbl_sample', 'tbl_order', 'tbl_opportunity', 'tbl_log',
             'tbl_faqs', 'tbl_contact_us', 'tbl_carousel', 'tbl_blog_post',
             'tbl_blog_category', 'auth_assignment', 'auth_item_child', 'auth_item', 'auth_rule',
-        ] as $table) {
+            ] as $table
+        ) {
             if ($this->db->schema->getTableSchema($table, true) !== null) {
                 $this->dropTable($table);
             }
@@ -236,11 +238,13 @@ class m260822_000001_create_application_schema extends Migration
         }
         $this->execute('SET FOREIGN_KEY_CHECKS=0');
         try {
-            foreach ([
+            foreach (
+                [
                 'migration', 'user', 'auth_rule', 'auth_item', 'auth_item_child', 'auth_assignment',
                 'tbl_blog_category', 'tbl_blog_post', 'tbl_carousel', 'tbl_contact_us',
                 'tbl_faqs', 'tbl_log', 'tbl_opportunity', 'tbl_order', 'tbl_sample', 'tbl_setting',
-            ] as $table) {
+                ] as $table
+            ) {
                 if ($this->db->schema->getTableSchema($table, true) !== null) {
                     $quoted = $this->db->quoteTableName($table);
                     $this->execute("ALTER TABLE {$quoted} CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");

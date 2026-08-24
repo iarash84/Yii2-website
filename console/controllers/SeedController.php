@@ -96,10 +96,12 @@ class SeedController extends Controller
             ])->execute();
             $categoryId = Yii::$app->db->getLastInsertID();
         }
-        if ($categoryId && !Yii::$app->db->createCommand(
-            'SELECT 1 FROM {{%tbl_blog_post}} WHERE title=:title LIMIT 1',
-            [':title' => 'شروع به کار وب‌سایت']
-        )->queryScalar()) {
+        if (
+            $categoryId && !Yii::$app->db->createCommand(
+                'SELECT 1 FROM {{%tbl_blog_post}} WHERE title=:title LIMIT 1',
+                [':title' => 'شروع به کار وب‌سایت']
+            )->queryScalar()
+        ) {
             Yii::$app->db->createCommand()->insert('tbl_blog_post', [
                 'user_id' => $userId,
                 'category_id' => $categoryId,
