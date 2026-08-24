@@ -133,7 +133,6 @@ class SettingController extends Controller
             $setting->youtube = $model->youtube;
             $setting->instagram = $model->instagram;
             $setting->telegram = $model->telegram;
-            $setting->googlePlus = $model->googlePlus;
 
             Yii::$app->session->setFlash('success', Yii::t('app', 'Thank you! Update successfully completed!'));
 
@@ -145,7 +144,6 @@ class SettingController extends Controller
             $model->youtube = $setting->youtube;
             $model->instagram = $setting->instagram;
             $model->telegram = $setting->telegram;
-            $model->googlePlus = $setting->googlePlus;
         }
 
         return $this->render('social', [

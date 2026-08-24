@@ -269,40 +269,21 @@ class Setting extends \yii\db\ActiveRecord
         return $setting->save();
     }
 
-
-    /**
-     * @return mixed|null
-     */
-    public function getGooglePlus()
+    public function getSocialLinks()
     {
-        $model = $this::find()->where(['type' => 'GooglePlus'])->one();
-
-        if($model == null)
-            return null;
-        return $model->content;
+        $labels = ['Facebook', 'Twitter', 'Linkedin', 'Instagram', 'Youtube', 'Telegram', 'Aparat'];
+        $rows = static::find()->select(['type', 'content'])->where(['type' => $labels])->indexBy('type')->all();
+        $links = [];
+        foreach ($labels as $type) {
+            $url = isset($rows[$type]) ? trim((string) $rows[$type]->content) : '';
+            if ($url !== '' && filter_var($url, FILTER_VALIDATE_URL) && in_array(parse_url($url, PHP_URL_SCHEME), ['http', 'https'], true)) {
+                $links[$type] = $url;
+            }
+        }
+        return $links;
     }
 
-    public function getGooglePlusLink()
-    {
-        $model = $this::find()->where(['type' => 'GooglePlus'])->one();
 
-        if($model == null || empty($model->content))
-            return null;
-        return '<li>'.Html::a('Google Plus',$model->content,['rel'=>'noopener noreferrer']).'</li>';
-    }
-
-    /**
-     * @param $value
-     */
-    public function setGooglePlus($value)
-    {
-        $setting = new Setting();
-        $setting::deleteAll(['type'=> 'GooglePlus']);
-        $setting->user_id = Yii::$app->user->identity->getId();
-        $setting->type = 'GooglePlus';
-        $setting->content = $value;
-        return $setting->save();
-    }
     /**
      * @return mixed|null
      */

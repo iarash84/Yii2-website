@@ -24,6 +24,5 @@ composer analyse
 composer security:audit
 ```
 
-فایل‌های قدیمی `tests/codeception` صرفاً برای مراجعه تاریخی نگهداری می‌شوند و در مجموعه
-تست فعال اجرا نمی‌شوند. تست `LocalizationTest` مسیرهای زبان‌دار، RTL/LTR و fallback
+مجموعه قدیمی Codeception به‌دلیل اجرا نشدن در CI و پوشش همان سناریوها توسط PHPUnit حذف شده است. تست `LocalizationTest` مسیرهای زبان‌دار، RTL/LTR و fallback
 ترجمه‌های دیتابیسی را پوشش می‌دهد.

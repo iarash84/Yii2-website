@@ -12,6 +12,7 @@ AppAsset::register($this);
 $languageManager = Yii::$app->languageManager;
 $isRtl = $languageManager->isRtl();
 $settings = new Setting();
+$socialLinks = $settings->socialLinks;
 $route = Yii::$app->controller->route;
 $isAdmin = Yii::$app->controller->module !== null
     && Yii::$app->controller->module->id === 'admin';
@@ -198,6 +199,7 @@ $this->registerLinkTag([
                     <h2><?= Html::encode($settings->companyName ?: Yii::t('app', 'My Company')) ?></h2>
                     <p><?= Html::encode($settings->address) ?></p>
                     <p class="ltr"><?= Html::encode($settings->email) ?><br><?= Html::encode($settings->phoneNumber) ?></p>
+                    <?php if ($socialLinks): ?><ul class="social-links" aria-label="<?= Yii::t('app', 'Social Network') ?>"><?php foreach ($socialLinks as $network => $url): ?><li><?= Html::a(Html::encode(Yii::t('app', $network)), $url, ['class' => 'social-link', 'target' => '_blank', 'rel' => 'noopener noreferrer']) ?></li><?php endforeach; ?></ul><?php endif; ?>
                 </section>
                 <nav aria-label="<?= Yii::t('app', 'Useful links') ?>">
                     <h2><?= Yii::t('app', 'Useful links') ?></h2>

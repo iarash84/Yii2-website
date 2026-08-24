@@ -10,7 +10,6 @@ use Yii;
 class SocialForm extends Model
 {
     public $facebook;
-    public $googlePlus;
     public $twitter;
     public $linkedin;
     public $aparat;
@@ -24,9 +23,8 @@ class SocialForm extends Model
     public function rules()
     {
         return [
-            [['facebook', 'googlePlus', 'twitter', 'linkedin', 'aparat', 'telegram' , 'youtube', 'instagram'], 'string'],
-            [['facebook', 'googlePlus', 'twitter', 'linkedin', 'aparat', 'telegram' , 'youtube', 'instagram'], 'safe'],
-            [['facebook', 'googlePlus', 'twitter', 'linkedin', 'aparat', 'telegram' , 'youtube', 'instagram'], 'string', 'max' => 100]
+            [['facebook', 'twitter', 'linkedin', 'aparat', 'telegram', 'youtube', 'instagram'], 'url', 'validSchemes' => ['http', 'https']],
+            [['facebook', 'twitter', 'linkedin', 'aparat', 'telegram', 'youtube', 'instagram'], 'string', 'max' => 255]
         ];
     }
 
@@ -37,7 +35,6 @@ class SocialForm extends Model
     {
         return [
             'facebook' => Yii::t('app', 'Facebook'),
-            'googlePlus' => Yii::t('app', 'GooglePlus'),
             'twitter' => Yii::t('app', 'Twitter'),
             'linkedin' => Yii::t('app', 'Linkedin'),
             'aparat' => Yii::t('app', 'Aparat'),
