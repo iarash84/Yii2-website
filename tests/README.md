@@ -5,6 +5,7 @@
 `yii2_website_test` استفاده می‌کنند و اطلاعات محیط توسعه را تغییر نمی‌دهند.
 
 ```powershell
+php init --env=Development --overwrite=All
 composer test:prepare
 composer test
 composer test:install

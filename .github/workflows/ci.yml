@@ -53,6 +53,9 @@ jobs:
       - name: نصب وابستگی‌ها
         run: composer install --no-interaction --prefer-dist --no-progress
 
+      - name: Initialize application
+        run: php init --env=Development --overwrite=All
+
       - name: اعتبارسنجی Composer
         run: composer check:composer
 
