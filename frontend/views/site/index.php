@@ -4,6 +4,7 @@ use frontend\models\Carousel;
 use frontend\models\Setting;
 use yii\helpers\Html;
 use yii\helpers\HtmlPurifier;
+use yii\helpers\Url;
 
 $this->title = Yii::t('app', 'My Company');
 $slides = Carousel::find()->where(['status' => 1])->orderBy('order_num')->all();
@@ -12,7 +13,7 @@ $home = Setting::findOne(['type' => 'Home']);
 ?>
 <section class="hero" aria-labelledby="home-hero-title">
     <?php if ($hero !== null): ?>
-        <?= Html::img($hero->image, ['alt' => '', 'loading' => 'eager']) ?>
+        <?= Html::img(Url::to('@web/' . ltrim($hero->image, '/')), ['alt' => '', 'loading' => 'eager']) ?>
     <?php endif; ?>
     <div class="hero-content">
         <p class="text-overline"><?= Yii::t('app', 'Welcome') ?></p>

@@ -3,6 +3,7 @@
 use common\widgets\Alert;
 use frontend\assets\AppAsset;
 use frontend\models\Setting;
+use frontend\widgets\Icon;
 use yii\helpers\Html;
 use yii\widgets\Breadcrumbs;
 
@@ -41,7 +42,7 @@ $this->registerLinkTag([
 <head>
     <meta charset="<?= Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#11685e">
+    <meta name="theme-color" content="#1b348c">
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
@@ -108,18 +109,31 @@ $this->registerLinkTag([
                 <aside class="admin-sidebar card" aria-label="<?= Yii::t('app', 'Admin panel') ?>">
                     <h2><?= Yii::t('app', 'Admin panel') ?></h2>
                     <ul class="admin-nav">
-                        <li><?= Html::a(Yii::t('app', 'Dashboard'), ['/admin']) ?></li>
-                        <li><?= Html::a(Yii::t('app', 'Blog'), ['/admin/blog/index']) ?></li>
-                        <li><?= Html::a(Yii::t('app', 'Category'), ['/admin/category/index']) ?></li>
-                        <li><?= Html::a(Yii::t('app', 'Carousel'), ['/admin/carousel/index']) ?></li>
-                        <li><?= Html::a(Yii::t('app', 'Contact'), ['/admin/contact/index']) ?></li>
-                        <li><?= Html::a(Yii::t('app', 'Order app'), ['/admin/order/index']) ?></li>
-                        <li><?= Html::a(Yii::t('app', 'Job opportunity'), ['/admin/opportunity/index']) ?></li>
+                        <li><?= Html::a(Icon::show('dashboard') . Yii::t('app', 'Dashboard'), ['/admin'], ['aria-current' => $current('admin/dashboard')]) ?></li>
+                        <?php if (Yii::$app->user->can('manageContent')): ?>
+                            <li class="admin-nav-label"><?= Yii::t('app', 'Content') ?></li>
+                            <li><?= Html::a(Icon::show('posts') . Yii::t('app', 'Blog'), ['/admin/blog/index'], ['aria-current' => $current('admin/blog')]) ?></li>
+                            <li><?= Html::a(Icon::show('plus') . Yii::t('app', 'Create Post'), ['/admin/blog/create']) ?></li>
+                            <li><?= Html::a(Icon::show('posts') . Yii::t('app', 'Category'), ['/admin/category/index'], ['aria-current' => $current('admin/category')]) ?></li>
+                            <li><?= Html::a(Icon::show('briefcase') . Yii::t('app', 'Sample Project'), ['/admin/sample/index'], ['aria-current' => $current('admin/sample')]) ?></li>
+                            <li><?= Html::a(Icon::show('image') . Yii::t('app', 'Carousel'), ['/admin/carousel/index'], ['aria-current' => $current('admin/carousel')]) ?></li>
+                        <?php endif; ?>
+                        <?php if (Yii::$app->user->can('viewSubmissions')): ?>
+                            <li class="admin-nav-label"><?= Yii::t('app', 'Requests') ?></li>
+                            <li><?= Html::a(Icon::show('inbox') . Yii::t('app', 'Contact'), ['/admin/contact/index'], ['aria-current' => $current('admin/contact')]) ?></li>
+                            <li><?= Html::a(Icon::show('posts') . Yii::t('app', 'Order app'), ['/admin/order/index'], ['aria-current' => $current('admin/order')]) ?></li>
+                            <li><?= Html::a(Icon::show('users') . Yii::t('app', 'Job opportunity'), ['/admin/opportunity/index'], ['aria-current' => $current('admin/opportunity')]) ?></li>
+                        <?php endif; ?>
                         <?php if (Yii::$app->user->can('manageSettings')): ?>
-                            <li><?= Html::a(Yii::t('app', 'Setting'), ['/admin/setting/index']) ?></li>
+                            <li class="admin-nav-label"><?= Yii::t('app', 'System') ?></li>
+                            <li><?= Html::a(Icon::show('settings') . Yii::t('app', 'General settings'), ['/admin/setting/index'], ['aria-current' => $route === 'admin/setting/index' ? 'page' : null]) ?></li>
+                            <li><?= Html::a(Icon::show('posts') . Yii::t('app', 'Home Update'), ['/admin/setting/home'], ['aria-current' => $route === 'admin/setting/home' ? 'page' : null]) ?></li>
+                            <li><?= Html::a(Icon::show('posts') . Yii::t('app', 'About'), ['/admin/setting/about'], ['aria-current' => $route === 'admin/setting/about' ? 'page' : null]) ?></li>
+                            <li><?= Html::a(Icon::show('external') . Yii::t('app', 'Social Network'), ['/admin/setting/social'], ['aria-current' => $route === 'admin/setting/social' ? 'page' : null]) ?></li>
+                            <li><?= Html::a(Icon::show('settings') . Yii::t('app', 'System'), ['/admin/setting/system'], ['aria-current' => $route === 'admin/setting/system' ? 'page' : null]) ?></li>
                         <?php endif; ?>
                         <?php if (Yii::$app->user->can('manageUsers')): ?>
-                            <li><?= Html::a(Yii::t('app', 'User Management'), ['/admin/user/index']) ?></li>
+                            <li><?= Html::a(Icon::show('users') . Yii::t('app', 'User Management'), ['/admin/user/index'], ['aria-current' => $current('admin/user')]) ?></li>
                         <?php endif; ?>
                     </ul>
                 </aside>

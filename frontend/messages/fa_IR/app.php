@@ -137,6 +137,17 @@ return [
     'Please try again or contact us if the problem continues.' => 'دوباره تلاش کنید و در صورت ادامه مشکل با ما تماس بگیرید.',
     'Back to home' => 'بازگشت به صفحه اصلی',
     'Upload a PDF file within the allowed size.' => 'یک فایل PDF با اندازه مجاز بارگذاری کنید.',
+    'Enter the test verification code.' => 'کد تأیید آزمایشی را وارد کنید.',
+    'What is {left} + {right}?' => 'حاصل {left} + {right} چند است؟',
+    'The verification answer is incorrect.' => 'پاسخ اعتبارسنجی صحیح نیست.',
+    'Requests' => 'درخواست‌ها',
+    'Quick actions' => 'دسترسی سریع',
+    'Common management tasks are available here.' => 'عملیات پرکاربرد مدیریت از این بخش در دسترس است.',
+    'Selected work' => 'پروژه‌های منتخب',
+    'No portfolio items yet' => 'هنوز نمونه‌کاری ثبت نشده است',
+    'Portfolio items will be displayed here after they are added.' => 'پس از افزودن نمونه‌کار، پروژه‌ها در این بخش نمایش داده می‌شوند.',
+    'View project' => 'مشاهده پروژه',
+    'General settings' => 'تنظیمات عمومی',
 
 
 ];

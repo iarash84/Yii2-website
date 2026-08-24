@@ -111,5 +111,54 @@ class SeedController extends Controller
                 'keyWord' => 'نمونه,نصب',
             ])->execute();
         }
+
+        $portfolioItems = [
+            [
+                'title' => 'پلتفرم تحلیل داده',
+                'content' => '<p>داشبورد مدیریتی برای پایش شاخص‌های کلیدی و گزارش‌های عملیاتی.</p>',
+                'image' => 'img/portfolio/analytics-platform.webp',
+                'url_display_name' => 'مشاهده جزئیات پروژه',
+            ],
+            [
+                'title' => 'همراه‌بانک سازمانی',
+                'content' => '<p>تجربه امن و ساده بانکداری همراه برای مشتریان حقیقی و سازمانی.</p>',
+                'image' => 'img/portfolio/mobile-banking.webp',
+                'url_display_name' => 'مشاهده جزئیات پروژه',
+            ],
+            [
+                'title' => 'فروشگاه آنلاین',
+                'content' => '<p>تجربه خرید یکپارچه و سریع برای دسکتاپ، تبلت و موبایل.</p>',
+                'image' => 'img/portfolio/commerce-experience.webp',
+                'url_display_name' => 'مشاهده جزئیات پروژه',
+            ],
+        ];
+        foreach ($portfolioItems as $item) {
+            $sampleExists = Yii::$app->db->createCommand(
+                'SELECT 1 FROM {{%tbl_sample}} WHERE title=:title LIMIT 1',
+                [':title' => $item['title']]
+            )->queryScalar();
+            if (!$sampleExists) {
+                Yii::$app->db->createCommand()->insert('tbl_sample', array_merge($item, [
+                    'user_id' => $userId,
+                    'url_link' => '#',
+                ]))->execute();
+            }
+        }
+
+        $carouselExists = Yii::$app->db->createCommand(
+            'SELECT 1 FROM {{%tbl_carousel}} WHERE image=:image LIMIT 1',
+            [':image' => 'img/portfolio/hero-studio.webp']
+        )->queryScalar();
+        if (!$carouselExists) {
+            Yii::$app->db->createCommand()->insert('tbl_carousel', [
+                'user_id' => $userId,
+                'image' => 'img/portfolio/hero-studio.webp',
+                'link' => '',
+                'title' => 'راهکارهای دیجیتال قابل اعتماد',
+                'text' => '<p>طراحی و توسعه محصولاتی که برای رشد کسب‌وکار ساخته شده‌اند.</p>',
+                'order_num' => 1,
+                'status' => 1,
+            ])->execute();
+        }
     }
 }

@@ -30,7 +30,7 @@ class OpportunityForm extends Model
             ['email', 'email'],
             ['email', 'filter', 'filter' => 'trim'],
             // verifyCode needs to be entered correctly
-            ['verifyCode', 'captcha'],
+            ['verifyCode', \common\validators\TextCaptchaValidator::class],
             ['phoneNumber', 'integer', 'integerOnly'=>true, 'min'=>10],
             ['phoneNumber', 'filter', 'filter' => 'trim'],
         ];

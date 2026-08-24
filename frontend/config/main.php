@@ -76,7 +76,7 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                'admin' => 'admin/setting/index',
+                'admin' => 'admin/dashboard/index',
                 'admin/blog' => 'admin/blog/index',
                 'admin/users' => 'admin/user/index',
                 'admin/settings' => 'admin/setting/index',

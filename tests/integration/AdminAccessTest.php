@@ -16,7 +16,7 @@ class AdminAccessTest extends TestCase
         /** @var Module $module */
         $module = Yii::$app->getModule('admin');
 
-        foreach (['setting', 'blog', 'user', 'contact', 'order', 'opportunity', 'carousel', 'sample'] as $id) {
+        foreach (['dashboard', 'setting', 'blog', 'user', 'contact', 'order', 'opportunity', 'carousel', 'sample'] as $id) {
             $controller = new Controller($id, $module);
             $action = new InlineAction('index', $controller, static fn () => null);
             self::assertFalse($module->beforeAction($action), "Guest admin access was allowed for {$id}.");

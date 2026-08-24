@@ -8,6 +8,16 @@ use Yii;
 
 class SmokeTest extends DatabaseTestCase
 {
+    public function testDemoImageAssetsExist(): void
+    {
+        $webroot = Yii::getAlias('@webroot');
+        foreach (['analytics-platform.webp', 'mobile-banking.webp', 'commerce-experience.webp', 'hero-studio.webp'] as $file) {
+            $path = $webroot . '/img/portfolio/' . $file;
+            self::assertFileExists($path);
+            self::assertGreaterThan(10_000, filesize($path));
+        }
+    }
+
     public function testMainPagesRenderWithoutServerErrors(): void
     {
         foreach (
@@ -37,11 +47,16 @@ class SmokeTest extends DatabaseTestCase
 
         foreach (
             [
+            'admin/dashboard/index',
             'admin/setting/index',
             'admin/setting/about',
+            'admin/setting/home',
+            'admin/setting/social',
+            'admin/setting/system',
             'admin/blog/index',
             'admin/category/index',
             'admin/carousel/index',
+            'admin/sample/index',
             'admin/contact/index',
             'admin/order/index',
             'admin/opportunity/index',

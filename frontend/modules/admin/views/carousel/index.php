@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use frontend\widgets\Icon;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -36,26 +37,30 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td>
                                 <div class="btn-group btn-group-sm" role="group">
 
-                                    <?= Html::a('<span class="glyphicon glyphicon-arrow-up"></span>', ['/admin/carousel/up', 'id' => $item->primaryKey], [
+                                    <?= Html::a(Icon::show('arrow-up'), ['/admin/carousel/up', 'id' => $item->primaryKey], [
                                         'title' => Yii::t('app', 'Move up'),
-                                        'class' => 'btn btn-default move-up',
+                                        'class' => 'icon-button move-up',
+                                        'aria-label' => Yii::t('app', 'Move up'),
                                         'data-method' => 'post',
                                     ]); ?>
 
-                                    <?= Html::a('<span class="glyphicon glyphicon-arrow-down"></span>', ['/admin/carousel/down', 'id' => $item->primaryKey], [
+                                    <?= Html::a(Icon::show('arrow-down'), ['/admin/carousel/down', 'id' => $item->primaryKey], [
                                         'title' => Yii::t('app', 'Move down'),
-                                        'class' => 'btn btn-default move-down',
+                                        'class' => 'icon-button move-down',
+                                        'aria-label' => Yii::t('app', 'Move down'),
                                         'data-method' => 'post',
                                     ]); ?>
 
-                                    <?= Html::a('<span class="glyphicon glyphicon-pencil"></span>', ['/admin/carousel/update', 'id' => $item->primaryKey], [
+                                    <?= Html::a(Icon::show('edit'), ['/admin/carousel/update', 'id' => $item->primaryKey], [
                                         'title' => Yii::t('app', 'Edit'),
-                                        'class' => 'btn btn-default',
+                                        'class' => 'icon-button',
+                                        'aria-label' => Yii::t('app', 'Edit'),
                                     ]); ?>
 
-                                    <?= Html::a('<span class="glyphicon glyphicon-remove"></span>', ['/admin/carousel/delete', 'id' => $item->primaryKey], [
+                                    <?= Html::a(Icon::show('delete'), ['/admin/carousel/delete', 'id' => $item->primaryKey], [
                                         'title' => Yii::t('app', 'Delete item'),
-                                        'class' => 'btn btn-default confirm-delete',
+                                        'class' => 'icon-button icon-button-danger confirm-delete',
+                                        'aria-label' => Yii::t('app', 'Delete item'),
                                         'data' => [
                                             'confirm' => Yii::t('app' ,'Are you sure you want to delete this item ?'),
                                             'method' => 'post',

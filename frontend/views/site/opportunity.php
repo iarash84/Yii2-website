@@ -6,7 +6,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use yii\captcha\Captcha;
+use frontend\components\TextCaptcha;
 
 $this->title = Yii::t('app','Job opportunity');;
 $this->params['breadcrumbs'][] = $this->title;
@@ -39,9 +39,14 @@ $this->params['breadcrumbs'][] = $this->title;
             ])->hint(Yii::t('app', 'Upload a PDF file within the allowed size.'), ['id' => 'resume-help']) ?>
 
 
-            <?= $form->field($model, 'verifyCode')->widget(Captcha::className(), [
-                'template' => '<div class="row"><div class="col-lg-3">{image}</div><div class="col-lg-6">{input}</div></div>',
-            ]) ?>
+            <div class="captcha-panel">
+                <p id="captcha-question" class="captcha-question"><?= Html::encode(TextCaptcha::question()) ?></p>
+                <?= $form->field($model, 'verifyCode')->textInput([
+                    'inputmode' => 'numeric',
+                    'autocomplete' => 'off',
+                    'aria-describedby' => 'captcha-question',
+                ]) ?>
+            </div>
 
             <div class="form-group">
                 <?= Html::submitButton(Yii::t('app', 'Send'), ['class' => 'btn btn-primary', 'name' => 'contact-button']) ?>

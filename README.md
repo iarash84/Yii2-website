@@ -78,6 +78,10 @@ alert و loading در فایل کوچک `frontend/web/js/app.js` پیاده‌س
 هنگام توسعه صفحه جدید از tokenها و componentهای همین design system استفاده کنید تا
 پشتیبانی responsive، دسترس‌پذیری و RTL/LTR بدون CSS پراکنده حفظ شود.
 
+داده‌های نمایشی نصب شامل سه نمونه‌کار و یک تصویر hero بهینه‌شده با فرمت WebP است. این
+assetها در `frontend/web/img/portfolio` قرار دارند و با اجرای `php yii seed` به‌صورت
+idempotent به داده‌های نمونه متصل می‌شوند.
+
 - سایت: <http://127.0.0.1:8080/>
 - مدیریت: <http://127.0.0.1:8080/admin>
 

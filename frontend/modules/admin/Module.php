@@ -8,7 +8,7 @@ use yii\web\ForbiddenHttpException;
 class Module extends \yii\base\Module
 {
     public $controllerNamespace = 'frontend\modules\admin\controllers';
-    public $defaultRoute = 'setting/index';
+    public $defaultRoute = 'dashboard/index';
 
     public function beforeAction($action)
     {
@@ -28,6 +28,9 @@ class Module extends \yii\base\Module
 
     private function requiredPermission($controllerId, $actionId)
     {
+        if ($controllerId === 'dashboard') {
+            return 'accessAdmin';
+        }
         if ($controllerId === 'user' && $actionId === 'change') {
             return 'accessAdmin';
         }

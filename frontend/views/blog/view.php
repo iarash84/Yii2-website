@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use frontend\widgets\Icon;
 
 /* @var $this yii\web\View */
 /* @var $model frontend\models\Blog */
@@ -31,11 +32,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <div class="row">
             <div class="group1 col-sm-6 col-md-6">
-                <span class="glyphicon glyphicon-folder-open" style="margin-left: 5px"></span><?= $model->user->username ?></a>
+                <?= Icon::show('users') ?> <?= Html::encode($model->user->username) ?>
 
             </div>
             <div class="group2 col-sm-6 col-md-6">
-                <span class="glyphicon glyphicon-time"></span> <?= $model->createDatetime ?>
+                <time datetime="<?= Html::encode($model->createDatetime) ?>"><?= Html::encode($model->createDatetime) ?></time>
             </div>
         </div>
         <hr>

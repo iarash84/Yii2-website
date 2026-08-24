@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\ListView;
+use frontend\widgets\Icon;
 
 /* @var $this yii\web\View */
 /* @var $searchModel frontend\models\BlogSearch */
@@ -12,6 +13,12 @@ $this->title = Yii::t('app', 'Blog');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="blog-index">
+    <div class="page-header page-header-actions">
+        <h1><?= Html::encode($this->title) ?></h1>
+        <?php if (!Yii::$app->user->isGuest && Yii::$app->user->can('manageContent')): ?>
+            <?= Html::a(Icon::show('plus') . Yii::t('app', 'Create Post'), ['/admin/blog/create'], ['class' => 'btn']) ?>
+        <?php endif; ?>
+    </div>
     <!-- Page Layout here -->
     <div class="row">
 
@@ -19,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h5><?= Html::a(Yii::t('app','Categories'),['/blogs']) ?></h5>
+                    <h2><?= Html::a(Yii::t('app', 'Categories'), ['/blog/index']) ?></h2>
                 </div>
                 <ul class="list-group">
                     <?php

@@ -1,62 +1,63 @@
 <?php
+
+use frontend\widgets\Icon;
 use yii\helpers\Html;
+use yii\helpers\HtmlPurifier;
+use yii\helpers\Url;
 
+$models = $dataProvider->models;
 ?>
-<div class="site-sample">
-    <?php
-    $counter = 0;
-    foreach ($dataProvider->models as $model) :
-        ?>
-        <?php if(($counter % 3) == 0) : ?>
-        <div class="row" >
-    <?php endif; ?>
-        <div class="col s8 m4">
-            <div class="card">
-
-                <?php if(!Yii::$app->user->isGuest) : ?>
-                    <div class="card-action" style="text-align: center">
-                        <div class="btn-group btn-group-sm btn-group-justified " role="group" dir="ltr">
-
-                            <?= Html::a('<span class="glyphicon glyphicon-pencil"></span>', ['/admin/sample/update', 'id' => $model->id], [
+<?php if (!$models): ?>
+    <section class="card empty-state">
+        <?= Icon::show('briefcase', ['class' => 'icon empty-state-icon']) ?>
+        <h2><?= Yii::t('app', 'No portfolio items yet') ?></h2>
+        <p><?= Yii::t('app', 'Portfolio items will be displayed here after they are added.') ?></p>
+        <?php if (!Yii::$app->user->isGuest && Yii::$app->user->can('manageContent')): ?>
+            <?= Html::a(Icon::show('plus') . Yii::t('app', 'Create Sample'), ['/admin/sample/create'], ['class' => 'btn']) ?>
+        <?php endif; ?>
+    </section>
+<?php else: ?>
+    <div class="portfolio-grid">
+        <?php foreach ($models as $model): ?>
+            <article class="portfolio-card card">
+                <div class="portfolio-media">
+                    <?= Html::img(Url::to('@web/' . ltrim($model->image, '/')), [
+                        'alt' => Html::encode($model->title),
+                        'loading' => 'lazy',
+                        'width' => 768,
+                        'height' => 512,
+                    ]) ?>
+                    <?php if (!Yii::$app->user->isGuest && Yii::$app->user->can('manageContent')): ?>
+                        <div class="portfolio-admin-actions">
+                            <?= Html::a(Icon::show('edit'), ['/admin/sample/update', 'id' => $model->id], [
                                 'title' => Yii::t('app', 'Edit'),
-                                'class' => 'btn btn-default blue darken-2',
-                            ]); ?>
-
-                            <?= Html::a('<span class="glyphicon glyphicon-remove"></span>', ['/admin/sample/delete', 'id' => $model->id], [
+                                'aria-label' => Yii::t('app', 'Edit'),
+                                'class' => 'icon-button',
+                            ]) ?>
+                            <?= Html::a(Icon::show('delete'), ['/admin/sample/delete', 'id' => $model->id], [
                                 'title' => Yii::t('app', 'Delete item'),
-                                'class' => 'btn btn-default confirm-delete red accent-2',
+                                'aria-label' => Yii::t('app', 'Delete item'),
+                                'class' => 'icon-button icon-button-danger',
                                 'data' => [
-                                    'confirm' => Yii::t('app' ,'Are you sure you want to delete this item ?'),
+                                    'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
                                     'method' => 'post',
                                 ],
-                            ]); ?>
-
+                            ]) ?>
                         </div>
-                    </div>
-                <?php endif; ?>
-
-
-                <div class="card-image">
-                    <?= Html::img($model->image) ?>
+                    <?php endif; ?>
                 </div>
-                <div class="card-content">
-                    <b ><?= $model->title ?></b>
-
-                    <p style="text-align: justify;">
-                        <?= \yii\helpers\HtmlPurifier::process($model->content) ?>
-                    </p>
+                <div class="portfolio-body">
+                    <h2><?= Html::encode($model->title) ?></h2>
+                    <div class="text-muted"><?= HtmlPurifier::process($model->content) ?></div>
+                    <?php if ($model->url_link): ?>
+                        <?= Html::a(
+                            Html::encode($model->url_display_name ?: Yii::t('app', 'View project')) . Icon::show('external'),
+                            $model->url_link,
+                            ['class' => 'portfolio-link', 'rel' => 'noopener noreferrer']
+                        ) ?>
+                    <?php endif; ?>
                 </div>
-                <div class="card-action">
-                    <a href="<?= $model->url_link ?>"><?= $model->url_display_name ?></a>
-                </div>
-            </div>
-        </div>
-        <?php
-        $counter++;
-        if($counter % 3 == 0) : ?>
-            </div>
-            <?php
-        endif;
-    endforeach;
-    ?>
-</div>
+            </article>
+        <?php endforeach; ?>
+    </div>
+<?php endif; ?>

@@ -17,6 +17,15 @@ use common\components\SecureUpload;
  */
 class SampleController extends Controller
 {
+    public function actionIndex()
+    {
+        return $this->render('index', [
+            'dataProvider' => new ActiveDataProvider([
+                'query' => Sample::find()->orderBy(['id' => SORT_DESC]),
+            ]),
+        ]);
+    }
+
     public function behaviors()
     {
         return [
@@ -59,7 +68,7 @@ class SampleController extends Controller
                 $model->save();
             }
             Yii::$app->session->setFlash('success', Yii::t('app', 'sample created'));
-            return $this->redirect(['/site/sample']);
+            return $this->redirect(['/admin/sample/index']);
         } else {
 
             return $this->render('create', [
@@ -100,7 +109,7 @@ class SampleController extends Controller
 
             $model->user_id = Yii::$app->user->identity->getId();
             $model->save();
-            return $this->redirect(['/site/sample']);
+            return $this->redirect(['/admin/sample/index']);
 
         } else {
             return $this->render('update', [
@@ -124,7 +133,7 @@ class SampleController extends Controller
             unlink($imagePath);
         $model->delete();
 
-        return $this->redirect(['/site/sample']);
+        return $this->redirect(['/admin/sample/index']);
     }
 
     /**
