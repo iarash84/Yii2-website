@@ -33,18 +33,17 @@ password. Change that ignored local file if your MySQL credentials differ.
 
 ## Run
 
-Run the frontend and backend in separate terminals:
+Start the application:
 
 ```powershell
 php yii serve --docroot=frontend/web 127.0.0.1:8080
-php yii serve --docroot=backend/web 127.0.0.1:8081
 ```
 
-- Frontend: <http://127.0.0.1:8080/>
-- Backend: <http://127.0.0.1:8081/>
+- Website: <http://127.0.0.1:8080/>
+- Management: <http://127.0.0.1:8080/admin>
 
-For Apache/XAMPP, point separate virtual-host document roots at `frontend/web`
-and `backend/web`; do not expose the repository root.
+For Apache/XAMPP, point the virtual-host document root at `frontend/web`; do
+not expose the repository root.
 
 ## Checks
 

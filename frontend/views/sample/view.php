@@ -17,12 +17,12 @@ use yii\helpers\Html;
                     <div class="card-action" style="text-align: center">
                         <div class="btn-group btn-group-sm btn-group-justified " role="group" dir="ltr">
 
-                            <?= Html::a('<span class="glyphicon glyphicon-pencil"></span>', ['/sample/update', 'id' => $model->id], [
+                            <?= Html::a('<span class="glyphicon glyphicon-pencil"></span>', ['/admin/sample/update', 'id' => $model->id], [
                                 'title' => Yii::t('app', 'Edit'),
                                 'class' => 'btn btn-default blue darken-2',
                             ]); ?>
 
-                            <?= Html::a('<span class="glyphicon glyphicon-remove"></span>', ['/sample/delete', 'id' => $model->id], [
+                            <?= Html::a('<span class="glyphicon glyphicon-remove"></span>', ['/admin/sample/delete', 'id' => $model->id], [
                                 'title' => Yii::t('app', 'Delete item'),
                                 'class' => 'btn btn-default confirm-delete red accent-2',
                                 'data' => [

@@ -1,0 +1,8 @@
+*
+!.gitignore
+!image/
+!resume/
+image/*
+!image/.gitignore
+resume/*
+!resume/.gitignore

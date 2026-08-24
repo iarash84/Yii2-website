@@ -1,7 +1,7 @@
 <?php
 namespace frontend\controllers;
 
-use app\models\Faqs;
+use frontend\models\Faqs;
 
 use frontend\models\Opportunity;
 use frontend\models\OpportunityForm;
@@ -164,9 +164,9 @@ class SiteController extends Controller
             if (!empty($model->resume)) {
 
                 // generate a unique file name
-                $file_upload_path = 'upload/resume/' . Yii::$app->security->generateRandomString() . "." . $model->resume->extension;
-                $model->resume->saveAs($file_upload_path);
-                $opportunity->resume = $file_upload_path;
+                $relativePath = 'upload/resume/' . Yii::$app->security->generateRandomString() . "." . $model->resume->extension;
+                $model->resume->saveAs(Yii::getAlias('@webroot/' . $relativePath));
+                $opportunity->resume = $relativePath;
             }
 
             $opportunity->name = $model->name;
@@ -185,7 +185,7 @@ class SiteController extends Controller
                 ]);
             }else
             {
-                return $this->redirect(['opportunity/index']);
+                return $this->redirect(['/admin/opportunity/index']);
             }
         }
     }
@@ -236,7 +236,7 @@ class SiteController extends Controller
             'model' => $model,
         ]);
         } else {
-            return $this->redirect(['setting/about']);
+            return $this->redirect(['/admin/setting/about']);
         }
     }
 

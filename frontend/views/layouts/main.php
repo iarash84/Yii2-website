@@ -55,36 +55,36 @@ if(Yii::$app->user->isGuest) { ?>
 
     <!-- Login Mode-->
     <ul id="blogDropdown" class="dropdown-content">
-        <li><?= Html::a(Yii::t('app','Blog'),['/blog/index']) ?></li>
+        <li><?= Html::a(Yii::t('app','Blog'),['/admin/blog/index']) ?></li>
         <li class="divider"></li>
-        <li><?= Html::a(Yii::t('app','Category'),['/category/index']) ?></li>
+        <li><?= Html::a(Yii::t('app','Category'),['/admin/category/index']) ?></li>
         <li class="divider"></li>
-        <li><?= Html::a(Yii::t('app','New Post'),['/blog/create']) ?></li>
+        <li><?= Html::a(Yii::t('app','New Post'),['/admin/blog/create']) ?></li>
     </ul>
 
 
     <ul id="userDropdown" class="dropdown-content">
         <?php if(Yii::$app->user->can('usersManagement')){ ?>
-            <li><?= Html::a(Yii::t('app','User Management'),['/user/index']) ?></li>
+            <li><?= Html::a(Yii::t('app','User Management'),['/admin/user/index']) ?></li>
         <?php } ?>
         <li class="divider"></li>
         <li><?= Html::a(Yii::t('app','Change Password'),['/changepass']) ?></li>
         <li class="divider"></li>
-        <li><?= Html::a(Yii::t('app','Log'),['/user/log']) ?></li>
+        <li><?= Html::a(Yii::t('app','Log'),['/admin/user/log']) ?></li>
         <li class="divider"></li>
         <li><?= Html::a(Yii::t('app', 'Logout') ,['/logout']) ?></li>
     </ul>
 
     <ul id="settingDropdown" class="dropdown-content">
-        <li><?= Html::a(Yii::t('app','Setting'),['/setting/index']) ?></li>
+        <li><?= Html::a(Yii::t('app','Setting'),['/admin/setting/index']) ?></li>
         <li class="divider"></li>
-        <li><?= Html::a(Yii::t('app','Home Update'),['/setting/home']) ?></li>
+        <li><?= Html::a(Yii::t('app','Home Update'),['/admin/setting/home']) ?></li>
         <li class="divider"></li>
-        <li><?= Html::a(Yii::t('app','Carousel'),['/carousel/index']) ?></li>
+        <li><?= Html::a(Yii::t('app','Carousel'),['/admin/carousel/index']) ?></li>
         <li class="divider"></li>
-        <li><?= Html::a(Yii::t('app','Social Network'),['/setting/social']) ?></li>
+        <li><?= Html::a(Yii::t('app','Social Network'),['/admin/setting/social']) ?></li>
         <li class="divider"></li>
-        <li><?= Html::a(Yii::t('app','System'),['/setting/system']) ?></li>
+        <li><?= Html::a(Yii::t('app','System'),['/admin/setting/system']) ?></li>
     </ul>
 
 
@@ -96,10 +96,10 @@ if(Yii::$app->user->isGuest) { ?>
                 <li><?= Html::a(Yii::t('app','User Area'). '(' . Yii::$app->user->identity->username . ')','#!',['class'=>'dropdown-button' , 'data-activates'=>'userDropdown']) ?></li>
                 <li><?= Html::a(Yii::t('app','Blog'),'#!',['class'=>'dropdown-button' , 'data-activates'=>'blogDropdown']) ?></li>
                 <li><?= Html::a(Yii::t('app','Setting'),'#!',['class'=>'dropdown-button' , 'data-activates'=>'settingDropdown']) ?></li>
-                <li><?= Html::a(Yii::t('app','Job opportunity'),['/opportunity/index']) ?></li>
-                <li><?= Html::a(Yii::t('app','Order app'),['/order/index']) ?></li>
+                <li><?= Html::a(Yii::t('app','Job opportunity'),['/admin/opportunity/index']) ?></li>
+                <li><?= Html::a(Yii::t('app','Order app'),['/admin/order/index']) ?></li>
                 <li><?= Html::a(Yii::t('app','Sample Project'),['/site/sample']) ?></li>
-                <li><?= Html::a(Yii::t('app','Contact'),['/contact/index']) ?></li>
+                <li><?= Html::a(Yii::t('app','Contact'),['/admin/contact/index']) ?></li>
                 <li><?= Html::a(Yii::t('app','About'),['/site/about']) ?></li>
                 <li><?= Html::a(Yii::t('app','Home'),['/site/index']) ?></li>
 
@@ -128,7 +128,7 @@ if(isset($this->params['breadcrumbs'])){ ?>
                     <li><?= Html::a(Yii::t('app','About'),['/site/about'],['class'=>"grey-text text-lighten-3"]) ?></li>
                     <li><?= Html::a(Yii::t('app','Contact'),['/site/contact'],['class'=>"grey-text text-lighten-3"]) ?></li>
                     <li><?= Html::a(Yii::t('app','Sample Project'),['/site/sample'],['class'=>"grey-text text-lighten-3"]) ?></li>
-                    <li><?= Html::a(Yii::t('app','Blog'),['/site/blog'],['class'=>"grey-text text-lighten-3"]) ?></li>
+                    <li><?= Html::a(Yii::t('app','Blog'),['/blog/index'],['class'=>"grey-text text-lighten-3"]) ?></li>
                     <li><?= Html::a(Yii::t('app','FAQS'),['/site/faqs'],['class'=>"grey-text text-lighten-3"]) ?></li>
                     <li><?= Html::a(Yii::t('app','Order app'),['/site/order'],['class'=>"grey-text text-lighten-3"]) ?></li>
                     <li><?= Html::a(Yii::t('app','Job opportunity'),['/site/opportunity'],['class'=>"grey-text text-lighten-3"]) ?></li>

@@ -2,6 +2,7 @@
 
 /* @var $this yii\web\View */
 use frontend\models\Carousel as CarouselModel;
+use frontend\models\Setting;
 use yii\bootstrap\Carousel;
 use yii\helpers\Html;
 
@@ -30,4 +31,5 @@ foreach($carousels as $item){
 ?>
 
 
-<?= file_get_contents("upload/html/home"); ?>
+<?php $home = Setting::findOne(['type' => 'Home']); ?>
+<?= $home ? $home->content : $this->render('_home') ?>

@@ -2,7 +2,6 @@
 
 namespace frontend\models;
 
-use app\models\BlogCategory;
 use common\models\User;
 use Yii;
 
@@ -67,7 +66,7 @@ class Blog extends \yii\db\ActiveRecord
      */
     public function getCategory()
     {
-        return $this->hasOne(BlogCategory::className(), ['id' => 'category_id']);
+        return $this->hasOne(Category::className(), ['id' => 'category_id']);
     }
 
     /**

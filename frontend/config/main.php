@@ -13,6 +13,11 @@ return [
     'language' => 'fa_IR',
     'sourceLanguage' => 'en_US',
     'controllerNamespace' => 'frontend\controllers',
+    'modules' => [
+        'admin' => [
+            'class' => 'frontend\modules\admin\Module',
+        ],
+    ],
     'components' => [
         'i18n' => [
             'translations' => [
@@ -43,17 +48,19 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        'DateTimeConverter' => [
-            'class' => 'app\Components\DateTimeConverter',
-        ],
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                'changepass' => 'user/change',
-                '<alias:index|contact|about|login|logout|faqs|order|sample|opportunity|blog>' => 'site/<alias>',
-                '<alias:social|system>' => 'setting/<alias>',
-                '<alias:log>' => 'user/<alias>',
+                'admin' => 'admin/setting/index',
+                'admin/blog' => 'admin/blog/index',
+                'admin/users' => 'admin/user/index',
+                'admin/settings' => 'admin/setting/index',
+                'admin/<controller:[\w-]+>/<action:[\w-]+>' => 'admin/<controller>/<action>',
+                'admin/<controller:[\w-]+>' => 'admin/<controller>/index',
+                'blog' => 'blog/index',
+                'changepass' => 'admin/user/change',
+                '<alias:index|contact|about|login|logout|faqs|order|sample|opportunity>' => 'site/<alias>',
                 '<controller:\w+>s' => '<controller>/index',
                 '<controller:\w+>/<id:\d+>/<action:(update|delete)>' => '<controller>/<action>',
                 '<controller:\w+>/<id:\d+>/<subject>/' => '<controller>/view',

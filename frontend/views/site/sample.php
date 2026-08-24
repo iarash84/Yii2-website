@@ -11,7 +11,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?php
         if(!Yii::$app->user->isGuest)
-            echo Html::a(Yii::t('app', 'Create Sample'), ['sample/create'], ['class' => 'btn btn-success']) ?>
+            echo Html::a(Yii::t('app', 'Create Sample'), ['/admin/sample/create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= $this->render('//sample/view', [
