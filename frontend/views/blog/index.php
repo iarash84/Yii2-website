@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <ul class="list-group">
                     <?php
                     foreach($categoryModels as $category){
-                        echo'<li class="list-group-item">'.Html::a($category->title,['/blog/category', 'id'=>$category->id]).'</li>';
+                        echo'<li class="list-group-item">'.Html::a(Html::encode($category->getLocalized('title')),['/blog/category', 'id'=>$category->id]).'</li>';
                     }
                     ?>
                 </ul>

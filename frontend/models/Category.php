@@ -18,6 +18,12 @@ use Yii;
  */
 class Category extends \yii\db\ActiveRecord
 {
+    use \frontend\models\traits\TranslatableContent;
+
+    public function translatedAttributes()
+    {
+        return ['title'];
+    }
     /**
      * @inheritdoc
      */

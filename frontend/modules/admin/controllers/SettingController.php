@@ -60,6 +60,13 @@ class SettingController extends Controller
             $setting->postalCode = $model->postalCode;
             $setting->workingHours = $model->workingHours;
             $setting->companyName = $model->companyName;
+            $translations = Yii::$app->request->post('settingTranslations', []);
+            foreach (['CompanyName', 'Address', 'WorkingHours'] as $type) {
+                $translatedSetting = Setting::findOne(['type' => $type]);
+                if ($translatedSetting !== null) {
+                    $translatedSetting->saveTranslations($translations[$type] ?? []);
+                }
+            }
             Yii::$app->session->setFlash('success', Yii::t('app', 'Thank you! Update successfully completed!'));
 
         } else {
@@ -74,6 +81,11 @@ class SettingController extends Controller
 
         return $this->render('index', [
             'model' => $model,
+            'translatedSettings' => [
+                'CompanyName' => Setting::findOne(['type' => 'CompanyName']),
+                'Address' => Setting::findOne(['type' => 'Address']),
+                'WorkingHours' => Setting::findOne(['type' => 'WorkingHours']),
+            ],
         ]);
     }
 
@@ -91,6 +103,7 @@ class SettingController extends Controller
             $model->user_id = Yii::$app->user->identity->getId();
             $model->type = 'About';
             $model->save();
+            $model->saveTranslations(Yii::$app->request->post('translations', []));
             Yii::$app->session->setFlash('success', Yii::t('app', 'Thank you! Update successfully completed!'));
 
             return $this->redirect(['setting/about']);
@@ -144,22 +157,22 @@ class SettingController extends Controller
     {
 
         $model = new HtmlForm();
+        $setting = Setting::findOne(['type' => 'Home']) ?: new Setting([
+            'user_id' => Yii::$app->user->id,
+            'type' => 'Home',
+        ]);
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            Setting::deleteAll(['type' => 'Home']);
-            $setting = new Setting([
-                'user_id' => Yii::$app->user->id,
-                'type' => 'Home',
-                'content' => $model->pageContent,
-            ]);
+            $setting->content = $model->pageContent;
             $setting->save();
+            $setting->saveTranslations(Yii::$app->request->post('translations', []));
         } else {
             $model->pageName = "home";
-            $setting = Setting::findOne(['type' => 'Home']);
             $model->pageContent = $setting ? $setting->content : '';
         }
 
         return $this->render('home', [
             'model' => $model,
+            'settingModel' => $setting,
         ]);
     }
 

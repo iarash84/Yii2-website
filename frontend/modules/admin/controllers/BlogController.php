@@ -128,8 +128,9 @@ class BlogController extends Controller
         if ($model->load(Yii::$app->request->post())) {
 
             $model->user_id = Yii::$app->user->identity->getId();
-            $model->save();
-            return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->save() && $model->saveTranslations(Yii::$app->request->post('translations', []))) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         } else {
             $categoriesModel = Category::find()->all();
             $categories = array();
@@ -154,7 +155,8 @@ class BlogController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) && $model->save()
+            && $model->saveTranslations(Yii::$app->request->post('translations', []))) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
 

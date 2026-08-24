@@ -20,6 +20,17 @@ use yii\helpers\Html;
  */
 class Setting extends \yii\db\ActiveRecord
 {
+    use \frontend\models\traits\TranslatableContent;
+
+    public function translatedAttributes()
+    {
+        return ['content'];
+    }
+
+    public function getLocalizedContent($language = null)
+    {
+        return $this->getLocalized('content', $language);
+    }
     /**
      * @inheritdoc
      */
@@ -72,7 +83,7 @@ class Setting extends \yii\db\ActiveRecord
 
         if($model == null)
             return null;
-        return $model->content;
+        return $model->getLocalizedContent();
     }
 
     /**
@@ -84,7 +95,7 @@ class Setting extends \yii\db\ActiveRecord
 
         if($model == null)
             return null;
-        return $model->content;
+        return $model->getLocalizedContent();
     }
 
     /**
@@ -96,17 +107,12 @@ class Setting extends \yii\db\ActiveRecord
 
         if($model == null)
             return null;
-        return $model->content;
+        return $model->getLocalizedContent();
     }
 
     public function setWorkingHours($value)
     {
-        $setting = new Setting();
-        $setting::deleteAll(['type'=> 'WorkingHours']);
-        $setting->user_id = Yii::$app->user->identity->getId();
-        $setting->type = 'WorkingHours';
-        $setting->content = $value;
-        $setting->save();
+        return $this->saveSettingValue('WorkingHours', $value);
     }
 
     /**
@@ -118,7 +124,7 @@ class Setting extends \yii\db\ActiveRecord
 
         if($model == null)
             return null;
-        return $model->content;
+        return $model->getLocalizedContent();
     }
 
     /**
@@ -144,7 +150,7 @@ class Setting extends \yii\db\ActiveRecord
 
         if($model == null)
             return null;
-        return $model->content;
+        return $model->getLocalizedContent();
     }
 
     /**
@@ -170,7 +176,7 @@ class Setting extends \yii\db\ActiveRecord
 
         if($model == null)
             return null;
-        return $model->content;
+        return $model->getLocalizedContent();
     }
 
     /**
@@ -197,7 +203,7 @@ class Setting extends \yii\db\ActiveRecord
 
         if($model == null)
             return null;
-        return $model->content;
+        return $model->getLocalizedContent();
     }
 
     /**
@@ -224,7 +230,7 @@ class Setting extends \yii\db\ActiveRecord
 
         if($model == null)
             return null;
-        return $model->content;
+        return $model->getLocalizedContent();
     }
 
     /**
@@ -232,12 +238,7 @@ class Setting extends \yii\db\ActiveRecord
      */
     public function setAddress($value)
     {
-        $setting = new Setting();
-        $setting::deleteAll(['type'=> 'Address']);
-        $setting->user_id = Yii::$app->user->identity->getId();
-        $setting->type = 'Address';
-        $setting->content = $value;
-        return $setting->save();
+        return $this->saveSettingValue('Address', $value);
     }
 
 
@@ -250,7 +251,7 @@ class Setting extends \yii\db\ActiveRecord
 
         if($model == null)
             return null;
-        return $model->content;
+        return $model->getLocalizedContent();
     }
 
     /**
@@ -258,10 +259,13 @@ class Setting extends \yii\db\ActiveRecord
      */
     public function setCompanyName($value)
     {
-        $setting = new Setting();
-        $setting::deleteAll(['type'=> 'CompanyName']);
-        $setting->user_id = Yii::$app->user->identity->getId();
-        $setting->type = 'CompanyName';
+        return $this->saveSettingValue('CompanyName', $value);
+    }
+
+    private function saveSettingValue($type, $value)
+    {
+        $setting = static::findOne(['type' => $type]) ?: new self(['type' => $type]);
+        $setting->user_id = Yii::$app->user->id ?: null;
         $setting->content = $value;
         return $setting->save();
     }

@@ -50,6 +50,7 @@ class CategoryController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             $model->user_id = Yii::$app->user->identity->getId();
             $model->save();
+            $model->saveTranslations(Yii::$app->request->post('translations', []));
             return $this->redirect(['/admin/category/index']);
         } else {
             return $this->render('index', [
@@ -69,7 +70,8 @@ class CategoryController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) && $model->save()
+            && $model->saveTranslations(Yii::$app->request->post('translations', []))) {
             return $this->redirect(['/admin/category/index']);
         } else {
             return $this->render('update', [

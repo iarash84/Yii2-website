@@ -24,6 +24,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'clientOptions' => [ 'filebrowserUploadUrl' => Url::to(['/admin/blog/upload']) , Yii::$app->language],
     ]) ?>
 
+    <?= $this->render('@app/modules/admin/views/_translation_fields', ['model' => $settingModel]) ?>
+
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Update'), ['class' =>'btn btn-success']) ?>
     </div>

@@ -20,6 +20,8 @@ use yii\widgets\ActiveForm;
         'clientOptions' => ['language' => Yii::$app->language],
     ])->label(false) ?>
 
+    <?= $this->render('@app/modules/admin/views/_translation_fields', ['model' => $model]) ?>
+
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>

@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'About');
                 'items' => [
                     [
                         'label' => Yii::t('app' ,'View'),
-                        'content' =>  '<br />'.$model->content,
+                        'content' =>  '<br />'.$model->getLocalizedContent(),
                         'active' => true
                     ],
                     [

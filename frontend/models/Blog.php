@@ -22,6 +22,12 @@ use Yii;
  */
 class Blog extends \yii\db\ActiveRecord
 {
+    use \frontend\models\traits\TranslatableContent;
+
+    public function translatedAttributes()
+    {
+        return ['title', 'description', 'content', 'keyWord'];
+    }
     /**
      * @inheritdoc
      */

@@ -18,7 +18,6 @@ class AppAsset extends AssetBundle
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
-        'css/materialize-rtl.css',
         'css/fonts.css',
         'css/style.css',
         'css/site.css',
@@ -31,4 +30,13 @@ class AppAsset extends AssetBundle
         'yii\web\YiiAsset',
         'yii\bootstrap\BootstrapAsset',
     ];
+
+    public function init()
+    {
+        array_unshift(
+            $this->css,
+            \Yii::$app->languageManager->isRtl() ? 'css/materialize-rtl.css' : 'css/materialize.css'
+        );
+        parent::init();
+    }
 }

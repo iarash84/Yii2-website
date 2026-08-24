@@ -5,7 +5,8 @@ use yii\helpers\Html;
 <div class="blog-post">
     <article>
 <!--        <h5> --><?php //= Html::a(Html::encode($model->title) ,['blog/'.$model->id]) ?><!--</h5>-->
-        <h5> <?= Html::a(Html::encode($model->title) ,['blog/view','id' => $model->id, 'subject' => str_replace(' ','_',trim($model->title))]) ?></h5>
+        <?php $localizedTitle = $model->getLocalized('title'); ?>
+        <h5> <?= Html::a(Html::encode($localizedTitle) ,['blog/view','id' => $model->id, 'subject' => str_replace(' ','_',trim($localizedTitle))]) ?></h5>
 
         <div class="row">
             <div class="group1 col-sm-6 col-md-6">
@@ -17,7 +18,7 @@ use yii\helpers\Html;
             </div>
         </div>
         <hr>
-        <?= \yii\helpers\HtmlPurifier::process($model->description) ?>
+        <?= \yii\helpers\HtmlPurifier::process($model->getLocalized('description')) ?>
         <p class="text-right">
             <?= Html::a(Yii::t('app','continue reading...'),['blog/view','id' => $model->id, 'subject' => str_replace(' ','_',trim($model->title))],['class'=>'text-right']); ?>
         </p>

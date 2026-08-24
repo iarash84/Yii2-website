@@ -5,7 +5,9 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model frontend\models\Blog */
 
-$this->title = $model->title;
+$this->title = $model->getLocalized('title');
+$this->registerMetaTag(['name' => 'description', 'content' => strip_tags($model->getLocalized('description'))]);
+$this->registerMetaTag(['name' => 'keywords', 'content' => $model->getLocalized('keyWord')]);
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Blog'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -25,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php } ?>
 
     <article>
-        <h5> <?= Html::a(Html::encode($model->title) ,['blog/view','id' => $model->id, 'subject' => str_replace(' ','_',trim($model->title))]) ?></h5>
+        <h5> <?= Html::a(Html::encode($this->title) ,['blog/view','id' => $model->id, 'subject' => str_replace(' ','_',trim($this->title))]) ?></h5>
 
         <div class="row">
             <div class="group1 col-sm-6 col-md-6">
@@ -37,7 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
         </div>
         <hr>
-        <?= \yii\helpers\HtmlPurifier::process($model->content) ?>
+        <?= \yii\helpers\HtmlPurifier::process($model->getLocalized('content')) ?>
         <hr>
     </article>
 

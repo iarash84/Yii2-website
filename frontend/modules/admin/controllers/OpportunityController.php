@@ -55,6 +55,7 @@ class OpportunityController extends Controller
             $model->user_id = Yii::$app->user->identity->getId();
             $model->type = 'Opportunity';
             $model->save();
+            $model->saveTranslations(Yii::$app->request->post('translations', []));
             Yii::$app->session->setFlash('success',Yii::t('app','Thank you! Update successfully completed!'));
 
             return $this->redirect(['opportunity/index']);

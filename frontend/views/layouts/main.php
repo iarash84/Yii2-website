@@ -14,12 +14,31 @@ $cookies = Yii::$app->request->cookies;;
 
 Icon::map($this, Icon::WHHG);
 $footerSetting = new \frontend\models\Setting();
+$languageManager = Yii::$app->languageManager;
+$isRtl = $languageManager->isRtl();
+$this->registerMetaTag(['name' => 'content-language', 'content' => $languageManager->getLocale()]);
+foreach ($languageManager->languages as $code => $language) {
+    $this->registerLinkTag([
+        'rel' => 'alternate',
+        'hreflang' => $language['locale'],
+        'href' => $languageManager->getLanguageUrl($code),
+    ]);
+}
+$this->registerLinkTag([
+    'rel' => 'alternate',
+    'hreflang' => 'x-default',
+    'href' => $languageManager->getLanguageUrl($languageManager->defaultLanguage),
+]);
+$this->registerLinkTag([
+    'rel' => 'canonical',
+    'href' => $languageManager->getLanguageUrl($languageManager->activeLanguage),
+]);
 ?>
 
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
 
-<html lang="fa-IR" dir="rtl">
+<html lang="<?= Html::encode($languageManager->getLocale()) ?>" dir="<?= $isRtl ? 'rtl' : 'ltr' ?>">
 <head>
     <meta charset="<?= Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -27,7 +46,7 @@ $footerSetting = new \frontend\models\Setting();
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
 </head>
-<body dir="rtl">
+<body dir="<?= $isRtl ? 'rtl' : 'ltr' ?>">
 <?php $this->beginBody() ?>
 
 <?php
@@ -35,7 +54,7 @@ if(Yii::$app->user->isGuest) { ?>
     <!--Logout Mode-->
     <nav class="teal" role="navigation">
         <div class="nav-wrapper">
-            <a href="<?= Yii::$app->homeUrl ?>" class="brand-logo site-brand"><?= Html::encode($footerSetting->companyName) ?></a>
+            <?= Html::a(Html::encode($footerSetting->companyName), ['/site/index'], ['class' => 'brand-logo site-brand']) ?>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
 
                 <li><?= Html::a(Yii::t('app','Login'),['/site/login']) ?></li>
@@ -46,6 +65,15 @@ if(Yii::$app->user->isGuest) { ?>
                 <li><?= Html::a(Yii::t('app','Contact'),['/site/contact']) ?></li>
                 <li><?= Html::a(Yii::t('app','About'),['/site/about']) ?></li>
                 <li><?= Html::a(Yii::t('app','Home'),['/site/index']) ?></li>
+                <li class="language-selector">
+                    <?php foreach ($languageManager->languages as $code => $language): ?>
+                        <?= Html::a(Html::encode($language['label']), $languageManager->getLanguageUrl($code), [
+                            'lang' => $language['locale'],
+                            'hreflang' => $language['locale'],
+                            'class' => $code === $languageManager->activeLanguage ? 'active' : null,
+                        ]) ?>
+                    <?php endforeach; ?>
+                </li>
 
             </ul>
         </div>
@@ -92,7 +120,7 @@ if(Yii::$app->user->isGuest) { ?>
 
     <nav class="teal navbar-fixed-top">
         <div class="nav-wrapper">
-            <a href="<?= Yii::$app->homeUrl ?>" class="brand-logo site-brand"><?= Html::encode($footerSetting->companyName) ?></a>
+            <?= Html::a(Html::encode($footerSetting->companyName), ['/site/index'], ['class' => 'brand-logo site-brand']) ?>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
 
                 <li><?= Html::a(Yii::t('app','User Area'). '(' . Yii::$app->user->identity->username . ')','#!',['class'=>'dropdown-button' , 'data-activates'=>'userDropdown']) ?></li>

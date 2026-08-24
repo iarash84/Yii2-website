@@ -11,6 +11,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <h3><?= Html::encode($this->title) ?></h3>
 
     <div itemprop="articleBody">
-    <?= \yii\helpers\HtmlPurifier::process($model->content) ?>
+    <?= \yii\helpers\HtmlPurifier::process($model->getLocalizedContent()) ?>
     </div>
 </div>
