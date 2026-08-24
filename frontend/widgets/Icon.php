@@ -20,6 +20,7 @@ class Icon
         'arrow-down' => 'm6 14 6 6 6-6M12 20V4',
         'inbox' => 'M4 4h16v16H4V4Zm0 11h5l2 2h2l2-2h5',
         'briefcase' => 'M3 7h18v13H3V7Zm5 0V4h8v3m-13 5h18',
+        'menu' => 'M4 6h16M4 12h16M4 18h16',
     ];
 
     public static function show($name, array $options = [])

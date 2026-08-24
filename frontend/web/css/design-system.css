@@ -184,6 +184,7 @@ tbody tr:hover { background: var(--color-primary-50); }
 .settings-section-heading { margin-block-end: var(--space-5); padding-block-end: var(--space-4); border-block-end: 1px solid var(--color-border); }
 .settings-section-heading h2 { margin-block-end: var(--space-2); font-size: 1.3rem; }
 .form-actions { display: flex; justify-content: flex-end; margin-block-start: var(--space-5); padding-block-start: var(--space-5); border-block-start: 1px solid var(--color-border); }
+.form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 var(--space-5); }
 .system-tool-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-5); }
 .system-tool-card { display: flex; min-height: 18rem; align-items: flex-start; flex-direction: column; }
 .system-tool-card h2 { font-size: 1.3rem; }
@@ -243,7 +244,7 @@ tbody tr:hover { background: var(--color-primary-50); }
     .hero { min-height: 23rem; border-radius: var(--radius-md); }
     .table-responsive, .grid-view, .detail-view { margin-inline: -1rem; border-inline: 0; border-radius: 0; }
     th, td { padding: .7rem .8rem; }
-    .admin-panels, .blog-index > .row, .portfolio-grid, .metric-grid, .system-tool-grid { grid-template-columns: 1fr; }
+    .admin-panels, .blog-index > .row, .portfolio-grid, .metric-grid, .system-tool-grid, .form-grid { grid-template-columns: 1fr; }
     .page-header-actions, .section-shortcut { align-items: stretch; flex-direction: column; }
 }
 @media (prefers-reduced-motion: reduce) {

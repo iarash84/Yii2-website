@@ -3,6 +3,7 @@
 use common\widgets\Alert;
 use frontend\assets\AppAsset;
 use frontend\models\Setting;
+use frontend\models\MenuItem;
 use frontend\widgets\Icon;
 use yii\helpers\Html;
 use yii\widgets\Breadcrumbs;
@@ -17,6 +18,8 @@ $isAdmin = Yii::$app->controller->module !== null
 $current = static function ($routePrefix) use ($route) {
     return strpos($route, $routePrefix) === 0 ? 'page' : null;
 };
+$mainMenu = $isAdmin ? [] : MenuItem::activeRoots('main');
+$footerMenu = $isAdmin ? [] : MenuItem::activeRoots('footer');
 
 $this->registerMetaTag(['name' => 'content-language', 'content' => $languageManager->getLocale()]);
 foreach ($languageManager->languages as $code => $language) {
@@ -65,12 +68,31 @@ $this->registerLinkTag([
                  aria-label="<?= Yii::t('app', 'Main navigation') ?>">
                 <ul class="nav-list">
                     <?php if (!$isAdmin): ?>
-                        <li><?= Html::a(Yii::t('app', 'Home'), ['/site/index'], ['aria-current' => $route === 'site/index' ? 'page' : null]) ?></li>
-                        <li><?= Html::a(Yii::t('app', 'Blog'), ['/blog/index'], ['aria-current' => $current('blog/')]) ?></li>
-                        <li><?= Html::a(Yii::t('app', 'Sample Project'), ['/site/sample'], ['aria-current' => $current('site/sample')]) ?></li>
-                        <li><?= Html::a(Yii::t('app', 'About'), ['/site/about'], ['aria-current' => $current('site/about')]) ?></li>
-                        <li><?= Html::a(Yii::t('app', 'Contact'), ['/site/contact'], ['aria-current' => $current('site/contact')]) ?></li>
-                        <li><?= Html::a(Yii::t('app', 'Order app'), ['/site/order'], ['class' => 'btn']) ?></li>
+                        <?php if ($mainMenu): ?>
+                            <?php foreach ($mainMenu as $menuItem): ?>
+                                <li class="<?= $menuItem->children ? 'nav-menu' : '' ?>">
+                                    <?php if ($menuItem->children): ?>
+                                        <details>
+                                            <summary class="nav-summary"><?= Html::encode($menuItem->getLocalized('label')) ?></summary>
+                                            <ul class="nav-submenu">
+                                                <?php foreach ($menuItem->children as $child): ?>
+                                                    <li><?= Html::a(Html::encode($child->getLocalized('label')), $child->getPublicUrl(), ['target' => $child->target, 'rel' => $child->target === '_blank' ? 'noopener noreferrer' : null]) ?></li>
+                                                <?php endforeach; ?>
+                                            </ul>
+                                        </details>
+                                    <?php else: ?>
+                                        <?= Html::a(Html::encode($menuItem->getLocalized('label')), $menuItem->getPublicUrl(), ['target' => $menuItem->target, 'rel' => $menuItem->target === '_blank' ? 'noopener noreferrer' : null]) ?>
+                                    <?php endif; ?>
+                                </li>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <li><?= Html::a(Yii::t('app', 'Home'), ['/site/index'], ['aria-current' => $route === 'site/index' ? 'page' : null]) ?></li>
+                            <li><?= Html::a(Yii::t('app', 'Blog'), ['/blog/index'], ['aria-current' => $current('blog/')]) ?></li>
+                            <li><?= Html::a(Yii::t('app', 'Sample Project'), ['/site/sample'], ['aria-current' => $current('site/sample')]) ?></li>
+                            <li><?= Html::a(Yii::t('app', 'About'), ['/site/about'], ['aria-current' => $current('site/about')]) ?></li>
+                            <li><?= Html::a(Yii::t('app', 'Contact'), ['/site/contact'], ['aria-current' => $current('site/contact')]) ?></li>
+                            <li><?= Html::a(Yii::t('app', 'Order app'), ['/site/order'], ['class' => 'btn']) ?></li>
+                        <?php endif; ?>
                     <?php endif; ?>
                     <?php if (Yii::$app->user->isGuest): ?>
                         <li><?= Html::a(Yii::t('app', 'Login'), ['/site/login']) ?></li>
@@ -118,6 +140,9 @@ $this->registerLinkTag([
                             <li><?= Html::a(Icon::show('briefcase') . Yii::t('app', 'Sample Project'), ['/admin/sample/index'], ['aria-current' => $current('admin/sample')]) ?></li>
                             <li><?= Html::a(Icon::show('image') . Yii::t('app', 'Carousel'), ['/admin/carousel/index'], ['aria-current' => $current('admin/carousel')]) ?></li>
                         <?php endif; ?>
+                        <?php if (Yii::$app->user->can('manageMenus')): ?>
+                            <li><?= Html::a(Icon::show('menu') . Yii::t('app', 'Menu management'), ['/admin/menu/index'], ['aria-current' => $current('admin/menu')]) ?></li>
+                        <?php endif; ?>
                         <?php if (Yii::$app->user->can('viewSubmissions')): ?>
                             <li class="admin-nav-label"><?= Yii::t('app', 'Requests') ?></li>
                             <li><?= Html::a(Icon::show('inbox') . Yii::t('app', 'Contact'), ['/admin/contact/index'], ['aria-current' => $current('admin/contact')]) ?></li>
@@ -163,12 +188,18 @@ $this->registerLinkTag([
                 <nav aria-label="<?= Yii::t('app', 'Useful links') ?>">
                     <h2><?= Yii::t('app', 'Useful links') ?></h2>
                     <ul class="footer-links">
-                        <li><?= Html::a(Yii::t('app', 'About'), ['/site/about']) ?></li>
-                        <li><?= Html::a(Yii::t('app', 'Contact'), ['/site/contact']) ?></li>
-                        <li><?= Html::a(Yii::t('app', 'Blog'), ['/blog/index']) ?></li>
-                        <li><?= Html::a(Yii::t('app', 'FAQS'), ['/site/faqs']) ?></li>
-                        <li><?= Html::a(Yii::t('app', 'Order app'), ['/site/order']) ?></li>
-                        <li><?= Html::a(Yii::t('app', 'Job opportunity'), ['/site/opportunity']) ?></li>
+                        <?php if ($footerMenu): ?>
+                            <?php foreach ($footerMenu as $menuItem): ?>
+                                <li><?= Html::a(Html::encode($menuItem->getLocalized('label')), $menuItem->getPublicUrl(), ['target' => $menuItem->target, 'rel' => $menuItem->target === '_blank' ? 'noopener noreferrer' : null]) ?></li>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <li><?= Html::a(Yii::t('app', 'About'), ['/site/about']) ?></li>
+                            <li><?= Html::a(Yii::t('app', 'Contact'), ['/site/contact']) ?></li>
+                            <li><?= Html::a(Yii::t('app', 'Blog'), ['/blog/index']) ?></li>
+                            <li><?= Html::a(Yii::t('app', 'FAQS'), ['/site/faqs']) ?></li>
+                            <li><?= Html::a(Yii::t('app', 'Order app'), ['/site/order']) ?></li>
+                            <li><?= Html::a(Yii::t('app', 'Job opportunity'), ['/site/opportunity']) ?></li>
+                        <?php endif; ?>
                     </ul>
                 </nav>
             </div>

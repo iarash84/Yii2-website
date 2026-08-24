@@ -39,6 +39,10 @@ class Module extends \yii\base\Module
             return 'manageUsers';
         }
 
+        if ($controllerId === 'menu') {
+            return 'manageMenus';
+        }
+
         if (in_array($controllerId, ['blog', 'category', 'carousel', 'sample'], true)) {
             return 'manageContent';
         }
