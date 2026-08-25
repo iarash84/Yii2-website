@@ -14,7 +14,7 @@ $defaultLanguage = $params['languages'][$params['defaultLanguage']]['yii'] ?? 'e
 return [
     'id' => 'app-frontend',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log', 'languageBootstrap', 'frontend\components\SecurityHeaders', 'frontend\components\MaintenanceMode'],
+    'bootstrap' => ['log', 'languageBootstrap', 'frontend\components\SecurityHeaders', 'frontend\components\MaintenanceMode', 'visitorAnalytics'],
     'language' => $defaultLanguage,
     'sourceLanguage' => 'en_US',
     'controllerNamespace' => 'frontend\controllers',
@@ -32,6 +32,9 @@ return [
         ],
         'languageBootstrap' => [
             'class' => 'frontend\components\LanguageBootstrap',
+        ],
+        'visitorAnalytics' => [
+            'class' => 'frontend\components\VisitorAnalytics',
         ],
         'formatter' => [
             'class' => 'frontend\components\LocalizedFormatter',

@@ -11,6 +11,7 @@ use frontend\models\Faqs;
 use frontend\models\Media;
 use frontend\models\Page;
 use frontend\models\SystemSetting;
+use frontend\models\VisitorReport;
 use common\models\User;
 use Yii;
 use yii\web\Controller;
@@ -19,7 +20,9 @@ class DashboardController extends Controller
 {
     public function actionIndex()
     {
+        $analytics = Yii::$app->user->can('viewAnalytics') ? VisitorReport::dashboard(30) : null;
         return $this->render('index', [
+            'analytics' => $analytics,
             'counts' => [
                 'posts' => Blog::find()->count(),
                 'samples' => Sample::find()->count(),

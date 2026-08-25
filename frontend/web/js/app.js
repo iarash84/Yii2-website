@@ -9,8 +9,6 @@
         root.dataset.theme = theme;
         if (themeButton) {
             themeButton.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
-            const label = themeButton.querySelector('[data-theme-label]');
-            if (label) label.textContent = theme === 'dark' ? themeButton.dataset.lightLabel : themeButton.dataset.darkLabel;
         }
     };
     applyTheme(savedTheme || preferredTheme);

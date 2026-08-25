@@ -19,6 +19,7 @@ class SeedController extends Controller
             $this->seedSettings($user->id);
             if (filter_var($demo, FILTER_VALIDATE_BOOLEAN)) {
                 $this->seedDemoContent($user->id);
+                $this->seedCompleteDemoData($user->id);
             }
             $transaction->commit();
             $this->stdout("Seed data installed successfully.\n");
@@ -180,5 +181,132 @@ class SeedController extends Controller
         } else {
             Yii::$app->db->createCommand()->insert('tbl_carousel', $carousel)->execute();
         }
+    }
+
+    private function seedCompleteDemoData($userId)
+    {
+        $db = Yii::$app->db;
+        $now = time();
+
+        $mediaPaths = [
+            'img/portfolio/analytics-platform.webp' => ['analytics-platform.webp', 'داشبورد تحلیل داده'],
+            'img/portfolio/mobile-banking.webp' => ['mobile-banking.webp', 'همراه بانک سازمانی'],
+            'img/portfolio/commerce-experience.webp' => ['commerce-experience.webp', 'فروشگاه آنلاین'],
+            'img/portfolio/hero-studio.webp' => ['hero-studio.webp', 'استودیوی طراحی دیجیتال'],
+        ];
+        foreach ($mediaPaths as $path => [$name, $alt]) {
+            if (!(new \yii\db\Query())->from('{{%media}}')->where(['path' => $path])->exists()) {
+                $file = Yii::getAlias('@frontend/web/' . $path);
+                $db->createCommand()->insert('{{%media}}', [
+                    'path' => $path, 'original_name' => $name, 'mime_type' => 'image/webp',
+                    'extension' => 'webp', 'size' => is_file($file) ? filesize($file) : 0,
+                    'alt_text' => $alt, 'created_by' => $userId, 'created_at' => $now, 'updated_at' => $now,
+                ])->execute();
+            }
+        }
+
+        if (!(new \yii\db\Query())->from('{{%page}}')->where(['slug' => 'services'])->exists()) {
+            $db->createCommand()->insert('{{%page}}', [
+                'title' => 'خدمات ما', 'slug' => 'services',
+                'summary' => 'راهکارهای طراحی، توسعه و بهینه‌سازی محصولات دیجیتال.',
+                'content' => '<h2>راهکار متناسب با کسب‌وکار شما</h2><p>از تحلیل نیاز تا طراحی و توسعه، در کنار تیم شما هستیم.</p>',
+                'status' => 'published', 'seo_title' => 'خدمات طراحی و توسعه وب',
+                'seo_description' => 'معرفی خدمات طراحی تجربه کاربری و توسعه نرم‌افزار.',
+                'seo_keywords' => 'طراحی وب,توسعه نرم‌افزار', 'robots' => 'index,follow',
+                'created_by' => $userId, 'updated_by' => $userId, 'created_at' => $now, 'updated_at' => $now,
+            ])->execute();
+        }
+
+        $menus = [
+            ['خانه', '/', 'main', 10], ['وبلاگ', '/blog', 'main', 20],
+            ['نمونه‌کارها', '/sample', 'main', 30], ['خدمات', '/services', 'main', 40],
+            ['درباره ما', '/about', 'footer', 10], ['تماس با ما', '/contact', 'footer', 20],
+            ['سؤالات متداول', '/faqs', 'footer', 30],
+        ];
+        foreach ($menus as [$label, $url, $location, $order]) {
+            if (!(new \yii\db\Query())->from('{{%menu_item}}')->where(['label' => $label, 'location' => $location])->exists()) {
+                $db->createCommand()->insert('{{%menu_item}}', [
+                    'label' => $label, 'url' => $url, 'location' => $location, 'target' => '_self',
+                    'sort_order' => $order, 'status' => 1, 'created_by' => $userId,
+                    'created_at' => $now, 'updated_at' => $now,
+                ])->execute();
+            }
+        }
+
+        $faqs = [
+            ['چطور می‌توانم سفارش ثبت کنم؟', 'از صفحه ثبت سفارش، مشخصات و توضیحات پروژه را ارسال کنید تا کارشناسان با شما تماس بگیرند.'],
+            ['زمان پاسخ‌گویی چقدر است؟', 'در روزهای کاری معمولاً کمتر از یک روز کاری پاسخ می‌دهیم.'],
+            ['آیا خدمات پشتیبانی ارائه می‌شود؟', 'بله، شرایط پشتیبانی متناسب با نوع پروژه در قرارداد مشخص می‌شود.'],
+        ];
+        foreach ($faqs as $index => [$question, $answer]) {
+            if (!(new \yii\db\Query())->from('{{%tbl_faqs}}')->where(['question' => $question])->exists()) {
+                $db->createCommand()->insert('{{%tbl_faqs}}', [
+                    'userId' => $userId, 'question' => $question, 'respons' => $answer,
+                    'status' => 1, 'sort_order' => ($index + 1) * 10,
+                ])->execute();
+            }
+        }
+
+        $postId = (new \yii\db\Query())->select('id')->from('{{%tbl_blog_post}}')->orderBy(['id' => SORT_ASC])->scalar();
+        foreach (['فناوری' => 'technology', 'طراحی' => 'design'] as $name => $slug) {
+            $tagId = (new \yii\db\Query())->select('id')->from('{{%blog_tag}}')->where(['slug' => $slug])->scalar();
+            if (!$tagId) {
+                $db->createCommand()->insert('{{%blog_tag}}', ['name' => $name, 'slug' => $slug])->execute();
+                $tagId = $db->getLastInsertID();
+            }
+            if ($postId && !(new \yii\db\Query())->from('{{%blog_post_tag}}')->where(['post_id' => $postId, 'tag_id' => $tagId])->exists()) {
+                $db->createCommand()->insert('{{%blog_post_tag}}', ['post_id' => $postId, 'tag_id' => $tagId])->execute();
+            }
+        }
+
+        $submissions = [
+            ['{{%tbl_contact_us}}', ['name' => 'کاربر نمونه', 'phoneNumber' => '02100000000', 'email' => 'contact@example.com', 'subject' => 'درخواست مشاوره', 'body' => 'برای بازطراحی وب‌سایت به مشاوره نیاز دارم.']],
+            ['{{%tbl_order}}', ['name' => 'شرکت نمونه', 'company' => 'راهکار نو', 'phoneNumber' => '02100000001', 'website' => 'https://example.com', 'email' => 'order@example.com', 'description' => 'طراحی و توسعه وب‌سایت شرکتی.']],
+            ['{{%tbl_opportunity}}', ['name' => 'متقاضی نمونه', 'phoneNumber' => '09120000000', 'email' => 'career@example.com']],
+        ];
+        foreach ($submissions as [$table, $data]) {
+            if (!(new \yii\db\Query())->from($table)->where(['email' => $data['email']])->exists()) {
+                $db->createCommand()->insert($table, $data)->execute();
+            }
+        }
+
+        $socialSettings = ['Instagram' => 'https://instagram.com/example', 'Linkedin' => 'https://linkedin.com/company/example', 'Telegram' => 'https://t.me/example'];
+        foreach ($socialSettings as $type => $content) {
+            if (!(new \yii\db\Query())->from('{{%tbl_setting}}')->where(['type' => $type])->exists()) {
+                $db->createCommand()->insert('{{%tbl_setting}}', ['user_id' => $userId, 'type' => $type, 'content' => $content])->execute();
+            }
+        }
+
+        $this->seedVisitorAnalytics();
+    }
+
+    private function seedVisitorAnalytics()
+    {
+        $db = Yii::$app->db;
+        $countries = ['IR' => 58, 'US' => 15, 'DE' => 10, 'CA' => 7, 'TR' => 6, 'AE' => 4];
+        $pages = ['/fa' => 34, '/fa/blog' => 24, '/fa/sample' => 18, '/fa/services' => 12, '/fa/contact' => 8, '/en' => 4];
+        for ($offset = 29; $offset >= 0; $offset--) {
+            $date = gmdate('Y-m-d', strtotime('-' . $offset . ' days'));
+            $factor = 0.72 + ((29 - $offset) / 100) + (($offset % 5) / 25);
+            $views = (int) round(110 * $factor);
+            $visitors = (int) round($views * 0.62);
+            $this->upsertAggregate('{{%visitor_daily}}', ['visit_date' => $date], $views, $visitors);
+            foreach ($countries as $code => $share) {
+                $countryViews = max(1, (int) round($views * $share / 100));
+                $this->upsertAggregate('{{%visitor_country_daily}}', ['visit_date' => $date, 'country_code' => $code], $countryViews, (int) round($countryViews * 0.65));
+            }
+            foreach ($pages as $path => $share) {
+                $pageViews = max(1, (int) round($views * $share / 100));
+                $this->upsertAggregate('{{%visitor_page_daily}}', ['visit_date' => $date, 'path' => $path], $pageViews, (int) round($pageViews * 0.7));
+            }
+        }
+    }
+
+    private function upsertAggregate($table, array $key, $views, $visitors)
+    {
+        $values = array_merge($key, ['page_views' => $views, 'visitors' => $visitors]);
+        $exists = (new \yii\db\Query())->from($table)->where($key)->exists();
+        $command = Yii::$app->db->createCommand();
+        $exists ? $command->update($table, $values, $key)->execute() : $command->insert($table, $values)->execute();
     }
 }

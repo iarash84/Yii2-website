@@ -34,6 +34,52 @@ $cards = [
         ) ?>
     <?php endforeach; ?>
 </div>
+<?php if ($analytics !== null): ?>
+    <?php
+    $maxDailyViews = max(1, ...array_map(static fn ($row) => (int) $row['page_views'], $analytics['daily'] ?: [['page_views' => 0]]));
+    $maxCountryViews = max(1, ...array_map(static fn ($row) => (int) $row['page_views'], $analytics['countries'] ?: [['page_views' => 0]]));
+    $countryNames = [
+        'IR' => Yii::t('app', 'Iran'), 'US' => Yii::t('app', 'United States'),
+        'DE' => Yii::t('app', 'Germany'), 'CA' => Yii::t('app', 'Canada'),
+        'GB' => Yii::t('app', 'United Kingdom'), 'TR' => Yii::t('app', 'Turkey'),
+        'AE' => Yii::t('app', 'United Arab Emirates'), 'ZZ' => Yii::t('app', 'Unknown country'),
+    ];
+    ?>
+    <section class="analytics-panel">
+        <div class="dashboard-section-title analytics-heading">
+            <div><p class="text-overline"><?= Yii::t('app', 'Audience overview') ?></p><h2><?= Yii::t('app', 'Visitor analytics') ?></h2></div>
+            <span class="status-pill"><?= Yii::t('app', 'Last {days} days', ['days' => $analytics['days']]) ?></span>
+        </div>
+        <div class="analytics-summary">
+            <?php foreach ([['users', 'visitors', 'Unique visitors'], ['activity', 'page_views', 'Page views']] as [$icon, $key, $label]): ?>
+                <?php $trend = $analytics['trend'][$key]; ?>
+                <article class="card analytics-kpi">
+                    <span class="analytics-kpi-icon"><?= Icon::show($icon) ?></span>
+                    <div><span><?= Yii::t('app', $label) ?></span><strong><?= Yii::$app->formatter->asInteger($analytics['totals'][$key]) ?></strong></div>
+                    <small class="trend <?= $trend < 0 ? 'is-down' : 'is-up' ?>"><?= $trend >= 0 ? '↑' : '↓' ?> <?= Html::encode(abs($trend)) ?>%</small>
+                </article>
+            <?php endforeach; ?>
+            <article class="card analytics-kpi">
+                <span class="analytics-kpi-icon"><?= Icon::show('pages') ?></span>
+                <div><span><?= Yii::t('app', 'Pages per visitor') ?></span><strong><?= $analytics['totals']['visitors'] ? Yii::$app->formatter->asDecimal($analytics['totals']['page_views'] / $analytics['totals']['visitors'], 1) : '0' ?></strong></div>
+            </article>
+        </div>
+        <div class="analytics-chart card" aria-label="<?= Yii::t('app', 'Daily page views') ?>">
+            <div class="dashboard-section-title"><h3><?= Yii::t('app', 'Traffic trend') ?></h3><span class="text-muted"><?= Yii::t('app', 'Daily page views') ?></span></div>
+            <?php if ($analytics['daily']): ?><div class="bar-chart"><?php foreach ($analytics['daily'] as $day): ?><div class="bar-column" title="<?= Html::encode($day['visit_date'] . ': ' . $day['page_views']) ?>"><span class="bar-value"><?= (int) $day['page_views'] ?></span><span class="bar" style="height: <?= max(4, ((int) $day['page_views'] / $maxDailyViews) * 100) ?>%"></span><small><?= Yii::$app->formatter->asDate($day['visit_date'], 'php:m/d') ?></small></div><?php endforeach; ?></div><?php else: ?><p class="empty-state"><?= Yii::t('app', 'No visitor data has been recorded yet.') ?></p><?php endif; ?>
+        </div>
+        <div class="dashboard-detail-grid">
+            <section class="card">
+                <div class="dashboard-section-title"><h3><?= Yii::t('app', 'Top countries') ?></h3><span class="text-muted"><?= Yii::t('app', 'Page views') ?></span></div>
+                <?php if ($analytics['countries']): ?><ul class="rank-list"><?php foreach ($analytics['countries'] as $country): ?><li><div><strong><?= Html::encode($countryNames[$country['country_code']] ?? $country['country_code']) ?></strong><span class="rank-track"><i style="width: <?= ((int) $country['page_views'] / $maxCountryViews) * 100 ?>%"></i></span></div><b><?= Yii::$app->formatter->asInteger($country['page_views']) ?></b></li><?php endforeach; ?></ul><?php else: ?><p class="empty-state"><?= Yii::t('app', 'No visitor data has been recorded yet.') ?></p><?php endif; ?>
+            </section>
+            <section class="card">
+                <div class="dashboard-section-title"><h3><?= Yii::t('app', 'Most visited pages') ?></h3><span class="text-muted"><?= Yii::t('app', 'Unique visitors') ?></span></div>
+                <?php if ($analytics['pages']): ?><ul class="activity-list"><?php foreach ($analytics['pages'] as $page): ?><li><div><strong class="ltr"><?= Html::encode($page['path']) ?></strong><small><?= Yii::t('app', '{count} page views', ['count' => Yii::$app->formatter->asInteger($page['page_views'])]) ?></small></div><b><?= Yii::$app->formatter->asInteger($page['visitors']) ?></b></li><?php endforeach; ?></ul><?php else: ?><p class="empty-state"><?= Yii::t('app', 'No visitor data has been recorded yet.') ?></p><?php endif; ?>
+            </section>
+        </div>
+    </section>
+<?php endif; ?>
 <section class="card section-shortcut">
     <div><h2><?= Yii::t('app', 'Quick actions') ?></h2><p class="text-muted"><?= Yii::t('app', 'Common management tasks are available here.') ?></p></div>
     <div class="action-row">

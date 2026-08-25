@@ -51,6 +51,32 @@ foreach ($checks as $name => $passed) {
 }
 
 if (!$keep) {
+    putenv('ADMIN_PASSWORD=InstallTest!2026');
+    $seedCommand = escapeshellarg(PHP_BINARY) . ' ' . escapeshellarg($root . '/yii') . ' seed 1';
+    passthru($seedCommand, $seedExitCode);
+    if ($seedExitCode !== 0) {
+        fwrite(STDERR, "Demo seed installation failed.\n");
+        $pdo->exec("DROP DATABASE IF EXISTS {$quotedDatabase}");
+        exit($seedExitCode);
+    }
+    $seedChecks = [
+        'FAQ seed' => (int) $pdo->query("SELECT COUNT(*) FROM {$quotedDatabase}.tbl_faqs")->fetchColumn() >= 3,
+        'page seed' => (int) $pdo->query("SELECT COUNT(*) FROM {$quotedDatabase}.page")->fetchColumn() >= 1,
+        'menu seed' => (int) $pdo->query("SELECT COUNT(*) FROM {$quotedDatabase}.menu_item")->fetchColumn() >= 6,
+        'media seed' => (int) $pdo->query("SELECT COUNT(*) FROM {$quotedDatabase}.media")->fetchColumn() >= 4,
+        'tag seed' => (int) $pdo->query("SELECT COUNT(*) FROM {$quotedDatabase}.blog_tag")->fetchColumn() >= 2,
+        'analytics seed' => (int) $pdo->query("SELECT COUNT(*) FROM {$quotedDatabase}.visitor_daily")->fetchColumn() === 30,
+    ];
+    foreach ($seedChecks as $name => $passed) {
+        if (!$passed) {
+            fwrite(STDERR, "Installation check failed: {$name}\n");
+            $pdo->exec("DROP DATABASE IF EXISTS {$quotedDatabase}");
+            exit(1);
+        }
+    }
+}
+
+if (!$keep) {
     $pdo->exec("DROP DATABASE IF EXISTS {$quotedDatabase}");
 }
 fwrite(STDOUT, "Fresh installation test passed.\n");

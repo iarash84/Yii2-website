@@ -97,7 +97,7 @@ $this->registerLinkTag([
                     <?php endif; ?>
                     <?php if (!$isAdmin): ?>
                         <li><?= Html::a(Icon::show('posts') . Yii::t('app', 'Search'), ['/search/index']) ?></li>
-                        <li><button class="theme-toggle" type="button" data-theme-toggle data-dark-label="<?= Yii::t('app', 'Dark mode') ?>" data-light-label="<?= Yii::t('app', 'Light mode') ?>" aria-label="<?= Yii::t('app', 'Switch color theme') ?>"><?= Icon::show('moon') ?><span data-theme-label><?= Yii::t('app', 'Dark mode') ?></span></button></li>
+                        <li><button class="theme-toggle" type="button" data-theme-toggle aria-label="<?= Yii::t('app', 'Switch color theme') ?>"><span class="theme-icon theme-icon-moon"><?= Icon::show('moon') ?></span><span class="theme-icon theme-icon-sun"><?= Icon::show('sun') ?></span></button></li>
                     <?php endif; ?>
                     <?php if (Yii::$app->user->isGuest): ?>
                         <li><?= Html::a(Yii::t('app', 'Login'), ['/site/login']) ?></li>
