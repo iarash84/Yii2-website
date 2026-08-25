@@ -19,6 +19,13 @@ use Yii;
  */
 class Sample extends \yii\db\ActiveRecord
 {
+    use \frontend\models\traits\TranslatableContent;
+
+    public function translatedAttributes()
+    {
+        return ['title', 'content', 'link_label'];
+    }
+
     /**
      * @inheritdoc
      */

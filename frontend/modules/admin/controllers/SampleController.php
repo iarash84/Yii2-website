@@ -65,7 +65,9 @@ class SampleController extends Controller
             if ($model->load(Yii::$app->request->post())) {
 
                 $model->image = $file_upload_path;
-                $model->save();
+                if ($model->save()) {
+                    $model->saveTranslations(Yii::$app->request->post('translations', []));
+                }
             }
             Yii::$app->session->setFlash('success', Yii::t('app', 'sample created'));
             return $this->redirect(['/admin/sample/index']);
@@ -108,7 +110,9 @@ class SampleController extends Controller
             }
 
             $model->user_id = Yii::$app->user->identity->getId();
-            $model->save();
+            if ($model->save()) {
+                $model->saveTranslations(Yii::$app->request->post('translations', []));
+            }
             return $this->redirect(['/admin/sample/index']);
 
         } else {

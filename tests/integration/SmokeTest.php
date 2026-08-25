@@ -3,6 +3,8 @@
 namespace tests\integration;
 
 use frontend\models\Setting;
+use frontend\models\HomeSection;
+use frontend\models\Sample;
 use tests\Support\DatabaseTestCase;
 use Yii;
 
@@ -20,6 +22,8 @@ class SmokeTest extends DatabaseTestCase
 
     public function testMainPagesRenderWithoutServerErrors(): void
     {
+        self::assertTrue((new HomeSection(['type'=>'portfolio','title'=>'Portfolio','status'=>1]))->save());
+        self::assertTrue((new Sample(['title'=>'Sample','content'=>'<p>Sample content</p>']))->save());
         foreach (
             [
             'CompanyName' => 'سایت آزمایشی',

@@ -22,7 +22,7 @@ $models = $dataProvider->models;
             <article class="portfolio-card card">
                 <div class="portfolio-media">
                     <?= Html::img(MediaUrl::image($model->image, 'img/portfolio/commerce-experience.webp'), [
-                        'alt' => Html::encode($model->title),
+                        'alt' => Html::encode($model->getLocalized('title')),
                         'loading' => 'lazy',
                         'width' => 768,
                         'height' => 512,
@@ -47,8 +47,8 @@ $models = $dataProvider->models;
                     <?php endif; ?>
                 </div>
                 <div class="portfolio-body">
-                    <h2><?= Html::encode($model->title) ?></h2>
-                    <div class="text-muted"><?= HtmlPurifier::process($model->content) ?></div>
+                    <h2><?= Html::encode($model->getLocalized('title')) ?></h2>
+                    <div class="text-muted"><?= HtmlPurifier::process($model->getLocalized('content')) ?></div>
                     <?php if ($model->link_url): ?>
                         <?= Html::a(
                             Html::encode($model->link_label ?: Yii::t('app', 'View project')) . Icon::show('external'),
