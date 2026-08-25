@@ -15,13 +15,18 @@ use frontend\models\VisitorReport;
 use common\models\User;
 use Yii;
 use yii\web\Controller;
+use yii\web\BadRequestHttpException;
+use yii\filters\VerbFilter;
+use frontend\models\DashboardPreference;
 
 class DashboardController extends Controller
 {
+    public function behaviors() { return ['verbs'=>['class'=>VerbFilter::class,'actions'=>['layout'=>['post']]]]; }
     public function actionIndex()
     {
         $analytics = Yii::$app->user->can('viewAnalytics') ? VisitorReport::dashboard(30) : null;
         return $this->render('index', [
+            'dashboardLayout' => DashboardPreference::layoutFor(Yii::$app->user->id),
             'analytics' => $analytics,
             'counts' => [
                 'posts' => Blog::find()->count(),
@@ -42,5 +47,17 @@ class DashboardController extends Controller
                 'environment' => YII_ENV,
             ],
         ]);
+    }
+
+    public function actionLayout()
+    {
+        $decoded = json_decode((string) Yii::$app->request->post('layout'), true);
+        if (!is_array($decoded)) throw new BadRequestHttpException(Yii::t('app', 'Invalid dashboard layout.'));
+        $layout = DashboardPreference::normalize($decoded);
+        $model = DashboardPreference::findOne(Yii::$app->user->id) ?: new DashboardPreference(['user_id'=>Yii::$app->user->id]);
+        $model->layout_json = json_encode($layout, JSON_UNESCAPED_SLASHES);
+        $model->updated_at = time();
+        if (!$model->save()) throw new BadRequestHttpException(implode(' ', $model->getFirstErrors()));
+        return $this->asJson(['success'=>true, 'layout'=>$layout]);
     }
 }

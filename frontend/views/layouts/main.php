@@ -164,7 +164,7 @@ $this->registerLinkTag([
                         <?php if (Yii::$app->user->can('manageSettings')): ?>
                             <li class="admin-nav-label"><?= Yii::t('app', 'System') ?></li>
                             <li><?= Html::a(Icon::show('settings') . Yii::t('app', 'General settings'), ['/admin/setting/index'], ['aria-current' => $route === 'admin/setting/index' ? 'page' : null]) ?></li>
-                            <li><?= Html::a(Icon::show('home') . Yii::t('app', 'Home Update'), ['/admin/setting/home'], ['aria-current' => $route === 'admin/setting/home' ? 'page' : null]) ?></li>
+                            <li><?= Html::a(Icon::show('home') . Yii::t('app', 'Homepage sections'), ['/admin/home-section/index'], ['aria-current' => str_starts_with($route, 'admin/home-section/') ? 'page' : null]) ?></li>
                             <li><?= Html::a(Icon::show('pages') . Yii::t('app', 'About'), ['/admin/setting/about'], ['aria-current' => $route === 'admin/setting/about' ? 'page' : null]) ?></li>
                             <li><?= Html::a(Icon::show('external') . Yii::t('app', 'Social Network'), ['/admin/setting/social'], ['aria-current' => $route === 'admin/setting/social' ? 'page' : null]) ?></li>
                             <li><?= Html::a(Icon::show('activity') . Yii::t('app', 'System'), ['/admin/setting/system'], ['aria-current' => $route === 'admin/setting/system' ? 'page' : null]) ?></li>

@@ -73,7 +73,7 @@ class Module extends \yii\base\Module
         if ($controllerId === 'backup') { return 'manageBackup'; }
         if ($controllerId === 'setting' && in_array($actionId, ['system', 'flush', 'clear', 'maintenance', 'email'], true)) { return 'manageSystem'; }
 
-        if (in_array($controllerId, ['blog', 'category', 'carousel', 'sample', 'faqs'], true)) {
+        if (in_array($controllerId, ['blog', 'category', 'carousel', 'sample', 'faqs', 'home-section'], true)) {
             return 'manageContent';
         }
 

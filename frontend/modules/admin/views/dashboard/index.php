@@ -20,6 +20,9 @@ $cards = [
     <div><p class="text-overline"><?= Yii::t('app', 'Admin panel') ?></p><h1><?= Html::encode($this->title) ?></h1></div>
     <?= Html::a(Icon::show('plus') . Yii::t('app', 'Create Post'), ['/admin/blog/create'], ['class' => 'btn']) ?>
 </div>
+<section class="card dashboard-customizer"><div><strong><?= Yii::t('app','Customize dashboard') ?></strong><p class="text-muted"><?= Yii::t('app','Drag widgets to reorder them, or show and hide each widget.') ?></p></div><button type="button" class="btn btn-secondary" data-dashboard-customize><?= Yii::t('app','Customize') ?></button><div class="dashboard-widget-picker" data-dashboard-picker hidden></div></section>
+<div class="dashboard-widgets" data-dashboard-widgets data-layout='<?= Html::encode(json_encode($dashboardLayout, JSON_UNESCAPED_SLASHES)) ?>' data-save-url="<?= \yii\helpers\Url::to(['/admin/dashboard/layout']) ?>" data-csrf-param="<?= Html::encode(Yii::$app->request->csrfParam) ?>" data-csrf-token="<?= Html::encode(Yii::$app->request->csrfToken) ?>">
+<div class="dashboard-widget" data-widget="metrics" data-title="<?= Yii::t('app','Site statistics') ?>" draggable="true">
 <div class="metric-grid">
     <?php foreach ($cards as [$icon, $key, $label, $url]): ?>
         <?php if ($counts[$key] === null) {
@@ -34,7 +37,9 @@ $cards = [
         ) ?>
     <?php endforeach; ?>
 </div>
+</div>
 <?php if ($analytics !== null): ?>
+    <div class="dashboard-widget" data-widget="analytics" data-title="<?= Yii::t('app','Visitor analytics') ?>" draggable="true">
     <?php
     $maxDailyViews = max(1, ...array_map(static fn ($row) => (int) $row['page_views'], $analytics['daily'] ?: [['page_views' => 0]]));
     $maxCountryViews = max(1, ...array_map(static fn ($row) => (int) $row['page_views'], $analytics['countries'] ?: [['page_views' => 0]]));
@@ -79,7 +84,9 @@ $cards = [
             </section>
         </div>
     </section>
+    </div>
 <?php endif; ?>
+<div class="dashboard-widget" data-widget="quick_actions" data-title="<?= Yii::t('app','Quick actions') ?>" draggable="true">
 <section class="card section-shortcut">
     <div><h2><?= Yii::t('app', 'Quick actions') ?></h2><p class="text-muted"><?= Yii::t('app', 'Common management tasks are available here.') ?></p></div>
     <div class="action-row">
@@ -90,6 +97,8 @@ $cards = [
         <?php endif; ?>
     </div>
 </section>
+</div>
+<div class="dashboard-widget" data-widget="recent_activity" data-title="<?= Yii::t('app','Recent activity') ?>" draggable="true">
 <div class="dashboard-detail-grid">
     <section class="card">
         <div class="dashboard-section-title"><h2><?= Yii::t('app', 'Latest posts') ?></h2><?= Html::a(Yii::t('app', 'View all'), ['/admin/blog/index']) ?></div>
@@ -100,9 +109,13 @@ $cards = [
         <?php if ($latestContacts): ?><ul class="activity-list"><?php foreach ($latestContacts as $contact): ?><li><div><strong><?= Html::encode($contact->subject ?: $contact->name) ?></strong><small><?= Html::encode($contact->email) ?></small></div><time><?= Yii::$app->formatter->asDatetime($contact->created_at) ?></time></li><?php endforeach; ?></ul><?php else: ?><p class="empty-state"><?= Yii::t('app', 'There are no contact messages.') ?></p><?php endif; ?>
     </section><?php endif; ?>
 </div>
+</div>
+<div class="dashboard-widget" data-widget="system_status" data-title="<?= Yii::t('app','System status') ?>" draggable="true">
 <section class="card system-overview">
     <div><span><?= Yii::t('app', 'Environment') ?></span><strong><?= Html::encode(strtoupper($systemStatus['environment'])) ?></strong></div>
     <div><span><?= Yii::t('app', 'Maintenance mode') ?></span><strong class="status-pill <?= $systemStatus['maintenance'] ? 'is-warning' : 'is-success' ?>"><?= $systemStatus['maintenance'] ? Yii::t('app', 'Enabled') : Yii::t('app', 'Disabled') ?></strong></div>
     <div><span><?= Yii::t('app', 'Active calendar') ?></span><strong><?= $systemStatus['calendar'] === 'jalali' ? Yii::t('app', 'Jalali calendar') : Yii::t('app', 'Gregorian calendar') ?></strong></div>
     <div><span><?= Yii::t('app', 'Current time') ?></span><strong><?= Yii::$app->formatter->asDatetime(time()) ?></strong></div>
 </section>
+</div>
+</div>

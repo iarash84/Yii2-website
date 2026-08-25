@@ -63,4 +63,21 @@
         });
         update();
     }
+
+    const dashboard = document.querySelector('[data-dashboard-widgets]');
+    if (dashboard) {
+        let layout = JSON.parse(dashboard.dataset.layout || '{"order":[],"hidden":[]}');
+        const picker = document.querySelector('[data-dashboard-picker]');
+        const widgets = Array.from(dashboard.querySelectorAll('[data-widget]'));
+        const save = function () {
+            layout.order = Array.from(dashboard.querySelectorAll('[data-widget]')).map(el => el.dataset.widget);
+            layout.hidden = widgets.filter(el => el.hidden).map(el => el.dataset.widget);
+            const body = new URLSearchParams(); body.set('layout', JSON.stringify(layout)); body.set(dashboard.dataset.csrfParam, dashboard.dataset.csrfToken);
+            fetch(dashboard.dataset.saveUrl, {method: 'POST', headers: {'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'}, body: body.toString()});
+        };
+        layout.order.forEach(id => { const el=dashboard.querySelector('[data-widget="'+id+'"]'); if(el) dashboard.appendChild(el); });
+        widgets.forEach(el => { el.hidden=(layout.hidden || []).includes(el.dataset.widget); const label=document.createElement('label'); const input=document.createElement('input'); input.type='checkbox'; input.checked=!el.hidden; input.addEventListener('change',()=>{el.hidden=!input.checked; save();}); label.append(input, document.createTextNode(' '+el.dataset.title)); picker.appendChild(label); el.addEventListener('dragstart',()=>el.classList.add('is-dragging')); el.addEventListener('dragend',()=>{el.classList.remove('is-dragging'); save();}); });
+        dashboard.addEventListener('dragover', event => { event.preventDefault(); const moving=dashboard.querySelector('.is-dragging'); const target=event.target.closest('[data-widget]'); if(moving && target && moving!==target) dashboard.insertBefore(moving, target); });
+        const customize=document.querySelector('[data-dashboard-customize]'); if(customize) customize.addEventListener('click',()=>{picker.hidden=!picker.hidden;});
+    }
 }());

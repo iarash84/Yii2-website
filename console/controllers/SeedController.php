@@ -188,6 +188,20 @@ class SeedController extends Controller
         $db = Yii::$app->db;
         $now = time();
 
+        $homeSections = [
+            ['features', 'خدماتی برای رشد پایدار', 'از ایده تا محصول قابل اعتماد', '<p>راهکارهای ما بر تجربه کاربر، امنیت و نگهداری‌پذیری تمرکز دارند.</p>', 10],
+            ['stats', 'اعتماد در یک نگاه', 'دستاوردهای مجموعه', '<p>آمار این بخش به‌صورت خودکار از محتوای سایت محاسبه می‌شود.</p>', 20],
+            ['portfolio', 'منتخب نمونه‌کارها', 'پروژه‌های اخیر', '<p>نگاهی کوتاه به تازه‌ترین تجربه‌های طراحی و توسعه ما.</p>', 30],
+            ['posts', 'از وبلاگ', 'تازه‌ترین نوشته‌ها', '<p>دانش و تجربه‌های کاربردی تیم را دنبال کنید.</p>', 40],
+            ['faqs', 'پاسخ‌های کوتاه و روشن', 'سؤالات متداول', '', 50],
+            ['cta', 'برای شروع آماده‌اید؟', 'همکاری با ما', '<p>درباره هدف و نیاز پروژه صحبت کنیم و مسیر مناسب را پیدا کنیم.</p>', 60],
+        ];
+        foreach ($homeSections as [$type, $title, $subtitle, $content, $order]) {
+            if (!(new \yii\db\Query())->from('{{%home_section}}')->where(['type'=>$type])->exists()) {
+                $db->createCommand()->insert('{{%home_section}}', ['type'=>$type,'title'=>$title,'subtitle'=>$subtitle,'content'=>$content,'sort_order'=>$order,'status'=>1,'created_by'=>$userId,'updated_by'=>$userId,'created_at'=>$now,'updated_at'=>$now])->execute();
+            }
+        }
+
         $mediaPaths = [
             'img/portfolio/analytics-platform.webp' => ['analytics-platform.webp', 'داشبورد تحلیل داده'],
             'img/portfolio/mobile-banking.webp' => ['mobile-banking.webp', 'همراه بانک سازمانی'],
