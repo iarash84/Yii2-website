@@ -29,7 +29,7 @@ class Category extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'tbl_blog_category';
+        return '{{%blog_category}}';
     }
 
     /**
@@ -40,7 +40,7 @@ class Category extends \yii\db\ActiveRecord
         return [
             [['title'],'required'],
             [['user_id'], 'integer'],
-            [['createDatetime'], 'safe'],
+            [['created_at'], 'safe'],
             [['title'], 'string', 'max' => 255]
         ];
     }
@@ -54,7 +54,7 @@ class Category extends \yii\db\ActiveRecord
             'id' => Yii::t('app', 'ID'),
             'user_id' => Yii::t('app', 'User Created'),
             'title' => Yii::t('app', 'Title'),
-            'createDatetime' => Yii::t('app', 'Create Date Time'),
+            'created_at' => Yii::t('app', 'Create Date Time'),
         ];
     }
 

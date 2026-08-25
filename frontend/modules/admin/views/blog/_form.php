@@ -33,7 +33,7 @@ use yii\widgets\ActiveForm;
         'clientOptions' => [ 'filebrowserUploadUrl' => Url::to(['/admin/blog/upload']) , Yii::$app->language],
     ]) ?>
 
-    <?= $form->field($model, 'keyWord')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'keywords')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'hashtags')->textInput([
         'maxlength' => true,

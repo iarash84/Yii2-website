@@ -68,7 +68,7 @@ class OrderForm extends Model
         $orderModel->name = $this->name;
         $orderModel->email = $this->email;
         $orderModel->company = $this->company;
-        $orderModel->phoneNumber = $this->phoneNumber;
+        $orderModel->phone_number = $this->phoneNumber;
         $orderModel->website = $this->website;
         $orderModel->description = $this->description;
         if($orderModel->save())

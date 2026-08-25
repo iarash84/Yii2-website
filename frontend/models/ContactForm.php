@@ -62,7 +62,7 @@ class ContactForm extends Model
         $contactUsModel = new Contact();
         $contactUsModel->name = $this->name;
         $contactUsModel->email = $this->email;
-        $contactUsModel->phoneNumber = $this->phoneNumber;
+        $contactUsModel->phone_number = $this->phoneNumber;
         $contactUsModel->subject = $this->subject;
         $contactUsModel->body = $this->body;
         if($contactUsModel->save())

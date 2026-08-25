@@ -23,7 +23,7 @@ class Order extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'tbl_order';
+        return '{{%order_submission}}';
     }
 
     /**
@@ -33,9 +33,9 @@ class Order extends \yii\db\ActiveRecord
     {
         return [
             [['description'], 'string'],
-            [['createDateTime'], 'safe'],
+            [['created_at'], 'safe'],
             [['name', 'company', 'website', 'email'], 'string', 'max' => 255],
-            [['phoneNumber'], 'string', 'max' => 20]
+            [['phone_number'], 'string', 'max' => 20]
         ];
     }
 
@@ -48,11 +48,11 @@ class Order extends \yii\db\ActiveRecord
             'id' => Yii::t('app', 'ID'),
             'name' => Yii::t('app', 'Name and family'),
             'company' => Yii::t('app', 'Company'),
-            'phoneNumber' => Yii::t('app', 'Phone Number'),
+            'phone_number' => Yii::t('app', 'Phone Number'),
             'website' => Yii::t('app', 'Website'),
             'email' => Yii::t('app', 'Email'),
             'description' => Yii::t('app', 'Description'),
-            'createDateTime' => Yii::t('app', 'Create Date Time'),
+            'created_at' => Yii::t('app', 'Create Date Time'),
         ];
     }
 }

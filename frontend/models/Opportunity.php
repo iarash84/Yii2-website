@@ -21,7 +21,7 @@ class Opportunity extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'tbl_opportunity';
+        return '{{%opportunity_submission}}';
     }
 
     /**
@@ -30,9 +30,9 @@ class Opportunity extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['createDateTime'], 'safe'],
+            [['created_at'], 'safe'],
             [['name', 'resume', 'email'], 'string', 'max' => 255],
-            [['phoneNumber'], 'string', 'max' => 20]
+            [['phone_number'], 'string', 'max' => 20]
         ];
     }
 
@@ -44,10 +44,10 @@ class Opportunity extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'name' => Yii::t('app', 'Name and family'),
-            'phoneNumber' => Yii::t('app', 'Phone Number'),
+            'phone_number' => Yii::t('app', 'Phone Number'),
             'resume' => Yii::t('app', 'Resume'),
             'email' => Yii::t('app', 'Email'),
-            'createDateTime' => Yii::t('app', 'Create Date Time'),
+            'created_at' => Yii::t('app', 'Create Date Time'),
         ];
     }
 }

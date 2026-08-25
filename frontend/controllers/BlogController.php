@@ -34,7 +34,7 @@ class BlogController extends Controller
     public function actionCategory($id)
     {
         $searchModel = new BlogSearch();
-        $query = Blog::find()->with(['tags', 'category', 'user'])->andWhere(['category_id' => $id])->orderBy(['createDatetime' => SORT_DESC, 'id' => SORT_DESC]);
+        $query = Blog::find()->with(['tags', 'category', 'user'])->andWhere(['category_id' => $id])->orderBy(['created_at' => SORT_DESC, 'id' => SORT_DESC]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,

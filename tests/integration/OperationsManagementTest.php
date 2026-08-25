@@ -42,7 +42,7 @@ class OperationsManagementTest extends DatabaseTestCase
     {
         $backup = json_decode(BackupService::create(), true);
         self::assertSame('yii2-website-backup', $backup['format']);
-        self::assertSame(1, $backup['version']);
+        self::assertSame(2, $backup['version']);
         self::assertArrayHasKey('system_setting', $backup['tables']);
         $this->expectException(\RuntimeException::class);
         BackupService::restore('{"format":"invalid"}');
@@ -50,9 +50,9 @@ class OperationsManagementTest extends DatabaseTestCase
 
     public function testFaqTranslationPublicationAndOrder(): void
     {
-        $second = new Faqs(['question' => 'Second', 'respons' => 'Answer', 'status' => 1, 'sort_order' => 20]);
-        $first = new Faqs(['question' => 'First', 'respons' => 'Answer', 'status' => 1, 'sort_order' => 10]);
-        $hidden = new Faqs(['question' => 'Hidden', 'respons' => 'Answer', 'status' => 0, 'sort_order' => 0]);
+        $second = new Faqs(['question' => 'Second', 'answer' => 'Answer', 'status' => 1, 'sort_order' => 20]);
+        $first = new Faqs(['question' => 'First', 'answer' => 'Answer', 'status' => 1, 'sort_order' => 10]);
+        $hidden = new Faqs(['question' => 'Hidden', 'answer' => 'Answer', 'status' => 0, 'sort_order' => 0]);
         self::assertTrue($second->save());
         self::assertTrue($first->save());
         self::assertTrue($hidden->save());

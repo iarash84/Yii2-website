@@ -28,14 +28,14 @@ class Blog extends \yii\db\ActiveRecord
 
     public function translatedAttributes()
     {
-        return ['title', 'description', 'content', 'keyWord'];
+        return ['title', 'description', 'content', 'keywords'];
     }
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'tbl_blog_post';
+        return '{{%blog_post}}';
     }
 
     /**
@@ -47,8 +47,8 @@ class Blog extends \yii\db\ActiveRecord
             [['title','category_id'],'required'],
             [['user_id', 'category_id'], 'integer'],
             [['description', 'content'], 'string'],
-            [['createDatetime'], 'safe'],
-            [['title', 'keyWord'], 'string', 'max' => 255],
+            [['created_at'], 'safe'],
+            [['title', 'keywords'], 'string', 'max' => 255],
             [['hashtags'], 'string', 'max' => 500],
         ];
     }
@@ -65,9 +65,9 @@ class Blog extends \yii\db\ActiveRecord
             'title' => Yii::t('app', 'Title'),
             'description' => Yii::t('app', 'Summery'),
             'content' => Yii::t('app', 'Main Content'),
-            'keyWord' => Yii::t('app', 'Key Word'),
+            'keywords' => Yii::t('app', 'Key Word'),
             'hashtags' => Yii::t('app', 'Hashtags'),
-            'createDatetime' => Yii::t('app', 'Create Datetime'),
+            'created_at' => Yii::t('app', 'Create Datetime'),
         ];
     }
 

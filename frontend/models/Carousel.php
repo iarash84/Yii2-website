@@ -26,7 +26,7 @@ class Carousel extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'tbl_carousel';
+        return '{{%carousel}}';
     }
 
     /**
@@ -36,7 +36,8 @@ class Carousel extends \yii\db\ActiveRecord
     {
         return [
             [['user_id'], 'required'],
-            [['user_id', 'order_num', 'status'], 'integer'],
+            [['user_id', 'sort_order', 'status'], 'integer'],
+            [['sort_order'], 'default', 'value' => 0],
             [['text'], 'string'],
             [['image', 'title'], 'string', 'max' => 128],
             [['link'], 'string', 'max' => 255]
@@ -55,7 +56,7 @@ class Carousel extends \yii\db\ActiveRecord
             'link' => Yii::t('app', 'Link'),
             'title' => Yii::t('app', 'Title'),
             'text' => Yii::t('app', 'Text'),
-            'order_num' => Yii::t('app', 'Order Num'),
+            'sort_order' => Yii::t('app', 'Display order'),
             'status' => Yii::t('app', 'Status'),
         ];
     }

@@ -35,7 +35,7 @@ class FaqsController extends Controller
     private function save(Faqs $model)
     {
         if ($model->load(Yii::$app->request->post())) {
-            $model->userId = $model->userId ?: Yii::$app->user->id;
+            $model->user_id = $model->user_id ?: Yii::$app->user->id;
             if ($model->save() && $model->saveTranslations(Yii::$app->request->post('translations', []))) {
                 Yii::$app->session->setFlash('success', Yii::t('app', 'FAQ saved.'));
                 return $this->redirect(['index']);

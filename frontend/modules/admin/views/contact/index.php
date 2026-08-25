@@ -35,7 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => 'yii\grid\DataColumn',
                 'headerOptions' => ['style'=>'text-align:center;'],
                 'contentOptions' => ['style'=>'text-align:center;'],
-                'attribute' => 'phoneNumber'
+                'attribute' => 'phone_number'
             ],
             [
                 'class' => 'yii\grid\DataColumn',
@@ -59,7 +59,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => 'yii\grid\DataColumn',
                 'headerOptions' => ['style'=>'text-align:center;'],
                 'contentOptions' => ['style'=>'text-align:center;'],
-                'attribute' => 'createDateTime',
+                'attribute' => 'created_at',
                 'format' => 'datetime',
             ],
             [

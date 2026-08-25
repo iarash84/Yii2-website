@@ -6,10 +6,10 @@ use Yii;
 
 class BackupService
 {
-    private const TABLES = ['user','auth_rule','auth_item','auth_item_child','auth_assignment','tbl_blog_category','tbl_blog_post','tbl_carousel','tbl_contact_us','tbl_faqs','tbl_log','tbl_opportunity','tbl_order','tbl_sample','tbl_setting','content_translation','menu_item','media','page','system_setting','admin_audit'];
+    private const TABLES = ['user','auth_rule','auth_item','auth_item_child','auth_assignment','blog_category','blog_post','blog_tag','blog_post_tag','carousel','contact_submission','faq','login_attempt','opportunity_submission','order_submission','portfolio_item','site_setting','content_translation','menu_item','media','page','system_setting','admin_audit','visitor_daily','visitor_country_daily','visitor_page_daily'];
     public static function create()
     {
-        $data = ['format' => 'yii2-website-backup','version' => 1,'created_at' => time(),'tables' => []];
+        $data = ['format' => 'yii2-website-backup','version' => 2,'created_at' => time(),'tables' => []];
         foreach (self::TABLES as $table) {
             if (Yii::$app->db->schema->getTableSchema($table, true)) {
                 $data['tables'][$table] = Yii::$app->db->createCommand('SELECT * FROM ' . Yii::$app->db->quoteTableName($table))->queryAll();
@@ -20,7 +20,7 @@ class BackupService
     public static function restore($json)
     {
         $data = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
-        if (($data['format'] ?? null) !== 'yii2-website-backup' || ($data['version'] ?? null) !== 1 || !is_array($data['tables'] ?? null)) {
+        if (($data['format'] ?? null) !== 'yii2-website-backup' || ($data['version'] ?? null) !== 2 || !is_array($data['tables'] ?? null)) {
             throw new \RuntimeException('Invalid backup format.');
         }
         foreach (array_keys($data['tables']) as $table) {

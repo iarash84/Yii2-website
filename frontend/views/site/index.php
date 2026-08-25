@@ -7,7 +7,7 @@ use yii\helpers\Html;
 use yii\helpers\HtmlPurifier;
 
 $this->title = Yii::t('app', 'My Company');
-$slides = Carousel::find()->where(['status' => 1])->orderBy('order_num')->all();
+$slides = Carousel::find()->where(['status' => 1])->orderBy('sort_order')->all();
 $hero = reset($slides) ?: null;
 $home = Setting::findOne(['type' => 'Home']);
 ?>

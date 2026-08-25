@@ -19,7 +19,7 @@ class OpportunitySearch extends Opportunity
     {
         return [
             [['id'], 'integer'],
-            [['name', 'phoneNumber', 'resume', 'email', 'createDateTime'], 'safe'],
+            [['name', 'phone_number', 'resume', 'email', 'created_at'], 'safe'],
         ];
     }
 
@@ -57,11 +57,11 @@ class OpportunitySearch extends Opportunity
 
         $query->andFilterWhere([
             'id' => $this->id,
-            'createDateTime' => $this->createDateTime,
+            'created_at' => $this->created_at,
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])
-            ->andFilterWhere(['like', 'phoneNumber', $this->phoneNumber])
+            ->andFilterWhere(['like', 'phone_number', $this->phone_number])
             ->andFilterWhere(['like', 'resume', $this->resume])
             ->andFilterWhere(['like', 'email', $this->email]);
 

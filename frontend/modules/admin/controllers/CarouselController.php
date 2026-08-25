@@ -37,7 +37,7 @@ class CarouselController extends Controller
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => Carousel::find()->orderBy('order_num'),
+            'query' => Carousel::find()->orderBy('sort_order'),
         ]);
 
         return $this->render('index', [
@@ -65,8 +65,8 @@ class CarouselController extends Controller
                 $model->image =  $file_upload_path;
                 $model->status = "1";
                 $model->user_id = Yii::$app->user->identity->getId();
-                $maxOrder = Carousel::find()->select('MAX(`order_num`)')->scalar();
-                $model->order_num = ++$maxOrder;
+                $maxOrder = Carousel::find()->select('MAX([[sort_order]])')->scalar();
+                $model->sort_order = ++$maxOrder;
 
                 $model->save();
                 Yii::$app->session->setFlash('success', Yii::t('app', 'Carousel created'));
@@ -152,20 +152,20 @@ class CarouselController extends Controller
                 $orderDir = 'ASC';
             }
 
-            $query = Carousel::find()->orderBy('order_num ' . $orderDir)->limit(1);
+            $query = Carousel::find()->orderBy('sort_order ' . $orderDir)->limit(1);
 
-            $where = [$eq, 'order_num', $model->order_num];
+            $where = [$eq, 'sort_order', $model->sort_order];
 
             $modelSwap = $query->where($where)->one();
 
             if (!empty($modelSwap)) {
 
-                $newOrderNum = $modelSwap->order_num;
+                $newOrderNum = $modelSwap->sort_order;
 
-                $modelSwap->order_num = $model->order_num;
+                $modelSwap->sort_order = $model->sort_order;
                 $modelSwap->save();
 
-                $model->order_num = $newOrderNum;
+                $model->sort_order = $newOrderNum;
                 $model->save();
             }
         }

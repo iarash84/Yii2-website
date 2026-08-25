@@ -120,7 +120,7 @@ class UserController extends Controller
 
     public function actionLog(){
         $dataProvider = new ActiveDataProvider([
-            'query' => Log::find()->orderBy(['createDateTime' => SORT_DESC]),
+            'query' => Log::find()->orderBy(['created_at' => SORT_DESC]),
         ]);
 
         return $this->render('log', [

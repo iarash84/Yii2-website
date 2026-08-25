@@ -73,9 +73,9 @@ class LoginForm extends Model
         }
         $model = new Log();
 
-        $model->user = mb_substr((string) $this->username, 0, 50);
+        $model->username = mb_substr((string) $this->username, 0, 50);
         $model->ip = $this->clientIp();
-        $model->userAgent = mb_substr((string) Yii::$app->request->userAgent, 0, 1000);
+        $model->user_agent = mb_substr((string) Yii::$app->request->userAgent, 0, 1000);
 
 
         if (!$this->validate()) {

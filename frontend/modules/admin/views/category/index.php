@@ -54,7 +54,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => 'yii\grid\DataColumn',
                 'headerOptions' => ['style'=>'text-align:center;'],
                 'contentOptions' => ['style'=>'text-align:center;'],
-                'attribute' => 'createDatetime',
+                'attribute' => 'created_at',
                 'format' => 'datetime',
             ],
             [

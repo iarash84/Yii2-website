@@ -19,7 +19,7 @@ class ContactSearch extends Contact
     {
         return [
             [['id'], 'integer'],
-            [['name', 'phoneNumber', 'email', 'subject', 'body', 'createDateTime'], 'safe'],
+            [['name', 'phone_number', 'email', 'subject', 'body', 'created_at'], 'safe'],
         ];
     }
 
@@ -57,11 +57,11 @@ class ContactSearch extends Contact
 
         $query->andFilterWhere([
             'id' => $this->id,
-            'createDateTime' => $this->createDateTime,
+            'created_at' => $this->created_at,
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])
-            ->andFilterWhere(['like', 'phoneNumber', $this->phoneNumber])
+            ->andFilterWhere(['like', 'phone_number', $this->phone_number])
             ->andFilterWhere(['like', 'email', $this->email])
             ->andFilterWhere(['like', 'subject', $this->subject])
             ->andFilterWhere(['like', 'body', $this->body]);

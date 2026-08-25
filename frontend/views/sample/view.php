@@ -49,10 +49,10 @@ $models = $dataProvider->models;
                 <div class="portfolio-body">
                     <h2><?= Html::encode($model->title) ?></h2>
                     <div class="text-muted"><?= HtmlPurifier::process($model->content) ?></div>
-                    <?php if ($model->url_link): ?>
+                    <?php if ($model->link_url): ?>
                         <?= Html::a(
-                            Html::encode($model->url_display_name ?: Yii::t('app', 'View project')) . Icon::show('external'),
-                            $model->url_link,
+                            Html::encode($model->link_label ?: Yii::t('app', 'View project')) . Icon::show('external'),
+                            $model->link_url,
                             ['class' => 'portfolio-link', 'rel' => 'noopener noreferrer']
                         ) ?>
                     <?php endif; ?>

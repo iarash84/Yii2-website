@@ -28,6 +28,9 @@ namespace common\widgets;
  */
 class Alert extends \yii\base\Widget
 {
+    /** @var array HTML attributes for the alert container. */
+    public $options = [];
+
     /**
      * @var array the alert types configuration for the flash messages.
      * This array is setup as $key => $value, where:
@@ -66,7 +69,7 @@ class Alert extends \yii\base\Widget
                     $this->options['id'] = $this->getId() . '-' . $type . '-' . $i;
 
                     echo \yii\helpers\Html::tag('div',
-                        \yii\helpers\Html::tag('span', $message)
+                        \yii\helpers\Html::tag('span', \yii\helpers\Html::encode((string) $message))
                         . \yii\helpers\Html::button('×', [
                             'class' => 'alert-close',
                             'type' => 'button',

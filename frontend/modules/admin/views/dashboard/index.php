@@ -93,11 +93,11 @@ $cards = [
 <div class="dashboard-detail-grid">
     <section class="card">
         <div class="dashboard-section-title"><h2><?= Yii::t('app', 'Latest posts') ?></h2><?= Html::a(Yii::t('app', 'View all'), ['/admin/blog/index']) ?></div>
-        <?php if ($latestPosts): ?><ul class="activity-list"><?php foreach ($latestPosts as $post): ?><li><div><strong><?= Html::encode($post->getLocalized('title')) ?></strong><small><?= Html::encode($post->category ? $post->category->getLocalized('title') : '') ?></small></div><time><?= Yii::$app->formatter->asDatetime($post->createDatetime) ?></time></li><?php endforeach; ?></ul><?php else: ?><p class="empty-state"><?= Yii::t('app', 'No posts have been created yet.') ?></p><?php endif; ?>
+        <?php if ($latestPosts): ?><ul class="activity-list"><?php foreach ($latestPosts as $post): ?><li><div><strong><?= Html::encode($post->getLocalized('title')) ?></strong><small><?= Html::encode($post->category ? $post->category->getLocalized('title') : '') ?></small></div><time><?= Yii::$app->formatter->asDatetime($post->created_at) ?></time></li><?php endforeach; ?></ul><?php else: ?><p class="empty-state"><?= Yii::t('app', 'No posts have been created yet.') ?></p><?php endif; ?>
     </section>
     <?php if (Yii::$app->user->can('viewSubmissions')): ?><section class="card">
         <div class="dashboard-section-title"><h2><?= Yii::t('app', 'Latest contact messages') ?></h2><?= Html::a(Yii::t('app', 'View all'), ['/admin/contact/index']) ?></div>
-        <?php if ($latestContacts): ?><ul class="activity-list"><?php foreach ($latestContacts as $contact): ?><li><div><strong><?= Html::encode($contact->subject ?: $contact->name) ?></strong><small><?= Html::encode($contact->email) ?></small></div><time><?= Yii::$app->formatter->asDatetime($contact->createDateTime) ?></time></li><?php endforeach; ?></ul><?php else: ?><p class="empty-state"><?= Yii::t('app', 'There are no contact messages.') ?></p><?php endif; ?>
+        <?php if ($latestContacts): ?><ul class="activity-list"><?php foreach ($latestContacts as $contact): ?><li><div><strong><?= Html::encode($contact->subject ?: $contact->name) ?></strong><small><?= Html::encode($contact->email) ?></small></div><time><?= Yii::$app->formatter->asDatetime($contact->created_at) ?></time></li><?php endforeach; ?></ul><?php else: ?><p class="empty-state"><?= Yii::t('app', 'There are no contact messages.') ?></p><?php endif; ?>
     </section><?php endif; ?>
 </div>
 <section class="card system-overview">

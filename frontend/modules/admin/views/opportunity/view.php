@@ -30,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'name',
-            'phoneNumber',
+            'phone_number',
             [
                 'attribute' => 'resume',
                 'format' => 'raw',
@@ -39,7 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     : null,
             ],
             'email:email',
-            ['attribute' => 'createDateTime', 'format' => 'datetime'],
+            ['attribute' => 'created_at', 'format' => 'datetime'],
         ],
     ]) ?>
 

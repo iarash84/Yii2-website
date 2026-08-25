@@ -18,7 +18,7 @@ class ExportController extends Controller
     }
     public function actionDownload($type)
     {
-        $map = ['contacts' => 'tbl_contact_us','orders' => 'tbl_order','opportunities' => 'tbl_opportunity','pages' => 'page'];
+        $map = ['contacts' => 'contact_submission','orders' => 'order_submission','opportunities' => 'opportunity_submission','pages' => 'page'];
         if (!isset($map[$type])) {
             throw new \yii\web\BadRequestHttpException();
         }

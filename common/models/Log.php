@@ -21,7 +21,7 @@ class Log extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'tbl_log';
+        return '{{%login_attempt}}';
     }
 
     /**
@@ -31,9 +31,9 @@ class Log extends \yii\db\ActiveRecord
     {
         return [
             [['success'], 'integer'],
-            [['userAgent'], 'string'],
-            [['createDateTime'], 'safe'],
-            [['user'], 'string', 'max' => 50],
+            [['user_agent'], 'string'],
+            [['created_at'], 'safe'],
+            [['username'], 'string', 'max' => 50],
             [['ip'], 'string', 'max' => 45]
         ];
     }
@@ -45,11 +45,11 @@ class Log extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'user' => Yii::t('app', 'User'),
+            'username' => Yii::t('app', 'User'),
             'success' => Yii::t('app', 'Success'),
             'ip' => Yii::t('app', 'Ip'),
-            'userAgent' => Yii::t('app', 'User Agent'),
-            'createDateTime' => Yii::t('app', 'Create Date Time'),
+            'user_agent' => Yii::t('app', 'User Agent'),
+            'created_at' => Yii::t('app', 'Create Date Time'),
         ];
     }
 }

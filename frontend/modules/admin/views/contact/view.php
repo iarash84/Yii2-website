@@ -29,11 +29,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'template' => '<tr><th>{label}</th><td style="text-align: right">{value}</td></tr>',
         'attributes' => [
             'name',
-            'phoneNumber',
+            'phone_number',
             'email:email',
             'subject',
             'body:ntext',
-            ['attribute' => 'createDateTime', 'format' => 'datetime'],
+            ['attribute' => 'created_at', 'format' => 'datetime'],
         ],
     ]) ?>
 

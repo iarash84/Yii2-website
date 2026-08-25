@@ -21,9 +21,9 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'content')->textarea(['rows' => 6]) ?>
 
-    <?= $form->field($model, 'url_link')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'link_url')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'url_display_name')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'link_label')->textInput(['maxlength' => true]) ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

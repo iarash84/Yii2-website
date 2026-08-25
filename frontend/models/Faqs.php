@@ -16,13 +16,13 @@ use Yii;
 class Faqs extends \yii\db\ActiveRecord
 {
     use \frontend\models\traits\TranslatableContent;
-    public function translatedAttributes() { return ['question', 'respons']; }
+    public function translatedAttributes() { return ['question', 'answer']; }
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'tbl_faqs';
+        return '{{%faq}}';
     }
 
     /**
@@ -31,10 +31,12 @@ class Faqs extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['question', 'respons'], 'required'],
-            [['userId', 'status', 'sort_order'], 'integer'],
-            [['respons'], 'string'],
-            [['createDateTime'], 'safe'],
+            [['question', 'answer'], 'required'],
+            [['user_id', 'status', 'sort_order'], 'integer'],
+            [['sort_order'], 'default', 'value' => 0],
+            [['status'], 'default', 'value' => 1],
+            [['answer'], 'string'],
+            [['created_at'], 'safe'],
             [['question'], 'string', 'max' => 150]
         ];
     }
@@ -46,10 +48,10 @@ class Faqs extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'userId' => Yii::t('app', 'User ID'),
+            'user_id' => Yii::t('app', 'User ID'),
             'question' => Yii::t('app', 'Question'),
-            'respons' => Yii::t('app', 'Respons'),
-            'createDateTime' => Yii::t('app', 'Create Date Time'),
+            'answer' => Yii::t('app', 'Respons'),
+            'created_at' => Yii::t('app', 'Create Date Time'),
             'status' => Yii::t('app', 'Published'),
             'sort_order' => Yii::t('app', 'Display order'),
         ];

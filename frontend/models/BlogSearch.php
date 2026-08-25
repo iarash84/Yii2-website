@@ -20,7 +20,7 @@ class BlogSearch extends Blog
     {
         return [
             [['id', 'user_id', 'category_id'], 'integer'],
-            [['title', 'description', 'content', 'keyWord', 'createDatetime', 'tag'], 'safe'],
+            [['title', 'description', 'content', 'keywords', 'created_at', 'tag'], 'safe'],
         ];
     }
 
@@ -46,7 +46,7 @@ class BlogSearch extends Blog
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'sort' => ['defaultOrder' => ['createDatetime' => SORT_DESC, 'id' => SORT_DESC]],
+            'sort' => ['defaultOrder' => ['created_at' => SORT_DESC, 'id' => SORT_DESC]],
         ]);
 
         $this->load($params);
@@ -61,13 +61,13 @@ class BlogSearch extends Blog
             'id' => $this->id,
             'user_id' => $this->user_id,
             'category_id' => $this->category_id,
-            'createDatetime' => $this->createDatetime,
+            'created_at' => $this->created_at,
         ]);
 
         $query->andFilterWhere(['like', 'title', $this->title])
             ->andFilterWhere(['like', 'description', $this->description])
             ->andFilterWhere(['like', 'content', $this->content])
-            ->andFilterWhere(['like', 'keyWord', $this->keyWord]);
+            ->andFilterWhere(['like', 'keywords', $this->keywords]);
 
         if ($this->tag !== null && $this->tag !== '') {
             $query->joinWith('tags')->andWhere(['blog_tag.slug' => $this->tag])->distinct();

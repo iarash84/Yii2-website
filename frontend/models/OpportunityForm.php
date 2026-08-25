@@ -61,7 +61,7 @@ class OpportunityForm extends Model
         $opportunityModel = new Opportunity();
         $opportunityModel->name = $this->name;
         $opportunityModel->email = $this->email;
-        $opportunityModel->phoneNumber = $this->phoneNumber;
+        $opportunityModel->phone_number = $this->phoneNumber;
         if($opportunityModel->save())
             return true;
         return false;

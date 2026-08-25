@@ -21,7 +21,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'company') ?>
 
-    <?= $form->field($model, 'phoneNumber') ?>
+    <?= $form->field($model, 'phone_number') ?>
 
     <?= $form->field($model, 'website') ?>
 
@@ -29,7 +29,7 @@ use yii\widgets\ActiveForm;
 
     <?php // echo $form->field($model, 'description') ?>
 
-    <?php // echo $form->field($model, 'createDateTime') ?>
+    <?php // echo $form->field($model, 'created_at') ?>
 
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>

@@ -60,7 +60,7 @@ if (!$keep) {
         exit($seedExitCode);
     }
     $seedChecks = [
-        'FAQ seed' => (int) $pdo->query("SELECT COUNT(*) FROM {$quotedDatabase}.tbl_faqs")->fetchColumn() >= 3,
+        'FAQ seed' => (int) $pdo->query("SELECT COUNT(*) FROM {$quotedDatabase}.faq")->fetchColumn() >= 3,
         'page seed' => (int) $pdo->query("SELECT COUNT(*) FROM {$quotedDatabase}.page")->fetchColumn() >= 1,
         'menu seed' => (int) $pdo->query("SELECT COUNT(*) FROM {$quotedDatabase}.menu_item")->fetchColumn() >= 6,
         'media seed' => (int) $pdo->query("SELECT COUNT(*) FROM {$quotedDatabase}.media")->fetchColumn() >= 4,

@@ -32,6 +32,8 @@ class MenuItem extends ActiveRecord
         return [
             [['label', 'url', 'location', 'target'], 'required'],
             [['parent_id', 'sort_order', 'status', 'created_by'], 'integer'],
+            [['sort_order'], 'default', 'value' => 0],
+            [['status'], 'default', 'value' => 1],
             [['label'], 'string', 'max' => 120],
             [['url'], 'string', 'max' => 500],
             [['location'], 'in', 'range' => ['main', 'footer']],

@@ -8,7 +8,7 @@ use frontend\widgets\Icon;
 
 $this->title = $model->getLocalized('title');
 $this->registerMetaTag(['name' => 'description', 'content' => strip_tags($model->getLocalized('description'))]);
-$this->registerMetaTag(['name' => 'keywords', 'content' => $model->getLocalized('keyWord')]);
+$this->registerMetaTag(['name' => 'keywords', 'content' => $model->getLocalized('keywords')]);
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Blog'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -36,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             </div>
             <div class="group2 col-sm-6 col-md-6">
-                <time datetime="<?= Html::encode($model->createDatetime) ?>"><?= Yii::$app->formatter->asDatetime($model->createDatetime) ?></time>
+                <time datetime="<?= Html::encode($model->created_at) ?>"><?= Yii::$app->formatter->asDatetime($model->created_at) ?></time>
             </div>
         </div>
         <hr>

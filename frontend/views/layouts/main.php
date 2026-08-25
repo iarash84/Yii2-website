@@ -200,7 +200,7 @@ $this->registerLinkTag([
                     <h2><?= Html::encode($settings->companyName ?: Yii::t('app', 'My Company')) ?></h2>
                     <p><?= Html::encode($settings->address) ?></p>
                     <p class="ltr"><?= Html::encode($settings->email) ?><br><?= Html::encode($settings->phoneNumber) ?></p>
-                    <?php if ($socialLinks): ?><ul class="social-links" aria-label="<?= Yii::t('app', 'Social Network') ?>"><?php foreach ($socialLinks as $network => $url): ?><li><?= Html::a(Html::encode(Yii::t('app', $network)), $url, ['class' => 'social-link', 'target' => '_blank', 'rel' => 'noopener noreferrer']) ?></li><?php endforeach; ?></ul><?php endif; ?>
+                    <?php if ($socialLinks): ?><ul class="social-links" aria-label="<?= Yii::t('app', 'Social Network') ?>"><?php foreach ($socialLinks as $network => $url): ?><li><?= Html::a(Icon::show(strtolower($network)) . Html::tag('span', Html::encode(Yii::t('app', $network)), ['class' => 'sr-only']), $url, ['class' => 'social-link', 'target' => '_blank', 'rel' => 'noopener noreferrer', 'aria-label' => Yii::t('app', $network)]) ?></li><?php endforeach; ?></ul><?php endif; ?>
                 </section>
                 <nav aria-label="<?= Yii::t('app', 'Useful links') ?>">
                     <h2><?= Yii::t('app', 'Useful links') ?></h2>

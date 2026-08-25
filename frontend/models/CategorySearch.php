@@ -19,7 +19,7 @@ class CategorySearch extends Category
     {
         return [
             [['id', 'user_id'], 'integer'],
-            [['title', 'createDatetime'], 'safe'],
+            [['title', 'created_at'], 'safe'],
         ];
     }
 
@@ -58,7 +58,7 @@ class CategorySearch extends Category
         $query->andFilterWhere([
             'id' => $this->id,
             'user_id' => $this->user_id,
-            'createDatetime' => $this->createDatetime,
+            'created_at' => $this->created_at,
         ]);
 
         $query->andFilterWhere(['like', 'title', $this->title]);

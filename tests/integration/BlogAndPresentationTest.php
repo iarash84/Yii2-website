@@ -16,8 +16,8 @@ class BlogAndPresentationTest extends DatabaseTestCase
         $user = $this->createUser();
         $category = new Category(['user_id' => $user->id, 'title' => 'Test']);
         self::assertTrue($category->save());
-        $old = new Blog(['user_id' => $user->id, 'category_id' => $category->id, 'title' => 'Old', 'createDatetime' => '2025-01-01 10:00:00']);
-        $new = new Blog(['user_id' => $user->id, 'category_id' => $category->id, 'title' => 'New', 'createDatetime' => '2026-01-01 10:00:00']);
+        $old = new Blog(['user_id' => $user->id, 'category_id' => $category->id, 'title' => 'Old', 'created_at' => '2025-01-01 10:00:00']);
+        $new = new Blog(['user_id' => $user->id, 'category_id' => $category->id, 'title' => 'New', 'created_at' => '2026-01-01 10:00:00']);
         self::assertTrue($old->save());
         self::assertTrue($new->save());
         self::assertTrue($new->syncTags('#yii #php'));

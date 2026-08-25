@@ -22,7 +22,7 @@ class Contact extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'tbl_contact_us';
+        return '{{%contact_submission}}';
     }
 
     /**
@@ -32,9 +32,9 @@ class Contact extends \yii\db\ActiveRecord
     {
         return [
             [['body'], 'string'],
-            [['createDateTime'], 'safe'],
+            [['created_at'], 'safe'],
             [['name', 'email', 'subject'], 'string', 'max' => 255],
-            [['phoneNumber'], 'string', 'max' => 20]
+            [['phone_number'], 'string', 'max' => 20]
         ];
     }
 
@@ -46,11 +46,11 @@ class Contact extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'name' => Yii::t('app', 'Name and family'),
-            'phoneNumber' => Yii::t('app', 'Phone Number'),
+            'phone_number' => Yii::t('app', 'Phone Number'),
             'email' => Yii::t('app', 'Email'),
             'subject' => Yii::t('app', 'Subject'),
             'body' => Yii::t('app', 'Body'),
-            'createDateTime' => Yii::t('app', 'Create Date Time'),
+            'created_at' => Yii::t('app', 'Create Date Time'),
         ];
     }
 }

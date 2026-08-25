@@ -19,7 +19,7 @@ class OrderSearch extends Order
     {
         return [
             [['id'], 'integer'],
-            [['name', 'company', 'phoneNumber', 'website', 'email', 'description', 'createDateTime'], 'safe'],
+            [['name', 'company', 'phone_number', 'website', 'email', 'description', 'created_at'], 'safe'],
         ];
     }
 
@@ -57,12 +57,12 @@ class OrderSearch extends Order
 
         $query->andFilterWhere([
             'id' => $this->id,
-            'createDateTime' => $this->createDateTime,
+            'created_at' => $this->created_at,
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['like', 'company', $this->company])
-            ->andFilterWhere(['like', 'phoneNumber', $this->phoneNumber])
+            ->andFilterWhere(['like', 'phone_number', $this->phone_number])
             ->andFilterWhere(['like', 'website', $this->website])
             ->andFilterWhere(['like', 'email', $this->email])
             ->andFilterWhere(['like', 'description', $this->description]);

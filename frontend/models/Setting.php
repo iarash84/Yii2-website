@@ -35,7 +35,7 @@ class Setting extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'tbl_setting';
+        return '{{%site_setting}}';
     }
 
     /**
@@ -45,7 +45,7 @@ class Setting extends \yii\db\ActiveRecord
     {
         return [
             [['type', 'content'], 'string'],
-            [['updateDateTime'], 'safe']
+            [['updated_at'], 'safe']
         ];
     }
 
@@ -61,7 +61,7 @@ class Setting extends \yii\db\ActiveRecord
             'user_id' => Yii::t('app', 'User ID'),
             'type' => Yii::t('app', 'Type'),
             'content' => Yii::t('app', 'Content'),
-            'updateDateTime' => Yii::t('app', 'Update Date Time'),
+            'updated_at' => Yii::t('app', 'Update Date Time'),
         ];
     }
 

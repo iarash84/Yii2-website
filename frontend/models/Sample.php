@@ -24,7 +24,7 @@ class Sample extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'tbl_sample';
+        return '{{%portfolio_item}}';
     }
 
     /**
@@ -36,10 +36,10 @@ class Sample extends \yii\db\ActiveRecord
             [['user_id'], 'integer'],
             //[['title','content'],'required'],
             [['content'], 'string'],
-            [['createDateTime'], 'safe'],
+            [['created_at'], 'safe'],
             [['title'], 'string', 'max' => 150],
-            [['url_link', 'image'], 'string', 'max' => 255],
-            [['url_display_name'], 'string', 'max' => 100]
+            [['link_url', 'image'], 'string', 'max' => 255],
+            [['link_label'], 'string', 'max' => 100]
         ];
     }
 
@@ -53,10 +53,10 @@ class Sample extends \yii\db\ActiveRecord
             'user_id' => Yii::t('app', 'User ID'),
             'title' => Yii::t('app', 'Title'),
             'content' => Yii::t('app', 'Content'),
-            'url_link' => Yii::t('app', 'Url Link'),
-            'url_display_name' => Yii::t('app', 'Url Display Name'),
+            'link_url' => Yii::t('app', 'Url Link'),
+            'link_label' => Yii::t('app', 'Url Display Name'),
             'image' => Yii::t('app', 'Image'),
-            'createDateTime' => Yii::t('app', 'Create Date Time'),
+            'created_at' => Yii::t('app', 'Create Date Time'),
         ];
     }
 

@@ -171,7 +171,7 @@ class SiteController extends Controller
 
             $opportunity->name = $model->name;
             $opportunity->email = $model->email;
-            $opportunity->phoneNumber = $model->phoneNumber;
+            $opportunity->phone_number = $model->phoneNumber;
             $opportunity->save();
             NotificationService::formSubmitted('opportunity', $model->attributes);
             Yii::$app->session->setFlash('success', Yii::t('app', 'Your resume uploaded successfully. We will respond to you as soon as possible.'));

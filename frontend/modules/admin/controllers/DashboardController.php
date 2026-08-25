@@ -34,8 +34,8 @@ class DashboardController extends Controller
                 'faqs' => Yii::$app->user->can('manageContent') ? Faqs::find()->count() : null,
                 'users' => Yii::$app->user->can('manageUsers') ? User::find()->count() : null,
             ],
-            'latestPosts' => Blog::find()->with(['category', 'user'])->orderBy(['createDatetime' => SORT_DESC, 'id' => SORT_DESC])->limit(5)->all(),
-            'latestContacts' => Yii::$app->user->can('viewSubmissions') ? Contact::find()->orderBy(['createDateTime' => SORT_DESC, 'id' => SORT_DESC])->limit(5)->all() : [],
+            'latestPosts' => Blog::find()->with(['category', 'user'])->orderBy(['created_at' => SORT_DESC, 'id' => SORT_DESC])->limit(5)->all(),
+            'latestContacts' => Yii::$app->user->can('viewSubmissions') ? Contact::find()->orderBy(['created_at' => SORT_DESC, 'id' => SORT_DESC])->limit(5)->all() : [],
             'systemStatus' => [
                 'maintenance' => filter_var(SystemSetting::getValue('maintenance_enabled', '0'), FILTER_VALIDATE_BOOLEAN),
                 'calendar' => SystemSetting::getValue('date_calendar', 'gregorian'),

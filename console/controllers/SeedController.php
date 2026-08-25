@@ -80,14 +80,14 @@ class SeedController extends Controller
         ];
         foreach ($settings as $type => $content) {
             $exists = Yii::$app->db->createCommand(
-                'SELECT id FROM {{%tbl_setting}} WHERE type=:type LIMIT 1',
+                'SELECT id FROM {{%site_setting}} WHERE type=:type LIMIT 1',
                 [':type' => $type]
             )->queryScalar();
             $command = Yii::$app->db->createCommand();
             if ($exists) {
-                $command->update('tbl_setting', ['user_id' => $userId, 'content' => $content], ['id' => $exists])->execute();
+                $command->update('{{%site_setting}}', ['user_id' => $userId, 'content' => $content], ['id' => $exists])->execute();
             } else {
-                $command->insert('tbl_setting', ['user_id' => $userId, 'type' => $type, 'content' => $content])->execute();
+                $command->insert('{{%site_setting}}', ['user_id' => $userId, 'type' => $type, 'content' => $content])->execute();
             }
         }
     }
@@ -95,11 +95,11 @@ class SeedController extends Controller
     private function seedDemoContent($userId)
     {
         $categoryId = Yii::$app->db->createCommand(
-            'SELECT id FROM {{%tbl_blog_category}} WHERE title=:title LIMIT 1',
+            'SELECT id FROM {{%blog_category}} WHERE title=:title LIMIT 1',
             [':title' => 'اخبار']
         )->queryScalar();
         if (!$categoryId) {
-            Yii::$app->db->createCommand()->insert('tbl_blog_category', [
+            Yii::$app->db->createCommand()->insert('{{%blog_category}}', [
                 'user_id' => $userId,
                 'title' => 'اخبار',
             ])->execute();
@@ -107,17 +107,17 @@ class SeedController extends Controller
         }
         if (
             $categoryId && !Yii::$app->db->createCommand(
-                'SELECT 1 FROM {{%tbl_blog_post}} WHERE title=:title LIMIT 1',
+                'SELECT 1 FROM {{%blog_post}} WHERE title=:title LIMIT 1',
                 [':title' => 'شروع به کار وب‌سایت']
             )->queryScalar()
         ) {
-            Yii::$app->db->createCommand()->insert('tbl_blog_post', [
+            Yii::$app->db->createCommand()->insert('{{%blog_post}}', [
                 'user_id' => $userId,
                 'category_id' => $categoryId,
                 'title' => 'شروع به کار وب‌سایت',
                 'description' => '<p>این نوشته نمونه است و می‌توانید آن را حذف یا ویرایش کنید.</p>',
                 'content' => '<p>نصب وب‌سایت با موفقیت انجام شد.</p>',
-                'keyWord' => 'نمونه,نصب',
+                'keywords' => 'نمونه,نصب',
             ])->execute();
         }
 
@@ -126,41 +126,41 @@ class SeedController extends Controller
                 'title' => 'پلتفرم تحلیل داده',
                 'content' => '<p>داشبورد مدیریتی برای پایش شاخص‌های کلیدی و گزارش‌های عملیاتی.</p>',
                 'image' => 'img/portfolio/analytics-platform.webp',
-                'url_display_name' => 'مشاهده جزئیات پروژه',
+                'link_label' => 'مشاهده جزئیات پروژه',
             ],
             [
                 'title' => 'همراه‌بانک سازمانی',
                 'content' => '<p>تجربه امن و ساده بانکداری همراه برای مشتریان حقیقی و سازمانی.</p>',
                 'image' => 'img/portfolio/mobile-banking.webp',
-                'url_display_name' => 'مشاهده جزئیات پروژه',
+                'link_label' => 'مشاهده جزئیات پروژه',
             ],
             [
                 'title' => 'فروشگاه آنلاین',
                 'content' => '<p>تجربه خرید یکپارچه و سریع برای دسکتاپ، تبلت و موبایل.</p>',
                 'image' => 'img/portfolio/commerce-experience.webp',
-                'url_display_name' => 'مشاهده جزئیات پروژه',
+                'link_label' => 'مشاهده جزئیات پروژه',
             ],
         ];
         foreach ($portfolioItems as $item) {
             $sampleId = Yii::$app->db->createCommand(
-                'SELECT id FROM {{%tbl_sample}} WHERE title=:title LIMIT 1',
+                'SELECT id FROM {{%portfolio_item}} WHERE title=:title LIMIT 1',
                 [':title' => $item['title']]
             )->queryScalar();
 
             $sample = array_merge($item, [
                 'user_id' => $userId,
-                'url_link' => '#',
+                'link_url' => '#',
             ]);
             if ($sampleId) {
-                Yii::$app->db->createCommand()->update('tbl_sample', $sample, ['id' => $sampleId])->execute();
+                Yii::$app->db->createCommand()->update('{{%portfolio_item}}', $sample, ['id' => $sampleId])->execute();
             } else {
-                Yii::$app->db->createCommand()->insert('tbl_sample', $sample)->execute();
+                Yii::$app->db->createCommand()->insert('{{%portfolio_item}}', $sample)->execute();
             }
         }
 
         $carouselTitle = 'راهکارهای دیجیتال قابل اعتماد';
         $carouselId = Yii::$app->db->createCommand(
-            'SELECT id FROM {{%tbl_carousel}} WHERE title=:title OR image=:image ORDER BY id LIMIT 1',
+            'SELECT id FROM {{%carousel}} WHERE title=:title OR image=:image ORDER BY id LIMIT 1',
             [
                 ':title' => $carouselTitle,
                 ':image' => 'img/portfolio/hero-studio.webp',
@@ -173,13 +173,13 @@ class SeedController extends Controller
             'link' => '',
             'title' => $carouselTitle,
             'text' => '<p>طراحی و توسعه محصولاتی که برای رشد کسب‌وکار ساخته شده‌اند.</p>',
-            'order_num' => 1,
+            'sort_order' => 1,
             'status' => 1,
         ];
         if ($carouselId) {
-            Yii::$app->db->createCommand()->update('tbl_carousel', $carousel, ['id' => $carouselId])->execute();
+            Yii::$app->db->createCommand()->update('{{%carousel}}', $carousel, ['id' => $carouselId])->execute();
         } else {
-            Yii::$app->db->createCommand()->insert('tbl_carousel', $carousel)->execute();
+            Yii::$app->db->createCommand()->insert('{{%carousel}}', $carousel)->execute();
         }
     }
 
@@ -239,15 +239,15 @@ class SeedController extends Controller
             ['آیا خدمات پشتیبانی ارائه می‌شود؟', 'بله، شرایط پشتیبانی متناسب با نوع پروژه در قرارداد مشخص می‌شود.'],
         ];
         foreach ($faqs as $index => [$question, $answer]) {
-            if (!(new \yii\db\Query())->from('{{%tbl_faqs}}')->where(['question' => $question])->exists()) {
-                $db->createCommand()->insert('{{%tbl_faqs}}', [
-                    'userId' => $userId, 'question' => $question, 'respons' => $answer,
+            if (!(new \yii\db\Query())->from('{{%faq}}')->where(['question' => $question])->exists()) {
+                $db->createCommand()->insert('{{%faq}}', [
+                    'user_id' => $userId, 'question' => $question, 'answer' => $answer,
                     'status' => 1, 'sort_order' => ($index + 1) * 10,
                 ])->execute();
             }
         }
 
-        $postId = (new \yii\db\Query())->select('id')->from('{{%tbl_blog_post}}')->orderBy(['id' => SORT_ASC])->scalar();
+        $postId = (new \yii\db\Query())->select('id')->from('{{%blog_post}}')->orderBy(['id' => SORT_ASC])->scalar();
         foreach (['فناوری' => 'technology', 'طراحی' => 'design'] as $name => $slug) {
             $tagId = (new \yii\db\Query())->select('id')->from('{{%blog_tag}}')->where(['slug' => $slug])->scalar();
             if (!$tagId) {
@@ -260,9 +260,9 @@ class SeedController extends Controller
         }
 
         $submissions = [
-            ['{{%tbl_contact_us}}', ['name' => 'کاربر نمونه', 'phoneNumber' => '02100000000', 'email' => 'contact@example.com', 'subject' => 'درخواست مشاوره', 'body' => 'برای بازطراحی وب‌سایت به مشاوره نیاز دارم.']],
-            ['{{%tbl_order}}', ['name' => 'شرکت نمونه', 'company' => 'راهکار نو', 'phoneNumber' => '02100000001', 'website' => 'https://example.com', 'email' => 'order@example.com', 'description' => 'طراحی و توسعه وب‌سایت شرکتی.']],
-            ['{{%tbl_opportunity}}', ['name' => 'متقاضی نمونه', 'phoneNumber' => '09120000000', 'email' => 'career@example.com']],
+            ['{{%contact_submission}}', ['name' => 'کاربر نمونه', 'phone_number' => '02100000000', 'email' => 'contact@example.com', 'subject' => 'درخواست مشاوره', 'body' => 'برای بازطراحی وب‌سایت به مشاوره نیاز دارم.']],
+            ['{{%order_submission}}', ['name' => 'شرکت نمونه', 'company' => 'راهکار نو', 'phone_number' => '02100000001', 'website' => 'https://example.com', 'email' => 'order@example.com', 'description' => 'طراحی و توسعه وب‌سایت شرکتی.']],
+            ['{{%opportunity_submission}}', ['name' => 'متقاضی نمونه', 'phone_number' => '09120000000', 'email' => 'career@example.com']],
         ];
         foreach ($submissions as [$table, $data]) {
             if (!(new \yii\db\Query())->from($table)->where(['email' => $data['email']])->exists()) {
@@ -272,8 +272,8 @@ class SeedController extends Controller
 
         $socialSettings = ['Instagram' => 'https://instagram.com/example', 'Linkedin' => 'https://linkedin.com/company/example', 'Telegram' => 'https://t.me/example'];
         foreach ($socialSettings as $type => $content) {
-            if (!(new \yii\db\Query())->from('{{%tbl_setting}}')->where(['type' => $type])->exists()) {
-                $db->createCommand()->insert('{{%tbl_setting}}', ['user_id' => $userId, 'type' => $type, 'content' => $content])->execute();
+            if (!(new \yii\db\Query())->from('{{%site_setting}}')->where(['type' => $type])->exists()) {
+                $db->createCommand()->insert('{{%site_setting}}', ['user_id' => $userId, 'type' => $type, 'content' => $content])->execute();
             }
         }
 

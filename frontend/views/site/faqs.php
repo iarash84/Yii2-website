@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php foreach ($models as $model): ?>
         <details class="card faq-item">
             <summary><span><?= Html::encode($model->getLocalized('question')) ?></span><span class="faq-toggle" aria-hidden="true">+</span></summary>
-            <div class="faq-answer"><?= HtmlPurifier::process($model->getLocalized('respons')) ?></div>
+            <div class="faq-answer"><?= HtmlPurifier::process($model->getLocalized('answer')) ?></div>
         </details>
     <?php endforeach; ?>
 </div>
