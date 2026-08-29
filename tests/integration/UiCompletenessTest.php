@@ -49,6 +49,26 @@ class UiCompletenessTest extends DatabaseTestCase
         self::assertSame([], array_keys($missing), 'Missing fa_IR translations: ' . implode(', ', array_keys($missing)));
     }
 
+    public function testPersianCatalogDoesNotContainUnusedMessages(): void
+    {
+        $catalog = require Yii::getAlias('@app/messages/fa_IR/app.php');
+        $used = [];
+        foreach (['common', 'frontend', 'console'] as $directory) {
+            $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(dirname(__DIR__, 2) . '/' . $directory));
+            foreach ($iterator as $file) {
+                if (!$file->isFile() || $file->getExtension() !== 'php') {
+                    continue;
+                }
+                preg_match_all('/Yii::t\(\s*[\'\"]app[\'\"]\s*,\s*([\'\"])(.*?)\1/s', file_get_contents($file->getPathname()), $matches);
+                foreach ($matches[2] as $message) {
+                    $used[$message] = true;
+                }
+            }
+        }
+        $unused = array_keys(array_diff_key($catalog, $used));
+        self::assertSame([], $unused, 'Unused fa_IR translations: ' . implode(', ', $unused));
+    }
+
     public function testThemeToggleUsesIconsWithoutVisibleLabel(): void
     {
         Yii::$app->user->logout(false);

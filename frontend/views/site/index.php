@@ -10,7 +10,8 @@ use frontend\helpers\MediaUrl;
 use yii\helpers\Html;
 use yii\helpers\HtmlPurifier;
 
-$this->title = Yii::t('app', 'My Company');
+$siteSettings = new Setting();
+$this->title = trim((string) $siteSettings->companyName) ?: Yii::t('app', 'Website');
 $slides = Carousel::find()->where(['status' => 1])->orderBy('sort_order')->all();
 $hero = reset($slides) ?: null;
 $home = Setting::findOne(['type' => 'Home']);
