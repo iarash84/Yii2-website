@@ -5,10 +5,9 @@
  * Date: 5/17/2016
  * Time: 11:16 AM
  */
-use dosamigos\ckeditor\CKEditor;
+use frontend\widgets\RichTextEditor;
 use frontend\widgets\Icon;
 use yii\helpers\Html;
-use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 $this->title = Yii::t('app', 'Home Update');
@@ -32,12 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <p class="text-muted"><?= Yii::t('app', 'Edit the primary content first, then complete the available translations.') ?></p>
     </div>
 
-    <?= $form->field($model, 'pageContent')->widget(CKEditor::className(), [
-        'options' => ['rows' => 6],
-        'class' => 'form-control',
-        'preset' => 'full',
-        'clientOptions' => [ 'filebrowserUploadUrl' => Url::to(['/admin/blog/upload']) , Yii::$app->language],
-    ]) ?>
+    <?= $form->field($model, 'pageContent')->widget(RichTextEditor::class, ['rows' => 8]) ?>
 
     <?= $this->render('@app/modules/admin/views/_translation_fields', ['model' => $settingModel]) ?>
 

@@ -1,8 +1,7 @@
 <?php
 
-use dosamigos\ckeditor\CKEditor;
+use frontend\widgets\RichTextEditor;
 use yii\helpers\Html;
-use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
@@ -18,20 +17,9 @@ use yii\widgets\ActiveForm;
 
     <?=  $form->field($model, 'category_id')->dropDownList($categories , ['prompt'=>'']) ?>
 
-    <?= $form->field($model, 'description')->widget(CKEditor::className(), [
-        'options' => ['rows' => 3],
+    <?= $form->field($model, 'description')->widget(RichTextEditor::class, ['rows' => 4]) ?>
 
-        'class' => 'form-control',
-        'preset' => 'full',
-        'clientOptions' => [ 'filebrowserUploadUrl' => Url::to(['/admin/blog/upload']) , 'language' => Yii::$app->language],
-    ]) ?>
-
-    <?= $form->field($model, 'content')->widget(CKEditor::className(), [
-        'options' => ['rows' => 6],
-        'class' => 'form-control',
-        'preset' => 'full',
-        'clientOptions' => [ 'filebrowserUploadUrl' => Url::to(['/admin/blog/upload']) , Yii::$app->language],
-    ]) ?>
+    <?= $form->field($model, 'content')->widget(RichTextEditor::class, ['rows' => 10]) ?>
 
     <?= $form->field($model, 'keywords')->textInput(['maxlength' => true]) ?>
 

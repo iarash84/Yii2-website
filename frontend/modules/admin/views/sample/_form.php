@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use frontend\widgets\RichTextEditor;
 
 /* @var $this yii\web\View */
 /* @var $model frontend\models\Sample */
@@ -19,7 +20,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'content')->textarea(['rows' => 6]) ?>
+    <?= $form->field($model, 'content')->widget(RichTextEditor::class, ['rows' => 8]) ?>
 
     <?= $form->field($model, 'link_url')->textInput(['maxlength' => true]) ?>
 

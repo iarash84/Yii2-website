@@ -15,9 +15,9 @@ $manager = Yii::$app->languageManager;
         <?php foreach ($model->translatedAttributes() as $attribute): ?>
             <div class="form-group">
                 <?= Html::label($model->getAttributeLabel($attribute), "translation-{$code}-{$attribute}") ?>
-                <?= in_array($attribute, ['content', 'description'], true)
+                <?= in_array($attribute, ['content', 'description', 'answer'], true)
                     ? Html::textarea("translations[{$code}][{$attribute}]", $model->getTranslationValue($attribute, $code), [
-                        'id' => "translation-{$code}-{$attribute}", 'class' => 'form-control', 'rows' => 6,
+                        'id' => "translation-{$code}-{$attribute}", 'class' => 'form-control rich-text-source', 'rows' => 6, 'data-rich-editor' => true,
                     ])
                     : Html::textInput("translations[{$code}][{$attribute}]", $model->getTranslationValue($attribute, $code), [
                         'id' => "translation-{$code}-{$attribute}", 'class' => 'form-control',

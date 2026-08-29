@@ -392,4 +392,5 @@ return [
     'Drag widgets to reorder them, or show and hide each widget.' => 'ابزارک‌ها را برای تغییر ترتیب جابه‌جا کنید یا نمایش آن‌ها را فعال و غیرفعال کنید.',
     'Site statistics' => 'آمار سایت', 'Recent activity' => 'فعالیت‌های اخیر', 'System status' => 'وضعیت سیستم',
     'Invalid dashboard layout.' => 'چیدمان پیشخوان معتبر نیست.', 'Completed projects' => 'پروژه تکمیل‌شده', 'Published articles' => 'مقاله منتشرشده', 'Helpful answers' => 'پاسخ کاربردی',
+    'Invalid section order.' => 'ترتیب بخش‌ها معتبر نیست.', 'Drag to reorder' => 'برای جابه‌جایی بکشید',
 ];

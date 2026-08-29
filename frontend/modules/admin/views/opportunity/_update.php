@@ -1,6 +1,6 @@
 <?php
 
-use dosamigos\ckeditor\CKEditor;
+use frontend\widgets\RichTextEditor;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -13,12 +13,7 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'content')->widget(CKEditor::className(), [
-        'options' => ['rows' => 6],
-        'class' => 'form-control',
-        'preset' => 'full',
-        'clientOptions' => ['language' => Yii::$app->language],
-    ])->label(false) ?>
+    <?= $form->field($model, 'content')->widget(RichTextEditor::class, ['rows' => 8])->label(false) ?>
 
     <?= $this->render('@app/modules/admin/views/_translation_fields', ['model' => $model]) ?>
 

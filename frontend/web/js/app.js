@@ -80,4 +80,29 @@
         dashboard.addEventListener('dragover', event => { event.preventDefault(); const moving=dashboard.querySelector('.is-dragging'); const target=event.target.closest('[data-widget]'); if(moving && target && moving!==target) dashboard.insertBefore(moving, target); });
         const customize=document.querySelector('[data-dashboard-customize]'); if(customize) customize.addEventListener('click',()=>{picker.hidden=!picker.hidden;});
     }
+
+    document.querySelectorAll('textarea[data-rich-editor]').forEach(function (source) {
+        const shell = document.createElement('div'); shell.className = 'rich-editor';
+        const toolbar = document.createElement('div'); toolbar.className = 'rich-editor-toolbar'; toolbar.setAttribute('role', 'toolbar');
+        const editor = document.createElement('div'); editor.className = 'rich-editor-content'; editor.contentEditable = 'true'; editor.dir = source.closest('[dir]')?.getAttribute('dir') || 'auto'; editor.innerHTML = source.value;
+        const commands = [['bold','B'],['italic','I'],['formatBlock','H2'],['insertUnorderedList','•'],['insertOrderedList','1.'],['removeFormat','×']];
+        commands.forEach(function (item) { const button=document.createElement('button'); button.type='button'; button.className='rich-editor-button'; button.textContent=item[1]; button.title=item[0]; button.addEventListener('click',function(){ editor.focus(); document.execCommand(item[0], false, item[0]==='formatBlock' ? 'h2' : null); editor.dispatchEvent(new Event('input')); }); toolbar.appendChild(button); });
+        const link=document.createElement('button'); link.type='button'; link.className='rich-editor-button'; link.textContent='↗'; link.title='Link'; link.addEventListener('click',function(){ const url=window.prompt('URL'); if(url && /^(https?:\/\/|\/|#|mailto:)/i.test(url)){editor.focus(); document.execCommand('createLink',false,url); editor.dispatchEvent(new Event('input'));} }); toolbar.appendChild(link);
+        editor.addEventListener('input', function(){ source.value=editor.innerHTML; source.dispatchEvent(new Event('change',{bubbles:true})); });
+        source.classList.add('rich-text-source-enhanced'); source.insertAdjacentElement('beforebegin', shell); shell.append(toolbar, editor);
+    });
+
+    const sectionSorter = document.querySelector('[data-home-section-sorter]');
+    if (sectionSorter) {
+        const state = document.querySelector('[data-home-section-save-state]');
+        let moving = null;
+        const saveSections = function () {
+            const items = Array.from(sectionSorter.querySelectorAll('[data-section-id]')).map(function(row){ return {id:Number(row.dataset.sectionId),enabled:row.querySelector('[data-section-enabled]').checked}; });
+            const body=new URLSearchParams(); body.set('items',JSON.stringify(items)); body.set(sectionSorter.dataset.csrfParam,sectionSorter.dataset.csrfToken);
+            state.textContent='…';
+            fetch(sectionSorter.dataset.saveUrl,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},body:body.toString()}).then(function(response){if(!response.ok) throw new Error(); return response.json();}).then(function(){state.textContent='✓';}).catch(function(){state.textContent='!';});
+        };
+        sectionSorter.querySelectorAll('[data-section-id]').forEach(function(row){ row.addEventListener('dragstart',function(){moving=row; row.classList.add('is-dragging');}); row.addEventListener('dragend',function(){row.classList.remove('is-dragging'); moving=null; saveSections();}); row.querySelector('[data-section-enabled]').addEventListener('change',saveSections); });
+        sectionSorter.addEventListener('dragover',function(event){event.preventDefault(); const target=event.target.closest('[data-section-id]'); if(moving && target && target!==moving) sectionSorter.insertBefore(moving,target);});
+    }
 }());

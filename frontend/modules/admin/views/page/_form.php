@@ -1,6 +1,6 @@
 <?php
 
-use dosamigos\ckeditor\CKEditor;
+use frontend\widgets\RichTextEditor;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
@@ -18,7 +18,7 @@ $form = ActiveForm::begin();
         <?= $form->field($model, 'unpublish_at')->input('datetime-local', ['value' => $model->unpublish_at ? date('Y-m-d\TH:i', $model->unpublish_at) : '']) ?>
     </div>
     <?= $form->field($model, 'summary')->textarea(['rows' => 3]) ?>
-    <?= $form->field($model, 'content')->widget(CKEditor::class, ['preset' => 'full', 'options' => ['rows' => 12]]) ?>
+    <?= $form->field($model, 'content')->widget(RichTextEditor::class, ['rows' => 12]) ?>
 
     <fieldset><legend><?= Yii::t('app', 'Search engine optimization') ?></legend>
         <?= $form->field($model, 'seo_title')->textInput(['maxlength' => true]) ?>

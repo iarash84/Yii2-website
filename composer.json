@@ -21,7 +21,6 @@
     "prefer-stable": true,
     "require": {
         "php": "^8.2",
-        "2amigos/yii2-ckeditor-widget": "^1.0.4",
         "yiisoft/yii2": "~2.0.55",
         "yiisoft/yii2-swiftmailer": "^2.1.3"
     },

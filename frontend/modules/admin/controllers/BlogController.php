@@ -10,13 +10,9 @@ use frontend\models\BlogSearch;
 use frontend\models\BlogTag;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
-use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\web\UploadedFile;
-use common\components\SecureUpload;
-use yii\helpers\Json;
 
 /**
  * BlogController implements the CRUD actions for Blog model.
@@ -40,27 +36,10 @@ class BlogController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['post'],
-                    'upload' => ['post'],
                 ],
             ],
         ];
     }
-
-    /**
-     * @return string
-     */
-    public function actionUpload(){
-        $uploadedFile = UploadedFile::getInstanceByName('upload');
-        if ($uploadedFile === null) {
-            throw new \yii\web\BadRequestHttpException(Yii::t('app', 'No file was uploaded.'));
-        }
-        $relativePath = SecureUpload::storeImage($uploadedFile);
-        $url = Url::to('@web/' . $relativePath, true);
-        $funcNum = (int) Yii::$app->request->get('CKEditorFuncNum', 0);
-        return '<script>window.parent.CKEDITOR.tools.callFunction(' . $funcNum . ', '
-            . Json::htmlEncode($url) . ', "");</script>';
-    }
-
 
     /**
      * Lists all Blog models.
