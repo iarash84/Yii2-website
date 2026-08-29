@@ -197,8 +197,19 @@ class SeedController extends Controller
             ['cta', 'برای شروع آماده‌اید؟', 'همکاری با ما', '<p>درباره هدف و نیاز پروژه صحبت کنیم و مسیر مناسب را پیدا کنیم.</p>', 60],
         ];
         foreach ($homeSections as [$type, $title, $subtitle, $content, $order]) {
-            if (!(new \yii\db\Query())->from('{{%home_section}}')->where(['type'=>$type])->exists()) {
-                $db->createCommand()->insert('{{%home_section}}', ['type'=>$type,'title'=>$title,'subtitle'=>$subtitle,'content'=>$content,'sort_order'=>$order,'status'=>1,'created_by'=>$userId,'updated_by'=>$userId,'created_at'=>$now,'updated_at'=>$now])->execute();
+            if (!(new \yii\db\Query())->from('{{%home_section}}')->where(['type' => $type])->exists()) {
+                $db->createCommand()->insert('{{%home_section}}', [
+                    'type' => $type,
+                    'title' => $title,
+                    'subtitle' => $subtitle,
+                    'content' => $content,
+                    'sort_order' => $order,
+                    'status' => 1,
+                    'created_by' => $userId,
+                    'updated_by' => $userId,
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ])->execute();
             }
         }
 

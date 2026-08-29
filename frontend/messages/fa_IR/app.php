@@ -19,7 +19,7 @@ return [
     'Sample Project' => 'نمونه کار',
     'Login' => 'ورود به سیستم',
     'Logout' => 'خروج از سیستم',
-    'My Company' => 'گروه ايده گستران كمان',
+    'My Company' => 'نام شرکت',
     'Vulnerabilities' => 'آسیب پذیری',
     'Thank you for contacting us. We will respond to you as soon as possible.' => 'از این که ما را در جریان قرار دادید بسیار سپاسگزاریم ، در اولین فرصت به این موضوع رسیدگی می شود',
     'Thank you for your order. We will respond to you as soon as possible.' => 'از سفارش شما سپاسگذاریم ، در اولین فرصت با شما تماس گرفته خواهد شد',
