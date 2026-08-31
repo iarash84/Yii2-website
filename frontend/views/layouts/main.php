@@ -135,7 +135,8 @@ $this->registerLinkTag([
     <main id="main-content" class="site-main" tabindex="-1">
         <div class="container <?= $isAdmin ? 'admin-shell' : 'content-shell' ?>">
             <?php if ($isAdmin): ?>
-                <aside class="admin-sidebar card" aria-label="<?= Yii::t('app', 'Admin panel') ?>">
+                <button class="d-btn d-btn-square d-btn-ghost admin-sidebar-toggle" type="button" data-admin-sidebar-toggle aria-controls="admin-sidebar" aria-expanded="false" aria-label="<?= Yii::t('app', 'Open admin navigation') ?>"><?= Icon::show('menu') ?></button>
+                <aside id="admin-sidebar" class="admin-sidebar card" data-admin-sidebar aria-label="<?= Yii::t('app', 'Admin panel') ?>">
                     <h2><?= Yii::t('app', 'Admin panel') ?></h2>
                     <ul class="admin-nav">
                         <li><?= Html::a(Icon::show('dashboard') . Yii::t('app', 'Dashboard'), ['/admin'], ['aria-current' => $current('admin/dashboard')]) ?></li>
@@ -238,6 +239,17 @@ $this->registerLinkTag([
     </footer>
 </div>
 <button id="scroll-to-top" type="button" aria-label="<?= Yii::t('app', 'Scroll to top') ?>">↑</button>
+<?php if ($isAdmin): ?>
+<dialog id="confirmation-dialog" class="d-modal admin-confirmation" data-confirmation-dialog aria-labelledby="confirmation-title">
+    <div class="d-modal-box">
+        <form method="dialog"><button class="d-btn d-btn-sm d-btn-circle d-btn-ghost confirmation-close" value="cancel" aria-label="<?= Yii::t('app', 'Close') ?>"><?= Icon::show('close', ['width' => 18, 'height' => 18]) ?></button></form>
+        <h2 id="confirmation-title" class="confirmation-title"><?= Yii::t('app', 'Confirm action') ?></h2>
+        <p data-confirmation-message><?= Yii::t('app', 'This action cannot be undone.') ?></p>
+        <div class="d-modal-action"><form method="dialog"><button class="d-btn d-btn-ghost" value="cancel"><?= Yii::t('app', 'Cancel') ?></button><button class="d-btn d-btn-error" value="confirm"><?= Yii::t('app', 'Confirm') ?></button></form></div>
+    </div>
+    <form method="dialog" class="d-modal-backdrop"><button value="cancel"><?= Yii::t('app', 'Close') ?></button></form>
+</dialog>
+<?php endif; ?>
 <?php $this->endBody() ?>
 </body>
 </html>

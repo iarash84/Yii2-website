@@ -3,6 +3,7 @@
 namespace tests\integration;
 
 use frontend\models\Setting;
+use frontend\widgets\AdminActionColumn;
 use tests\Support\DatabaseTestCase;
 use Yii;
 
@@ -79,5 +80,21 @@ class UiCompletenessTest extends DatabaseTestCase
         }
         self::assertStringNotContainsString('value="light"', $output);
         self::assertStringNotContainsString('value="dark"', $output);
+    }
+
+    public function testAdminShellProvidesResponsiveNavigationAndConfirmationDialog(): void
+    {
+        $admin = $this->createUser('superAdmin', 'admin-ui-shell');
+        self::assertTrue(Yii::$app->user->login($admin));
+        $output = Yii::$app->runAction('admin/dashboard/index');
+        self::assertStringContainsString('data-admin-sidebar-toggle', $output);
+        self::assertStringContainsString('data-admin-sidebar', $output);
+        self::assertStringContainsString('data-confirmation-dialog', $output);
+        self::assertStringContainsString('d-modal', $output);
+    }
+
+    public function testGridActionsUseCentralizedAdminColumn(): void
+    {
+        self::assertInstanceOf(AdminActionColumn::class, Yii::$container->get(\yii\grid\ActionColumn::class));
     }
 }

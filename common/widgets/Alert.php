@@ -38,11 +38,11 @@ class Alert extends \yii\base\Widget
      * - $value is the bootstrap alert type (i.e. danger, success, info, warning)
      */
     public $alertTypes = [
-        'error'   => 'alert-danger',
-        'danger'  => 'alert-danger',
-        'success' => 'alert-success',
-        'info'    => 'alert-info',
-        'warning' => 'alert-warning'
+        'error'   => 'd-alert d-alert-error alert-danger',
+        'danger'  => 'd-alert d-alert-error alert-danger',
+        'success' => 'd-alert d-alert-success alert-success',
+        'info'    => 'd-alert d-alert-info alert-info',
+        'warning' => 'd-alert d-alert-warning alert-warning'
     ];
 
     /**
@@ -71,7 +71,7 @@ class Alert extends \yii\base\Widget
                     echo \yii\helpers\Html::tag('div',
                         \yii\helpers\Html::tag('span', \yii\helpers\Html::encode((string) $message))
                         . \yii\helpers\Html::button('×', [
-                            'class' => 'alert-close',
+                            'class' => 'd-btn d-btn-sm d-btn-circle d-btn-ghost alert-close',
                             'type' => 'button',
                             'aria-label' => \Yii::t('app', 'Close'),
                             'data-dismiss-alert' => true,

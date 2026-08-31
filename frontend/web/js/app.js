@@ -39,6 +39,61 @@
         });
     }
 
+    const adminSidebar = document.querySelector('[data-admin-sidebar]');
+    const adminSidebarToggle = document.querySelector('[data-admin-sidebar-toggle]');
+    if (adminSidebar && adminSidebarToggle) {
+        const setSidebar = function (open) {
+            adminSidebar.classList.toggle('is-open', open);
+            adminSidebarToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+        };
+        adminSidebarToggle.addEventListener('click', function () { setSidebar(!adminSidebar.classList.contains('is-open')); });
+        adminSidebar.addEventListener('click', function (event) {
+            if (event.target.closest('a') && window.matchMedia('(max-width: 64rem)').matches) setSidebar(false);
+        });
+        document.addEventListener('keydown', function (event) { if (event.key === 'Escape') setSidebar(false); });
+    }
+
+    document.querySelectorAll('.admin-content form .form-control, .admin-content form input, .admin-content form select, .admin-content form textarea').forEach(function (field) {
+        if (field.type === 'hidden' || field.type === 'submit') return;
+        if (field.type === 'checkbox') field.classList.add('d-checkbox');
+        else if (field.type === 'radio') field.classList.add('d-radio');
+        else if (field.type === 'file') field.classList.add('d-file-input', 'd-file-input-bordered');
+        else if (field.tagName === 'SELECT') field.classList.add('d-select', 'd-select-bordered');
+        else if (field.tagName === 'TEXTAREA') field.classList.add('d-textarea', 'd-textarea-bordered');
+        else field.classList.add('d-input', 'd-input-bordered');
+    });
+    document.querySelectorAll('.admin-content .btn').forEach(function (button) {
+        button.classList.add('d-btn');
+        if (button.classList.contains('btn-danger')) button.classList.add('d-btn-error');
+        else if (button.classList.contains('btn-secondary')) button.classList.add('d-btn-outline');
+        else button.classList.add('d-btn-primary');
+    });
+
+    const confirmationDialog = document.querySelector('[data-confirmation-dialog]');
+    if (confirmationDialog) {
+        let pendingConfirmation = null;
+        document.addEventListener('click', function (event) {
+            const trigger = event.target.closest('[data-confirm]');
+            if (!trigger || trigger.dataset.confirmApproved === 'true') return;
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            pendingConfirmation = trigger;
+            confirmationDialog.querySelector('[data-confirmation-message]').textContent = trigger.dataset.confirm;
+            confirmationDialog.showModal();
+        }, true);
+        confirmationDialog.addEventListener('close', function () {
+            if (confirmationDialog.returnValue === 'confirm' && pendingConfirmation) {
+                const trigger = pendingConfirmation;
+                pendingConfirmation = null;
+                trigger.dataset.confirmApproved = 'true';
+                trigger.click();
+                delete trigger.dataset.confirmApproved;
+            } else {
+                pendingConfirmation = null;
+            }
+        });
+    }
+
     document.querySelectorAll('[data-dismiss-alert]').forEach(function (button) {
         button.addEventListener('click', function () {
             button.closest('[role="alert"], [role="status"]').remove();
@@ -51,6 +106,13 @@
             if (submit && !submit.disabled) {
                 submit.classList.add('is-loading');
                 submit.setAttribute('aria-busy', 'true');
+                if (!submit.querySelector('.d-loading')) {
+                    const spinner = document.createElement('span');
+                    spinner.className = 'd-loading d-loading-spinner d-loading-sm';
+                    spinner.setAttribute('aria-hidden', 'true');
+                    submit.prepend(spinner);
+                }
+                window.setTimeout(function () { submit.disabled = true; }, 0);
             }
         });
     });
