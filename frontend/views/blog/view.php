@@ -14,10 +14,10 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="blog-view">
     <?php
-    if (!Yii::$app->user->isGuest) { ?>
+    if (!Yii::$app->user->isGuest && Yii::$app->user->can('manageContent')) { ?>
         <div class="page-actions">
-            <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'd-btn d-btn-primary']) ?>
-            <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
+            <?= Html::a(Yii::t('app', 'Update'), ['/admin/blog/update', 'id' => $model->id], ['class' => 'd-btn d-btn-primary']) ?>
+            <?= Html::a(Yii::t('app', 'Delete'), ['/admin/blog/delete', 'id' => $model->id], [
                 'class' => 'd-btn d-btn-error d-btn-soft',
                 'data' => [
                     'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),

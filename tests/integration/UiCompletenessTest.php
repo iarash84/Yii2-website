@@ -97,4 +97,14 @@ class UiCompletenessTest extends DatabaseTestCase
     {
         self::assertInstanceOf(AdminActionColumn::class, Yii::$container->get(\yii\grid\ActionColumn::class));
     }
+
+    public function testFrontendEnhancementsPreserveActiveFormAndDialogCancellation(): void
+    {
+        $script = file_get_contents(Yii::getAlias('@webroot/js/app.js'));
+
+        self::assertStringContainsString(".on('beforeSubmit', 'form'", $script);
+        self::assertStringContainsString("data('yiiActiveForm')", $script);
+        self::assertStringContainsString("confirmationDialog.returnValue = 'cancel'", $script);
+        self::assertStringContainsString("confirmationDialog.returnValue === 'confirm'", $script);
+    }
 }

@@ -96,6 +96,7 @@
             event.stopImmediatePropagation();
             pendingConfirmation = trigger;
             confirmationDialog.querySelector('[data-confirmation-message]').textContent = trigger.dataset.confirm;
+            confirmationDialog.returnValue = 'cancel';
             confirmationDialog.showModal();
         }, true);
         confirmationDialog.addEventListener('close', function () {
@@ -117,22 +118,56 @@
         });
     });
 
+    const setFormLoading = function (form) {
+        const submit = form.querySelector('[type="submit"]');
+        if (!submit || submit.disabled || form.dataset.submitting === 'true') return false;
+        form.dataset.submitting = 'true';
+        submit.dataset.loading = 'true';
+        submit.classList.add('is-loading');
+        submit.setAttribute('aria-busy', 'true');
+        submit.setAttribute('aria-disabled', 'true');
+        const spinner = document.createElement('span');
+        spinner.className = 'd-loading d-loading-spinner d-loading-sm';
+        spinner.dataset.submitSpinner = 'true';
+        spinner.setAttribute('aria-hidden', 'true');
+        submit.prepend(spinner);
+        return true;
+    };
+    const resetFormLoading = function (form) {
+        const submit = form.querySelector('[type="submit"][data-loading="true"]');
+        if (!submit) return;
+        delete form.dataset.submitting;
+        submit.classList.remove('is-loading');
+        submit.removeAttribute('aria-busy');
+        submit.removeAttribute('aria-disabled');
+        delete submit.dataset.loading;
+        const spinner = submit.querySelector('[data-submit-spinner]');
+        if (spinner) spinner.remove();
+    };
     document.querySelectorAll('form').forEach(function (form) {
-        form.addEventListener('submit', function () {
-            const submit = form.querySelector('[type="submit"]');
-            if (submit && !submit.disabled) {
-                submit.classList.add('is-loading');
-                submit.setAttribute('aria-busy', 'true');
-                if (!submit.querySelector('.d-loading')) {
-                    const spinner = document.createElement('span');
-                    spinner.className = 'd-loading d-loading-spinner d-loading-sm';
-                    spinner.setAttribute('aria-hidden', 'true');
-                    submit.prepend(spinner);
-                }
-                window.setTimeout(function () { submit.disabled = true; }, 0);
+        form.addEventListener('submit', function (event) {
+            if (window.jQuery && window.jQuery(form).data('yiiActiveForm')) return;
+            if (!setFormLoading(form)) {
+                event.preventDefault();
+                return;
             }
+            window.setTimeout(function () {
+                if (event.defaultPrevented) resetFormLoading(form);
+            }, 0);
         });
     });
+    if (window.jQuery) {
+        window.jQuery(document).on('beforeSubmit', 'form', function (event) {
+            const form = event.currentTarget;
+            if (!setFormLoading(form)) {
+                event.preventDefault();
+                return false;
+            }
+            window.setTimeout(function () {
+                if (event.isDefaultPrevented()) resetFormLoading(form);
+            }, 0);
+        });
+    }
 
     const scrollButton = document.getElementById('scroll-to-top');
     if (scrollButton) {

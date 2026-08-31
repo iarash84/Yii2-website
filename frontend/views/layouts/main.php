@@ -45,7 +45,7 @@ $this->registerLinkTag([
 <!DOCTYPE html>
 <html lang="<?= Html::encode($languageManager->getLocale()) ?>" dir="<?= $isRtl ? 'rtl' : 'ltr' ?>" data-theme="site-light">
 <head>
-    <script>(function(){try{var k='color-theme',v=localStorage.getItem(k)||'system',m={light:'site-light',dark:'site-dark'},d=v==='system'?(matchMedia('(prefers-color-scheme: dark)').matches?'site-dark':'site-light'):(m[v]||v);document.documentElement.dataset.theme=d;document.documentElement.dataset.themePreference=v;}catch(e){document.documentElement.dataset.theme='site-light';}}());</script>
+    <script>(function(){try{var k='color-theme',v=localStorage.getItem(k)||'system',a=['system','site-light','site-dark','corporate','nord','business'],m={light:'site-light',dark:'site-dark'};v=m[v]||v;if(a.indexOf(v)<0)v='system';var d=v==='system'?(matchMedia('(prefers-color-scheme: dark)').matches?'site-dark':'site-light'):v;document.documentElement.dataset.theme=d;document.documentElement.dataset.themePreference=v;}catch(e){document.documentElement.dataset.theme='site-light';}}());</script>
     <meta charset="<?= Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#6757d1">

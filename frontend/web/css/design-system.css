@@ -175,7 +175,7 @@ p { margin-block: 0 var(--space-4); }
 .section-heading { max-width: 45rem; margin-block-end: var(--space-6); }
 
 .admin-content .btn { display: inline-flex; min-height: 2.75rem; align-items: center; justify-content: center; gap: var(--space-2); padding: .65rem 1.1rem; border: 1px solid transparent; border-radius: var(--radius-sm); color: #fff; background: var(--color-primary-600); font-weight: 700; cursor: pointer; }
-.is-loading { opacity: .65; cursor: wait; transform: none; }
+.is-loading { opacity: .65; pointer-events: none; cursor: wait; transform: none; }
 .is-loading { gap: var(--space-2); }
 
 .form-group { margin-block-end: var(--space-4); }
