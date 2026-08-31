@@ -4,6 +4,10 @@
 // served directly; all other requests are handled by Yii's front controller.
 if (PHP_SAPI === 'cli-server') {
     $path = rawurldecode(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?: '/');
+    if ($path === '/install.php') {
+        require __DIR__ . '/install.php';
+        return true;
+    }
     $webroot = realpath(__DIR__);
     $file = realpath(__DIR__ . DIRECTORY_SEPARATOR . ltrim($path, '/\\'));
     $extension = strtolower(pathinfo($file ?: '', PATHINFO_EXTENSION));

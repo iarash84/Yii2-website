@@ -35,4 +35,7 @@ phpunit.phar
 /.env
 /.env.*
 !/.env.example
+/.install.lock
+/.env.installing
+/.env.installer-backup
 /.phpunit.cache/
