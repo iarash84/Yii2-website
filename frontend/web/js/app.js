@@ -2,7 +2,7 @@
     'use strict';
 
     const root = document.documentElement;
-    const themeSelector = document.querySelector('[data-theme-selector]');
+    const themeOptions = Array.from(document.querySelectorAll('[data-theme-option]'));
     const themeMedia = window.matchMedia('(prefers-color-scheme: dark)');
     const allowedThemes = ['system', 'site-light', 'site-dark', 'corporate', 'nord', 'business'];
     const legacyThemes = {light: 'site-light', dark: 'site-dark'};
@@ -12,11 +12,19 @@
         const resolved = preference === 'system' ? (themeMedia.matches ? 'site-dark' : 'site-light') : preference;
         root.dataset.theme = resolved;
         root.dataset.themePreference = preference;
-        if (themeSelector) themeSelector.value = preference;
+        themeOptions.forEach(function (option) {
+            option.setAttribute('aria-pressed', option.dataset.themeOption === preference ? 'true' : 'false');
+        });
         if (persist) localStorage.setItem('color-theme', preference);
     };
     applyTheme(localStorage.getItem('color-theme') || 'system', false);
-    if (themeSelector) themeSelector.addEventListener('change', function () { applyTheme(themeSelector.value, true); });
+    themeOptions.forEach(function (option) {
+        option.addEventListener('click', function () {
+            applyTheme(option.dataset.themeOption, true);
+            const details = option.closest('details');
+            if (details) details.open = false;
+        });
+    });
     const handleSystemTheme = function () { if (root.dataset.themePreference === 'system') applyTheme('system', false); };
     if (themeMedia.addEventListener) themeMedia.addEventListener('change', handleSystemTheme);
     else themeMedia.addListener(handleSystemTheme);
@@ -72,7 +80,7 @@
 
     document.querySelectorAll('.admin-content form .form-control, .admin-content form input, .admin-content form select, .admin-content form textarea').forEach(function (field) {
         if (field.type === 'hidden' || field.type === 'submit') return;
-        if (field.type === 'checkbox') field.classList.add('d-checkbox');
+        if (field.type === 'checkbox') field.classList.add('d-toggle', 'd-toggle-sm');
         else if (field.type === 'radio') field.classList.add('d-radio');
         else if (field.type === 'file') field.classList.add('d-file-input', 'd-file-input-bordered');
         else if (field.tagName === 'SELECT') field.classList.add('d-select', 'd-select-bordered');
@@ -112,6 +120,32 @@
         });
     }
 
+    const imagePreviewDialog = document.querySelector('[data-image-preview-dialog]');
+    if (imagePreviewDialog) {
+        const previewImage = imagePreviewDialog.querySelector('[data-image-preview-target]');
+        document.addEventListener('click', function (event) {
+            const trigger = event.target.closest('[data-image-preview]');
+            if (!trigger) return;
+            previewImage.src = trigger.dataset.imagePreview;
+            previewImage.alt = trigger.dataset.imageAlt || '';
+            imagePreviewDialog.showModal();
+        });
+        imagePreviewDialog.addEventListener('close', function () { previewImage.src = ''; });
+    }
+
+    const remoteDetailDialog = document.querySelector('[data-remote-detail-dialog]');
+    if (remoteDetailDialog) {
+        const remoteContent = remoteDetailDialog.querySelector('[data-remote-detail-content]');
+        document.addEventListener('click', function (event) {
+            const trigger = event.target.closest('[data-remote-dialog-url]');
+            if (!trigger) return;
+            remoteContent.innerHTML = '<span class="d-loading d-loading-spinner" aria-label="Loading"></span>';
+            remoteDetailDialog.showModal();
+            fetch(trigger.dataset.remoteDialogUrl, {headers: {'X-Requested-With': 'XMLHttpRequest'}}).then(function (response) { if (!response.ok) throw new Error(); return response.text(); }).then(function (html) { remoteContent.innerHTML = html; }).catch(function () { remoteContent.textContent = trigger.dataset.errorMessage || 'Unable to load details.'; });
+        });
+        remoteDetailDialog.addEventListener('close', function () { remoteContent.textContent = ''; });
+    }
+
     document.querySelectorAll('[data-dismiss-alert]').forEach(function (button) {
         button.addEventListener('click', function () {
             button.closest('[role="alert"], [role="status"]').remove();
@@ -145,6 +179,7 @@
         if (spinner) spinner.remove();
     };
     document.querySelectorAll('form').forEach(function (form) {
+        if (form.method === 'dialog' || form.getAttribute('method') === 'dialog') return;
         form.addEventListener('submit', function (event) {
             if (window.jQuery && window.jQuery(form).data('yiiActiveForm')) return;
             if (!setFormLoading(form)) {
@@ -181,6 +216,41 @@
         update();
     }
 
+    const heroSlider = document.querySelector('[data-hero-slider]');
+    if (heroSlider) {
+        const slides = Array.from(heroSlider.querySelectorAll('[data-hero-slide]'));
+        const dots = Array.from(heroSlider.querySelectorAll('[data-hero-dot]'));
+        let activeSlide = 0;
+        let sliderTimer = null;
+        const showSlide = function (index) {
+            activeSlide = (index + slides.length) % slides.length;
+            slides.forEach(function (slide, slideIndex) {
+                const active = slideIndex === activeSlide;
+                slide.classList.toggle('is-active', active);
+                slide.setAttribute('aria-hidden', active ? 'false' : 'true');
+            });
+            dots.forEach(function (dot, dotIndex) {
+                dot.setAttribute('aria-current', dotIndex === activeSlide ? 'true' : 'false');
+            });
+        };
+        const startSlider = function () {
+            if (slides.length < 2 || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+            window.clearInterval(sliderTimer);
+            sliderTimer = window.setInterval(function () { showSlide(activeSlide + 1); }, 6500);
+        };
+        const moveSlide = function (offset) { showSlide(activeSlide + offset); startSlider(); };
+        const previous = heroSlider.querySelector('[data-hero-previous]');
+        const next = heroSlider.querySelector('[data-hero-next]');
+        if (previous) previous.addEventListener('click', function () { moveSlide(-1); });
+        if (next) next.addEventListener('click', function () { moveSlide(1); });
+        dots.forEach(function (dot) { dot.addEventListener('click', function () { showSlide(Number(dot.dataset.heroDot)); startSlider(); }); });
+        heroSlider.addEventListener('mouseenter', function () { window.clearInterval(sliderTimer); });
+        heroSlider.addEventListener('mouseleave', startSlider);
+        heroSlider.addEventListener('focusin', function () { window.clearInterval(sliderTimer); });
+        heroSlider.addEventListener('focusout', startSlider);
+        startSlider();
+    }
+
     const dashboard = document.querySelector('[data-dashboard-widgets]');
     if (dashboard) {
         let layout = JSON.parse(dashboard.dataset.layout || '{"order":[],"hidden":[]}');
@@ -189,11 +259,12 @@
         const save = function () {
             layout.order = Array.from(dashboard.querySelectorAll('[data-widget]')).map(el => el.dataset.widget);
             layout.hidden = widgets.filter(el => el.hidden).map(el => el.dataset.widget);
+            layout.collapsed = widgets.filter(el => el.classList.contains('is-collapsed')).map(el => el.dataset.widget);
             const body = new URLSearchParams(); body.set('layout', JSON.stringify(layout)); body.set(dashboard.dataset.csrfParam, dashboard.dataset.csrfToken);
             fetch(dashboard.dataset.saveUrl, {method: 'POST', headers: {'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'}, body: body.toString()});
         };
         layout.order.forEach(id => { const el=dashboard.querySelector('[data-widget="'+id+'"]'); if(el) dashboard.appendChild(el); });
-        widgets.forEach(el => { el.hidden=(layout.hidden || []).includes(el.dataset.widget); const label=document.createElement('label'); const input=document.createElement('input'); input.type='checkbox'; input.checked=!el.hidden; input.addEventListener('change',()=>{el.hidden=!input.checked; save();}); label.append(input, document.createTextNode(' '+el.dataset.title)); picker.appendChild(label); el.addEventListener('dragstart',()=>el.classList.add('is-dragging')); el.addEventListener('dragend',()=>{el.classList.remove('is-dragging'); save();}); });
+        widgets.forEach(el => { el.hidden=(layout.hidden || []).includes(el.dataset.widget); el.classList.toggle('is-collapsed', (layout.collapsed || []).includes(el.dataset.widget)); const collapse=document.createElement('button'); collapse.type='button'; collapse.className='d-btn d-btn-sm d-btn-square d-btn-ghost dashboard-widget-toggle'; collapse.innerHTML='<span aria-hidden="true">−</span>'; const updateCollapseLabel=()=>collapse.setAttribute('aria-label',el.classList.contains('is-collapsed')?dashboard.dataset.expandLabel:dashboard.dataset.collapseLabel); updateCollapseLabel(); collapse.addEventListener('click',()=>{el.classList.toggle('is-collapsed'); updateCollapseLabel(); save();}); el.prepend(collapse); const label=document.createElement('label'); const input=document.createElement('input'); input.type='checkbox'; input.className='d-toggle d-toggle-sm'; input.checked=!el.hidden; input.addEventListener('change',()=>{el.hidden=!input.checked; save();}); label.append(input, document.createTextNode(' '+el.dataset.title)); picker.appendChild(label); el.addEventListener('dragstart',()=>el.classList.add('is-dragging')); el.addEventListener('dragend',()=>{el.classList.remove('is-dragging'); save();}); });
         dashboard.addEventListener('dragover', event => { event.preventDefault(); const moving=dashboard.querySelector('.is-dragging'); const target=event.target.closest('[data-widget]'); if(moving && target && moving!==target) dashboard.insertBefore(moving, target); });
         const customize=document.querySelector('[data-dashboard-customize]'); if(customize) customize.addEventListener('click',()=>{picker.hidden=!picker.hidden;});
     }
@@ -222,4 +293,31 @@
         sectionSorter.querySelectorAll('[data-section-id]').forEach(function(row){ row.addEventListener('dragstart',function(){moving=row; row.classList.add('is-dragging');}); row.addEventListener('dragend',function(){row.classList.remove('is-dragging'); moving=null; saveSections();}); row.querySelector('[data-section-enabled]').addEventListener('change',saveSections); });
         sectionSorter.addEventListener('dragover',function(event){event.preventDefault(); const target=event.target.closest('[data-section-id]'); if(moving && target && target!==moving) sectionSorter.insertBefore(moving,target);});
     }
+
+    const faqSorter = document.querySelector('[data-faq-sorter]');
+    if (faqSorter) {
+        let movingFaq = null;
+        const saveFaqOrder = function () {
+            const body = new URLSearchParams();
+            body.set('ids', JSON.stringify(Array.from(faqSorter.querySelectorAll('[data-faq-id]')).map(row => Number(row.dataset.faqId))));
+            body.set(faqSorter.dataset.csrfParam, faqSorter.dataset.csrfToken);
+            fetch(faqSorter.dataset.saveUrl, {method: 'POST', headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'}, body: body.toString()});
+        };
+        faqSorter.querySelectorAll('[data-faq-id]').forEach(function (row) {
+            row.addEventListener('dragstart', function () { movingFaq = row; row.classList.add('is-dragging'); });
+            row.addEventListener('dragend', function () { row.classList.remove('is-dragging'); movingFaq = null; saveFaqOrder(); });
+        });
+        faqSorter.addEventListener('dragover', function (event) { event.preventDefault(); const target = event.target.closest('[data-faq-id]'); if (movingFaq && target && target !== movingFaq) faqSorter.insertBefore(movingFaq, target); });
+    }
+
+    document.querySelectorAll('[data-admin-tabs]').forEach(function (tabs) {
+        const buttons = Array.from(tabs.querySelectorAll('[data-tab-target]'));
+        const panels = Array.from(tabs.querySelectorAll('[data-tab-panel]'));
+        buttons.forEach(function (button) {
+            button.addEventListener('click', function () {
+                buttons.forEach(function (item) { const active = item === button; item.classList.toggle('d-tab-active', active); item.setAttribute('aria-selected', active ? 'true' : 'false'); });
+                panels.forEach(function (panel) { panel.hidden = panel.id !== button.dataset.tabTarget; });
+            });
+        });
+    });
 }());

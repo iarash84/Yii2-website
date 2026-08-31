@@ -20,7 +20,7 @@ class ContactController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['view', 'delete'],
+                'only' => ['view', 'detail', 'delete'],
                 'rules' => [
                     [
                         'allow' => true,
@@ -59,9 +59,21 @@ class ContactController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+        if ($model->read_at === null) {
+            $model->updateAttributes(['read_at' => time()]);
+        }
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
         ]);
+    }
+    public function actionDetail($id)
+    {
+        $model = $this->findModel($id);
+        if ($model->read_at === null) {
+            $model->updateAttributes(['read_at' => time()]);
+        }
+        return $this->renderPartial('_detail', ['model' => $model]);
     }
 
     /**

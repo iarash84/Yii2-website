@@ -13,7 +13,7 @@ class FaqsController extends Controller
 {
     public function behaviors()
     {
-        return ['verbs' => ['class' => VerbFilter::class,'actions' => ['delete' => ['post']]]];
+        return ['verbs' => ['class' => VerbFilter::class,'actions' => ['delete' => ['post'], 'reorder' => ['post']]]];
     }
     public function actionIndex()
     {
@@ -31,6 +31,20 @@ class FaqsController extends Controller
     {
         $this->find($id)->delete();
         return $this->redirect(['index']);
+    }
+    public function actionReorder()
+    {
+        $ids = json_decode((string) Yii::$app->request->post('ids'), true);
+        if (!is_array($ids)) {
+            throw new \yii\web\BadRequestHttpException(Yii::t('app', 'Invalid FAQ order.'));
+        }
+        $models = Faqs::find()->where(['id' => array_map('intval', $ids)])->indexBy('id')->all();
+        foreach ($ids as $position => $id) {
+            if (isset($models[(int) $id])) {
+                $models[(int) $id]->updateAttributes(['sort_order' => ($position + 1) * 10]);
+            }
+        }
+        return $this->asJson(['success' => true]);
     }
     private function save(Faqs $model)
     {

@@ -30,7 +30,7 @@ class Opportunity extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['created_at'], 'safe'],
+            [['created_at', 'read_at'], 'safe'],
             [['name', 'resume', 'email'], 'string', 'max' => 255],
             [['phone_number'], 'string', 'max' => 20]
         ];

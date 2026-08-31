@@ -373,4 +373,10 @@ return [
     'Site statistics' => 'آمار سایت', 'Recent activity' => 'فعالیت‌های اخیر', 'System status' => 'وضعیت سیستم',
     'Invalid dashboard layout.' => 'چیدمان پیشخوان معتبر نیست.', 'Completed projects' => 'پروژه تکمیل‌شده', 'Published articles' => 'مقاله منتشرشده', 'Helpful answers' => 'پاسخ کاربردی',
     'Invalid section order.' => 'ترتیب بخش‌ها معتبر نیست.', 'Drag to reorder' => 'برای جابه‌جایی بکشید',
+    'Previous slide' => 'اسلاید قبلی', 'Next slide' => 'اسلاید بعدی',
+    'Go to slide {number}' => 'رفتن به اسلاید {number}', 'View more' => 'مشاهده بیشتر',
+    'Notifications' => 'اعلان‌ها', 'Minimize widget' => 'کوچک‌کردن ابزارک', 'Expand widget' => 'بازکردن ابزارک',
+    'View full-size image' => 'مشاهده تصویر در اندازه اصلی', 'Image preview' => 'پیش‌نمایش تصویر',
+    'View details' => 'مشاهده جزئیات', 'Unable to load details.' => 'بارگذاری جزئیات امکان‌پذیر نیست.',
+    'Invalid FAQ order.' => 'ترتیب پرسش‌های متداول معتبر نیست.',
 ];

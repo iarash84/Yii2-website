@@ -33,7 +33,7 @@ class Order extends \yii\db\ActiveRecord
     {
         return [
             [['description'], 'string'],
-            [['created_at'], 'safe'],
+            [['created_at', 'read_at'], 'safe'],
             [['name', 'company', 'website', 'email'], 'string', 'max' => 255],
             [['phone_number'], 'string', 'max' => 20]
         ];

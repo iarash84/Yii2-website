@@ -4,6 +4,9 @@ use common\widgets\Alert;
 use frontend\assets\AppAsset;
 use frontend\models\Setting;
 use frontend\models\MenuItem;
+use frontend\models\Contact;
+use frontend\models\Order;
+use frontend\models\Opportunity;
 use frontend\widgets\Icon;
 use yii\helpers\Html;
 use yii\widgets\Breadcrumbs;
@@ -22,6 +25,15 @@ $current = static function ($routePrefix) use ($route) {
 };
 $mainMenu = $isAdmin ? [] : MenuItem::activeRoots('main');
 $footerMenu = $isAdmin ? [] : MenuItem::activeRoots('footer');
+$submissionNotifications = [];
+if ($isAdmin && Yii::$app->user->can('viewSubmissions')) {
+    $submissionNotifications = [
+        ['count' => Contact::find()->where(['read_at' => null])->count(), 'label' => Yii::t('app', 'Contact'), 'url' => ['/admin/contact/index']],
+        ['count' => Order::find()->where(['read_at' => null])->count(), 'label' => Yii::t('app', 'Order app'), 'url' => ['/admin/order/index']],
+        ['count' => Opportunity::find()->where(['read_at' => null])->count(), 'label' => Yii::t('app', 'Job opportunity'), 'url' => ['/admin/opportunity/index']],
+    ];
+}
+$unreadSubmissionCount = array_sum(array_column($submissionNotifications, 'count'));
 
 $this->registerMetaTag(['name' => 'content-language', 'content' => $languageManager->getLocale()]);
 foreach ($languageManager->languages as $code => $language) {
@@ -98,9 +110,10 @@ $this->registerLinkTag([
                         <?php endif; ?>
                     <?php endif; ?>
                     <?php if (!$isAdmin): ?>
-                        <li><?= Html::a(Icon::show('posts') . Yii::t('app', 'Search'), ['/search/index']) ?></li>
+                        <li><?= Html::a(Icon::show('search') . Yii::t('app', 'Search'), ['/search/index']) ?></li>
                     <?php endif; ?>
-                    <li class="theme-selector-item"><span class="theme-selector-icon" aria-hidden="true"><?= Icon::show('sun') ?></span><label class="sr-only" for="theme-selector"><?= Yii::t('app', 'Color theme') ?></label><select id="theme-selector" class="theme-selector d-select d-select-ghost d-select-sm" data-theme-selector aria-label="<?= Yii::t('app', 'Color theme') ?>"><option value="system"><?= Yii::t('app', 'System theme') ?></option><option value="site-light"><?= Yii::t('app', 'Site light') ?></option><option value="site-dark"><?= Yii::t('app', 'Site dark') ?></option><option value="corporate">Corporate</option><option value="nord">Nord</option><option value="business">Business</option></select></li>
+                    <?php if (!$isAdmin): ?><li><?= $this->render('_appearance', ['inSidebar' => false]) ?></li><?php endif; ?>
+                    <?php if ($isAdmin && Yii::$app->user->can('viewSubmissions')): ?><li class="notification-control"><details><summary class="d-btn d-btn-square d-btn-ghost" aria-label="<?= Yii::t('app', 'Notifications') ?>"><?= Icon::show('bell') ?><?php if ($unreadSubmissionCount): ?><span class="notification-badge"><?= (int) $unreadSubmissionCount ?></span><?php endif; ?></summary><div class="notification-menu"><h2><?= Yii::t('app', 'Notifications') ?></h2><?php foreach ($submissionNotifications as $notification): ?><?= Html::a(Html::tag('span', Html::encode($notification['label'])) . Html::tag('strong', (string) $notification['count']), $notification['url'], ['class' => $notification['count'] ? 'has-unread' : null]) ?><?php endforeach; ?></div></details></li><?php endif; ?>
                     <?php if (Yii::$app->user->isGuest): ?>
                         <li><?= Html::a(Yii::t('app', 'Login'), ['/site/login']) ?></li>
                     <?php else: ?>
@@ -190,7 +203,8 @@ $this->registerLinkTag([
                         <?php if (Yii::$app->user->can('manageUsers')): ?>
                             <li><?= Html::a(Icon::show('users') . Yii::t('app', 'User Management'), ['/admin/user/index'], ['aria-current' => $current('admin/user')]) ?></li>
                         <?php endif; ?>
-                    </ul>
+                        </ul>
+                    <?= $this->render('_appearance', ['inSidebar' => true]) ?>
                 </aside>
                 <section class="admin-content">
             <?php else: ?>
@@ -249,6 +263,8 @@ $this->registerLinkTag([
     </div>
     <form method="dialog" class="d-modal-backdrop"><button value="cancel"><?= Yii::t('app', 'Close') ?></button></form>
 </dialog>
+<dialog id="image-preview-dialog" class="d-modal image-preview-dialog" data-image-preview-dialog aria-label="<?= Yii::t('app', 'Image preview') ?>"><div class="d-modal-box"><form method="dialog"><button class="d-btn d-btn-sm d-btn-circle d-btn-ghost confirmation-close" value="cancel" aria-label="<?= Yii::t('app', 'Close') ?>"><?= Icon::show('close') ?></button></form><img data-image-preview-target src="" alt=""></div><form method="dialog" class="d-modal-backdrop"><button value="cancel"><?= Yii::t('app', 'Close') ?></button></form></dialog>
+<dialog id="remote-detail-dialog" class="d-modal remote-detail-dialog" data-remote-detail-dialog aria-label="<?= Yii::t('app', 'View details') ?>"><div class="d-modal-box"><form method="dialog"><button class="d-btn d-btn-sm d-btn-circle d-btn-ghost confirmation-close" value="cancel" aria-label="<?= Yii::t('app', 'Close') ?>"><?= Icon::show('close') ?></button></form><div data-remote-detail-content></div></div><form method="dialog" class="d-modal-backdrop"><button value="cancel"><?= Yii::t('app', 'Close') ?></button></form></dialog>
 <?php endif; ?>
 <?php $this->endBody() ?>
 </body>

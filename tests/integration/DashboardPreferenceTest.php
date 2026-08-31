@@ -12,8 +12,10 @@ class DashboardPreferenceTest extends TestCase
         $layout = DashboardPreference::normalize([
             'order' => ['analytics', 'unknown', 'analytics'],
             'hidden' => ['metrics', 'invalid'],
+            'collapsed' => ['analytics', 'invalid'],
         ]);
         self::assertSame(['analytics', 'metrics', 'quick_actions', 'recent_activity', 'system_status'], $layout['order']);
         self::assertSame(['metrics'], $layout['hidden']);
+        self::assertSame(['analytics'], $layout['collapsed']);
     }
 }

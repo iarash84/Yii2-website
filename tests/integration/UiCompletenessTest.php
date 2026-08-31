@@ -3,6 +3,7 @@
 namespace tests\integration;
 
 use frontend\models\Setting;
+use frontend\models\Contact;
 use frontend\widgets\AdminActionColumn;
 use tests\Support\DatabaseTestCase;
 use Yii;
@@ -74,12 +75,12 @@ class UiCompletenessTest extends DatabaseTestCase
     {
         Yii::$app->user->logout(false);
         $output = Yii::$app->runAction('site/index');
-        self::assertStringContainsString('data-theme-selector', $output);
+        self::assertStringContainsString('data-theme-option', $output);
         foreach (['system', 'site-light', 'site-dark', 'corporate', 'nord', 'business'] as $theme) {
-            self::assertStringContainsString('value="' . $theme . '"', $output);
+            self::assertStringContainsString('data-theme-option="' . $theme . '"', $output);
         }
-        self::assertStringNotContainsString('value="light"', $output);
-        self::assertStringNotContainsString('value="dark"', $output);
+        self::assertStringNotContainsString('data-theme-option="light"', $output);
+        self::assertStringNotContainsString('data-theme-option="dark"', $output);
     }
 
     public function testAdminShellProvidesResponsiveNavigationAndConfirmationDialog(): void
@@ -106,5 +107,20 @@ class UiCompletenessTest extends DatabaseTestCase
         self::assertStringContainsString("data('yiiActiveForm')", $script);
         self::assertStringContainsString("confirmationDialog.returnValue = 'cancel'", $script);
         self::assertStringContainsString("confirmationDialog.returnValue === 'confirm'", $script);
+        self::assertStringContainsString("form.method === 'dialog'", $script);
+    }
+
+    public function testAdminNotificationTracksUnreadContactSubmission(): void
+    {
+        $contact = new Contact(['name' => 'New contact', 'email' => 'contact@example.test', 'subject' => 'Hello', 'body' => 'Message']);
+        self::assertTrue($contact->save());
+        $admin = $this->createUser('superAdmin', 'notification-admin');
+        self::assertTrue(Yii::$app->user->login($admin));
+
+        $dashboard = Yii::$app->runAction('admin/dashboard/index');
+        self::assertStringContainsString('notification-badge', $dashboard);
+        Yii::$app->runAction('admin/contact/detail', ['id' => $contact->id]);
+        $contact->refresh();
+        self::assertNotNull($contact->read_at);
     }
 }

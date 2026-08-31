@@ -34,10 +34,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?php foreach($dataProvider->models as $item) : ?>
                         <tr data-id="<?= $item->primaryKey ?>">
 
-                            <td><?= Html::img(MediaUrl::image($item->image, 'img/portfolio/hero-studio.webp'), [
+                            <?php $imageUrl = MediaUrl::image($item->image, 'img/portfolio/hero-studio.webp'); ?>
+                            <td><button type="button" class="carousel-thumbnail" data-image-preview="<?= Html::encode($imageUrl) ?>" data-image-alt="<?= Html::encode($item->title) ?>" aria-label="<?= Yii::t('app', 'View full-size image') ?>"><?= Html::img($imageUrl, [
                                 'alt' => Html::encode($item->title),
-                                'style' => 'width: 550px;',
-                            ]) ?></td>
+                                'class' => 'carousel-thumbnail-image',
+                            ]) ?></button></td>
                             <td>
                                 <div class="btn-group btn-group-sm" role="group">
 

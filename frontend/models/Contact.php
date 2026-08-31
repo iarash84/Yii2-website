@@ -32,7 +32,7 @@ class Contact extends \yii\db\ActiveRecord
     {
         return [
             [['body'], 'string'],
-            [['created_at'], 'safe'],
+            [['created_at', 'read_at'], 'safe'],
             [['name', 'email', 'subject'], 'string', 'max' => 255],
             [['phone_number'], 'string', 'max' => 20]
         ];

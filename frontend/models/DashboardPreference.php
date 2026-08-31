@@ -17,6 +17,10 @@ class DashboardPreference extends \yii\db\ActiveRecord
     {
         $order = array_values(array_unique(array_intersect($layout['order'] ?? [], self::WIDGETS)));
         foreach (self::WIDGETS as $widget) if (!in_array($widget, $order, true)) $order[] = $widget;
-        return ['order' => $order, 'hidden' => array_values(array_unique(array_intersect($layout['hidden'] ?? [], self::WIDGETS)))];
+        return [
+            'order' => $order,
+            'hidden' => array_values(array_unique(array_intersect($layout['hidden'] ?? [], self::WIDGETS))),
+            'collapsed' => array_values(array_unique(array_intersect($layout['collapsed'] ?? [], self::WIDGETS))),
+        ];
     }
 }

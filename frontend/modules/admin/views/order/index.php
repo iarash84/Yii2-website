@@ -2,6 +2,9 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use frontend\widgets\AdminActionColumn;
+use frontend\widgets\Icon;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $searchModel frontend\models\OrderSearch */
@@ -58,20 +61,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => 'yii\grid\DataColumn',
                 'headerOptions' => ['style'=>'text-align:center;'],
                 'contentOptions' => ['style'=>'text-align:center;'],
-                'attribute' => 'description'
-            ],
-            [
-                'class' => 'yii\grid\DataColumn',
-                'headerOptions' => ['style'=>'text-align:center;'],
-                'contentOptions' => ['style'=>'text-align:center;'],
                 'attribute' => 'created_at',
                 'format' => 'datetime',
             ],
             [
-                'class' => 'yii\grid\ActionColumn' ,
+                'class' => AdminActionColumn::class,
                 'headerOptions' => ['style'=>'text-align:center;'],
                 'contentOptions' => ['style'=>'text-align:center;'],
-                'template' => '{view} {delete}'
+                'template' => '{detail} {delete}',
+                'buttons' => ['detail' => static fn ($url, $model) => Html::button(Icon::show('eye'), ['class' => 'd-btn d-btn-sm d-btn-square d-btn-ghost', 'data-remote-dialog-url' => Url::to(['detail', 'id' => $model->id]), 'data-error-message' => Yii::t('app', 'Unable to load details.'), 'aria-label' => Yii::t('app', 'View')])],
             ],
         ],
     ]); ?>

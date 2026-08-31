@@ -5,11 +5,26 @@ namespace tests\integration;
 use frontend\models\Setting;
 use frontend\models\HomeSection;
 use frontend\models\Sample;
+use frontend\models\Carousel;
 use tests\Support\DatabaseTestCase;
 use Yii;
 
 class SmokeTest extends DatabaseTestCase
 {
+    public function testHomepageRendersManagedSlidesAndPortfolioImages(): void
+    {
+        $user = $this->createUser('editor', 'homepage-editor');
+        self::assertTrue((new Carousel(['user_id' => $user->id, 'image' => 'img/portfolio/hero-studio.webp', 'title' => 'Managed slide', 'sort_order' => 10, 'status' => 1]))->save());
+        self::assertTrue((new HomeSection(['type' => 'portfolio', 'title' => 'Portfolio', 'status' => 1]))->save());
+        self::assertTrue((new Sample(['title' => 'Image item', 'content' => '<p>Content</p>', 'image' => 'img/portfolio/commerce-experience.webp']))->save());
+
+        $output = Yii::$app->runAction('site/index');
+        self::assertStringContainsString('data-hero-slider', $output);
+        self::assertStringContainsString('Managed slide', $output);
+        self::assertStringContainsString('home-portfolio-image', $output);
+        self::assertStringContainsString('commerce-experience.webp', $output);
+    }
+
     public function testDemoImageAssetsExist(): void
     {
         $webroot = Yii::getAlias('@webroot');

@@ -21,7 +21,7 @@ $cards = [
     <?= Html::a(Icon::show('plus') . Yii::t('app', 'Create Post'), ['/admin/blog/create'], ['class' => 'btn']) ?>
 </div>
 <section class="card dashboard-customizer"><div><strong><?= Yii::t('app','Customize dashboard') ?></strong><p class="text-muted"><?= Yii::t('app','Drag widgets to reorder them, or show and hide each widget.') ?></p></div><button type="button" class="btn btn-secondary" data-dashboard-customize><?= Yii::t('app','Customize') ?></button><div class="dashboard-widget-picker" data-dashboard-picker hidden></div></section>
-<div class="dashboard-widgets" data-dashboard-widgets data-layout='<?= Html::encode(json_encode($dashboardLayout, JSON_UNESCAPED_SLASHES)) ?>' data-save-url="<?= \yii\helpers\Url::to(['/admin/dashboard/layout']) ?>" data-csrf-param="<?= Html::encode(Yii::$app->request->csrfParam) ?>" data-csrf-token="<?= Html::encode(Yii::$app->request->csrfToken) ?>">
+<div class="dashboard-widgets" data-dashboard-widgets data-layout='<?= Html::encode(json_encode($dashboardLayout, JSON_UNESCAPED_SLASHES)) ?>' data-save-url="<?= \yii\helpers\Url::to(['/admin/dashboard/layout']) ?>" data-csrf-param="<?= Html::encode(Yii::$app->request->csrfParam) ?>" data-csrf-token="<?= Html::encode(Yii::$app->request->csrfToken) ?>" data-collapse-label="<?= Yii::t('app', 'Minimize widget') ?>" data-expand-label="<?= Yii::t('app', 'Expand widget') ?>">
 <div class="dashboard-widget" data-widget="metrics" data-title="<?= Yii::t('app','Site statistics') ?>" draggable="true">
 <div class="metric-grid">
     <?php foreach ($cards as [$icon, $key, $label, $url]): ?>
