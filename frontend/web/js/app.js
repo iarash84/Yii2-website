@@ -29,6 +29,13 @@
             toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
             document.body.classList.toggle('is-nav-open', open);
         });
+        nav.addEventListener('click', function (event) {
+            if (event.target.closest('a') && window.matchMedia('(max-width: 64rem)').matches) {
+                nav.classList.remove('is-open');
+                toggle.setAttribute('aria-expanded', 'false');
+                document.body.classList.remove('is-nav-open');
+            }
+        });
         document.addEventListener('keydown', function (event) {
             if (event.key === 'Escape' && nav.classList.contains('is-open')) {
                 nav.classList.remove('is-open');
@@ -38,6 +45,16 @@
             }
         });
     }
+
+    document.querySelectorAll('.content-shell form .form-control, .content-shell form input, .content-shell form select, .content-shell form textarea').forEach(function (field) {
+        if (field.type === 'hidden' || field.type === 'submit' || field.dataset.richEditor !== undefined) return;
+        if (field.type === 'checkbox') field.classList.add('d-checkbox');
+        else if (field.type === 'radio') field.classList.add('d-radio');
+        else if (field.type === 'file') field.classList.add('d-file-input', 'd-file-input-bordered');
+        else if (field.tagName === 'SELECT') field.classList.add('d-select', 'd-select-bordered');
+        else if (field.tagName === 'TEXTAREA') field.classList.add('d-textarea', 'd-textarea-bordered');
+        else field.classList.add('d-input', 'd-input-bordered');
+    });
 
     const adminSidebar = document.querySelector('[data-admin-sidebar]');
     const adminSidebarToggle = document.querySelector('[data-admin-sidebar-toggle]');

@@ -1,7 +1,6 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
 use yii\widgets\ListView;
 use frontend\widgets\Icon;
 
@@ -16,29 +15,26 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="page-header page-header-actions">
         <h1><?= Html::encode($this->title) ?></h1>
         <?php if (!Yii::$app->user->isGuest && Yii::$app->user->can('manageContent')): ?>
-            <?= Html::a(Icon::show('plus') . Yii::t('app', 'Create Post'), ['/admin/blog/create'], ['class' => 'btn']) ?>
+            <?= Html::a(Icon::show('plus') . Yii::t('app', 'Create Post'), ['/admin/blog/create'], ['class' => 'd-btn d-btn-primary']) ?>
         <?php endif; ?>
     </div>
-    <!-- Page Layout here -->
-    <div class="row">
-
-        <div class="col s3">
-
-            <div class="panel panel-default">
-                <div class="panel-heading">
+    <div class="blog-layout">
+        <aside class="blog-sidebar" aria-label="<?= Yii::t('app', 'Categories') ?>">
+            <section class="blog-filter">
+                <header class="blog-filter-heading">
                     <h2><?= Html::a(Yii::t('app', 'Categories'), ['/blog/index']) ?></h2>
-                </div>
-                <ul class="list-group">
+                </header>
+                <ul class="blog-filter-list">
                     <?php
                     foreach($categoryModels as $category){
-                        echo'<li class="list-group-item">'.Html::a(Html::encode($category->getLocalized('title')),['/blog/category', 'id'=>$category->id]).'</li>';
+                        echo '<li>' . Html::a(Html::encode($category->getLocalized('title')), ['/blog/category', 'id' => $category->id]) . '</li>';
                     }
                     ?>
                 </ul>
-            </div>
+            </section>
             <?php if ($tagModels): ?>
-                <div class="panel blog-tags-filter">
-                    <div class="panel-heading"><h2><?= Yii::t('app', 'Hashtags') ?></h2></div>
+                <section class="blog-filter blog-tags-filter">
+                    <header class="blog-filter-heading"><h2><?= Yii::t('app', 'Hashtags') ?></h2></header>
                     <div class="tag-cloud">
                         <?php foreach ($tagModels as $tag): ?>
                             <?= Html::a('#' . Html::encode($tag->name), ['/blog/index', 'BlogSearch[tag]' => $tag->slug], [
@@ -46,11 +42,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]) ?>
                         <?php endforeach; ?>
                     </div>
-                </div>
+                </section>
             <?php endif; ?>
-        </div>
-
-        <div class="col s9">
+        </aside>
+        <section class="blog-feed" aria-label="<?= Html::encode($this->title) ?>">
             <?= ListView::widget([
                 'dataProvider' => $dataProvider,
                 'options' => [
@@ -63,6 +58,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
             ]);
             ?>
-        </div>
+        </section>
     </div>
 </div>

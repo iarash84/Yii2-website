@@ -5,6 +5,7 @@
 /* @var $model \frontend\models\ContactForm */
 
 use yii\helpers\Html;
+use yii\helpers\HtmlPurifier;
 use yii\widgets\ActiveForm;
 use frontend\components\TextCaptcha;
 
@@ -13,17 +14,14 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 
-<div class="site-contact">
-    <h3><?= Html::encode($this->title) ?></h3>
-    <div class="row">
+<div class="site-opportunity public-form-card">
+    <header class="public-form-header"><h1><?= Html::encode($this->title) ?></h1></header>
+    <div class="prose public-form-intro">
         <?php
             $setting = new \frontend\models\Setting();
-            echo $setting->opportunity;
+            echo HtmlPurifier::process($setting->opportunity);
         ?>
     </div>
-
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
 
             <?php $form = ActiveForm::begin(['id' => 'contact-form', 'options'=>['enctype'=>'multipart/form-data']]); ?>
 
@@ -49,11 +47,8 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
 
             <div class="form-group">
-                <?= Html::submitButton(Yii::t('app', 'Send'), ['class' => 'btn btn-primary', 'name' => 'contact-button']) ?>
+                <?= Html::submitButton(Yii::t('app', 'Send'), ['class' => 'd-btn d-btn-primary', 'name' => 'contact-button']) ?>
             </div>
 
             <?php ActiveForm::end(); ?>
-        </div>
-    </div>
-
 </div>

@@ -30,5 +30,5 @@ $this->registerMetaTag(['property' => 'og:type', 'content' => 'article'], 'og-ty
     <?php if ($model->featuredMedia && $model->featuredMedia->getIsImage()): ?>
         <?= Html::img($model->featuredMedia->getUrl(), ['class' => 'page-featured-image', 'alt' => Html::encode($model->featuredMedia->alt_text ?: $model->getLocalized('title'))]) ?>
     <?php endif; ?>
-    <div class="card prose"><?= HtmlPurifier::process($model->getLocalized('content')) ?></div>
+    <div class="prose rich-content"><?= HtmlPurifier::process($model->getLocalized('content')) ?></div>
 </article>

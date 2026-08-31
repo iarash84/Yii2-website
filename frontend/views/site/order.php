@@ -11,11 +11,8 @@ use frontend\components\TextCaptcha;
 $this->title = Yii::t('app','Order app');;
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="site-contact">
-    <h3><?= Html::encode($this->title) ?></h3>
-
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
+<div class="site-order public-form-card">
+    <header class="public-form-header"><h1><?= Html::encode($this->title) ?></h1></header>
 
             <?php $form = ActiveForm::begin(['id' => 'contact-form']); ?>
 
@@ -41,11 +38,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
 
                 <div class="form-group">
-                    <?= Html::submitButton(Yii::t('app', 'Send'), ['class' => 'btn btn-primary', 'name' => 'contact-button']) ?>
+                    <?= Html::submitButton(Yii::t('app', 'Send'), ['class' => 'd-btn d-btn-primary', 'name' => 'contact-button']) ?>
                 </div>
 
             <?php ActiveForm::end(); ?>
-        </div>
-    </div>
-
 </div>

@@ -65,8 +65,8 @@ $this->registerLinkTag([
                 ['/site/index'],
                 ['class' => 'brand', 'aria-label' => Yii::t('app', 'Home')]
             ) ?>
-            <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false"
-                    aria-controls="primary-navigation" aria-label="<?= Yii::t('app', 'Open menu') ?>">☰</button>
+            <button class="nav-toggle d-btn d-btn-square d-btn-ghost" type="button" data-nav-toggle aria-expanded="false"
+                    aria-controls="primary-navigation" aria-label="<?= Yii::t('app', 'Open menu') ?>"><?= Icon::show('menu') ?></button>
             <nav id="primary-navigation" class="primary-nav" data-primary-nav
                  aria-label="<?= Yii::t('app', 'Main navigation') ?>">
                 <ul class="nav-list">
@@ -94,13 +94,13 @@ $this->registerLinkTag([
                             <li><?= Html::a(Yii::t('app', 'Sample Project'), ['/site/sample'], ['aria-current' => $current('site/sample')]) ?></li>
                             <li><?= Html::a(Yii::t('app', 'About'), ['/site/about'], ['aria-current' => $current('site/about')]) ?></li>
                             <li><?= Html::a(Yii::t('app', 'Contact'), ['/site/contact'], ['aria-current' => $current('site/contact')]) ?></li>
-                            <li><?= Html::a(Yii::t('app', 'Order app'), ['/site/order'], ['class' => 'btn']) ?></li>
+                            <li><?= Html::a(Yii::t('app', 'Order app'), ['/site/order'], ['class' => 'd-btn d-btn-primary d-btn-sm']) ?></li>
                         <?php endif; ?>
                     <?php endif; ?>
                     <?php if (!$isAdmin): ?>
                         <li><?= Html::a(Icon::show('posts') . Yii::t('app', 'Search'), ['/search/index']) ?></li>
                     <?php endif; ?>
-                    <li class="theme-selector-item"><label class="sr-only" for="theme-selector"><?= Yii::t('app', 'Color theme') ?></label><select id="theme-selector" class="theme-selector d-select d-select-sm" data-theme-selector aria-label="<?= Yii::t('app', 'Color theme') ?>"><option value="system"><?= Yii::t('app', 'System theme') ?></option><option value="site-light"><?= Yii::t('app', 'Site light') ?></option><option value="site-dark"><?= Yii::t('app', 'Site dark') ?></option><option value="corporate">Corporate</option><option value="nord">Nord</option><option value="business">Business</option></select></li>
+                    <li class="theme-selector-item"><span class="theme-selector-icon" aria-hidden="true"><?= Icon::show('sun') ?></span><label class="sr-only" for="theme-selector"><?= Yii::t('app', 'Color theme') ?></label><select id="theme-selector" class="theme-selector d-select d-select-ghost d-select-sm" data-theme-selector aria-label="<?= Yii::t('app', 'Color theme') ?>"><option value="system"><?= Yii::t('app', 'System theme') ?></option><option value="site-light"><?= Yii::t('app', 'Site light') ?></option><option value="site-dark"><?= Yii::t('app', 'Site dark') ?></option><option value="corporate">Corporate</option><option value="nord">Nord</option><option value="business">Business</option></select></li>
                     <?php if (Yii::$app->user->isGuest): ?>
                         <li><?= Html::a(Yii::t('app', 'Login'), ['/site/login']) ?></li>
                     <?php else: ?>
@@ -238,7 +238,7 @@ $this->registerLinkTag([
         </div>
     </footer>
 </div>
-<button id="scroll-to-top" type="button" aria-label="<?= Yii::t('app', 'Scroll to top') ?>">↑</button>
+<button id="scroll-to-top" class="d-btn d-btn-circle d-btn-primary" type="button" aria-label="<?= Yii::t('app', 'Scroll to top') ?>"><?= Icon::show('arrow-up') ?></button>
 <?php if ($isAdmin): ?>
 <dialog id="confirmation-dialog" class="d-modal admin-confirmation" data-confirmation-dialog aria-labelledby="confirmation-title">
     <div class="d-modal-box">

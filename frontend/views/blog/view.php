@@ -14,35 +14,32 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="blog-view">
     <?php
-    if(!Yii::$app->user->isGuest){ ?>
-        <p>
-            <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+    if (!Yii::$app->user->isGuest) { ?>
+        <div class="page-actions">
+            <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'd-btn d-btn-primary']) ?>
             <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
-                'class' => 'btn btn-danger',
+                'class' => 'd-btn d-btn-error d-btn-soft',
                 'data' => [
                     'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
                     'method' => 'post',
                 ],
             ]) ?>
-        </p>
+        </div>
     <?php } ?>
 
-    <article>
-        <h5> <?= Html::a(Html::encode($this->title) ,['blog/view','id' => $model->id, 'subject' => str_replace(' ','_',trim($this->title))]) ?></h5>
+    <article class="article-page">
+        <header class="article-header"><p class="text-overline"><?= Yii::t('app', 'Blog') ?></p><h1><?= Html::encode($this->title) ?></h1>
 
-        <div class="row">
-            <div class="group1 col-sm-6 col-md-6">
+        <div class="article-meta">
+            <span>
                 <?= Icon::show('users') ?> <?= Html::encode($model->user->username) ?>
-
-            </div>
-            <div class="group2 col-sm-6 col-md-6">
+            </span>
+            <span>
                 <time datetime="<?= Html::encode($model->created_at) ?>"><?= Yii::$app->formatter->asDatetime($model->created_at) ?></time>
-            </div>
-        </div>
-        <hr>
-        <?= \yii\helpers\HtmlPurifier::process($model->getLocalized('content')) ?>
+            </span>
+        </div></header>
+        <div class="prose rich-content"><?= \yii\helpers\HtmlPurifier::process($model->getLocalized('content')) ?></div>
         <?php if ($model->tags): ?><div class="tag-cloud" aria-label="<?= Yii::t('app', 'Hashtags') ?>"><?php foreach ($model->tags as $tag): ?><?= Html::a('#' . Html::encode($tag->name), ['/blog/index', 'BlogSearch[tag]' => $tag->slug], ['class' => 'tag-chip']) ?><?php endforeach; ?></div><?php endif; ?>
-        <hr>
     </article>
 
 </div>

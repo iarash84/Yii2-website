@@ -10,14 +10,14 @@ use yii\widgets\ActiveForm;
 $this->title = Yii::t('app','Login');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="site-login center-block col-lg-6 col-md-4 col-sm-6" style=" float:none;">
-    <h2><?= Html::encode($this->title) ?></h2>
+<div class="site-login public-form-card auth-card">
+    <header class="public-form-header"><h1><?= Html::encode($this->title) ?></h1>
 
-    <p> <?= Yii::t('app', 'Please fill out the following fields to login') ?></p>
+    <p><?= Yii::t('app', 'Please fill out the following fields to login') ?></p></header>
 
     <?php $form = ActiveForm::begin([
         'id' => 'login-form',
-        'options' => ['class' => 'form-horizontal'],
+        'options' => ['class' => 'public-form'],
     ]); ?>
 
     <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
@@ -29,9 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
     ]) ?>
 
     <div class="form-group">
-        <div class="col-lg-offset-1 col-lg-11">
-            <?= Html::submitButton(Yii::t('app', 'Login'), ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
-        </div>
+        <?= Html::submitButton(Yii::t('app', 'Login'), ['class' => 'd-btn d-btn-primary', 'name' => 'login-button']) ?>
     </div>
     <?php ActiveForm::end(); ?>
 

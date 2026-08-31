@@ -13,7 +13,7 @@ $models = $dataProvider->models;
         <h2><?= Yii::t('app', 'No portfolio items yet') ?></h2>
         <p><?= Yii::t('app', 'Portfolio items will be displayed here after they are added.') ?></p>
         <?php if (!Yii::$app->user->isGuest && Yii::$app->user->can('manageContent')): ?>
-            <?= Html::a(Icon::show('plus') . Yii::t('app', 'Create Sample'), ['/admin/sample/create'], ['class' => 'btn']) ?>
+            <?= Html::a(Icon::show('plus') . Yii::t('app', 'Create Sample'), ['/admin/sample/create'], ['class' => 'd-btn d-btn-primary']) ?>
         <?php endif; ?>
     </section>
 <?php else: ?>
@@ -32,12 +32,12 @@ $models = $dataProvider->models;
                             <?= Html::a(Icon::show('edit'), ['/admin/sample/update', 'id' => $model->id], [
                                 'title' => Yii::t('app', 'Edit'),
                                 'aria-label' => Yii::t('app', 'Edit'),
-                                'class' => 'icon-button',
+                                'class' => 'd-btn d-btn-sm d-btn-circle icon-button',
                             ]) ?>
                             <?= Html::a(Icon::show('delete'), ['/admin/sample/delete', 'id' => $model->id], [
                                 'title' => Yii::t('app', 'Delete item'),
                                 'aria-label' => Yii::t('app', 'Delete item'),
-                                'class' => 'icon-button icon-button-danger',
+                                'class' => 'd-btn d-btn-sm d-btn-circle d-btn-error d-btn-soft icon-button icon-button-danger',
                                 'data' => [
                                     'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
                                     'method' => 'post',

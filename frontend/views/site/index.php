@@ -30,8 +30,8 @@ $sections = HomeSection::find()->where(['status' => 1])->orderBy(['sort_order' =
             <p><?= Yii::t('app', 'We build reliable digital products for growing businesses.') ?></p>
         <?php endif; ?>
         <div class="hero-actions">
-            <?= Html::a(Yii::t('app', 'Order app'), ['/site/order'], ['class' => 'btn']) ?>
-            <?= Html::a(Yii::t('app', 'Contact'), ['/site/contact'], ['class' => 'btn btn-secondary']) ?>
+            <?= Html::a(Yii::t('app', 'Order app'), ['/site/order'], ['class' => 'd-btn d-btn-primary']) ?>
+            <?= Html::a(Yii::t('app', 'Contact'), ['/site/contact'], ['class' => 'd-btn d-btn-outline hero-secondary-action']) ?>
         </div>
     </div>
 </section>
@@ -42,10 +42,10 @@ $sections = HomeSection::find()->where(['status' => 1])->orderBy(['sort_order' =
     <?php if ($section->getLocalized('content')): ?><div class="home-section-intro prose"><?= HtmlPurifier::process($section->getLocalized('content')) ?></div><?php endif; ?>
     <?php if ($section->type === 'features'): ?><div class="card-grid"><article class="card"><span class="card-icon">01</span><h3><?= Yii::t('app','Product strategy') ?></h3></article><article class="card"><span class="card-icon">02</span><h3><?= Yii::t('app','Web development') ?></h3></article><article class="card"><span class="card-icon">03</span><h3><?= Yii::t('app','Ongoing support') ?></h3></article></div>
     <?php elseif ($section->type === 'stats'): ?><div class="home-stats"><div><strong><?= Sample::find()->count() ?></strong><span><?= Yii::t('app','Completed projects') ?></span></div><div><strong><?= Blog::find()->count() ?></strong><span><?= Yii::t('app','Published articles') ?></span></div><div><strong><?= Faqs::find()->where(['status'=>1])->count() ?></strong><span><?= Yii::t('app','Helpful answers') ?></span></div></div>
-    <?php elseif ($section->type === 'portfolio'): ?><div class="card-grid"><?php foreach (Sample::find()->orderBy(['id'=>SORT_DESC])->limit(3)->all() as $item): ?><article class="card"><h3><?= Html::encode($item->getLocalized('title')) ?></h3><div class="prose"><?= HtmlPurifier::process($item->getLocalized('content')) ?></div></article><?php endforeach; ?></div><p><?= Html::a(Yii::t('app','View all'),['/site/sample'],['class'=>'btn btn-secondary']) ?></p>
-    <?php elseif ($section->type === 'posts'): ?><div class="card-grid"><?php foreach (Blog::find()->orderBy(['created_at'=>SORT_DESC])->limit(3)->all() as $post): ?><article class="card"><h3><?= Html::encode($post->getLocalized('title')) ?></h3><p><?= Html::encode($post->getLocalized('description')) ?></p></article><?php endforeach; ?></div><?= Html::a(Yii::t('app','View all'),['/blog/index'],['class'=>'btn btn-secondary']) ?>
+    <?php elseif ($section->type === 'portfolio'): ?><div class="card-grid"><?php foreach (Sample::find()->orderBy(['id'=>SORT_DESC])->limit(3)->all() as $item): ?><article class="card content-card"><h3><?= Html::encode($item->getLocalized('title')) ?></h3><div class="content-card-summary"><?= HtmlPurifier::process($item->getLocalized('content')) ?></div></article><?php endforeach; ?></div><p class="section-action"><?= Html::a(Yii::t('app','View all'),['/site/sample'],['class'=>'d-btn d-btn-outline']) ?></p>
+    <?php elseif ($section->type === 'posts'): ?><div class="card-grid"><?php foreach (Blog::find()->orderBy(['created_at'=>SORT_DESC])->limit(3)->all() as $post): ?><article class="card content-card"><h3><?= Html::a(Html::encode($post->getLocalized('title')), ['/blog/view', 'id' => $post->id]) ?></h3><p class="content-card-summary"><?= Html::encode($post->getLocalized('description')) ?></p></article><?php endforeach; ?></div><p class="section-action"><?= Html::a(Yii::t('app','View all'),['/blog/index'],['class'=>'d-btn d-btn-outline']) ?></p>
     <?php elseif ($section->type === 'faqs'): ?><div class="faq-list"><?php foreach (Faqs::find()->where(['status'=>1])->orderBy(['sort_order'=>SORT_ASC])->limit(4)->all() as $faq): ?><details class="card"><summary><?= Html::encode($faq->getLocalized('question')) ?></summary><div><?= HtmlPurifier::process($faq->getLocalized('answer')) ?></div></details><?php endforeach; ?></div>
-    <?php elseif ($section->type === 'cta'): ?><div class="home-cta-actions"><?= Html::a(Yii::t('app','Contact'),['/site/contact'],['class'=>'btn']) ?><?= Html::a(Yii::t('app','Order app'),['/site/order'],['class'=>'btn btn-secondary']) ?></div><?php endif; ?>
+    <?php elseif ($section->type === 'cta'): ?><div class="home-cta-actions"><?= Html::a(Yii::t('app','Contact'),['/site/contact'],['class'=>'d-btn d-btn-primary']) ?><?= Html::a(Yii::t('app','Order app'),['/site/order'],['class'=>'d-btn d-btn-outline']) ?></div><?php endif; ?>
 </section>
 <?php endforeach; ?>
 

@@ -14,5 +14,5 @@ $this->title = $name;
     <h1><?= Html::encode($this->title) ?></h1>
     <p><?= nl2br(Html::encode($message)) ?></p>
     <p class="text-muted"><?= Yii::t('app', 'Please try again or contact us if the problem continues.') ?></p>
-    <?= Html::a(Yii::t('app', 'Back to home'), ['/site/index'], ['class' => 'btn']) ?>
+    <?= Html::a(Yii::t('app', 'Back to home'), ['/site/index'], ['class' => 'd-btn d-btn-primary']) ?>
 </div>

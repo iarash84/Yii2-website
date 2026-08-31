@@ -6,6 +6,6 @@ use yii\helpers\Html;
     <h2><?= Yii::t('app', 'Welcome') ?></h2>
     <p><?= Yii::t('app', 'Homepage content can be managed from the admin panel.') ?></p>
     <?php if (!Yii::$app->user->isGuest): ?>
-        <?= Html::a(Yii::t('app', 'Home Update'), ['/admin/setting/home'], ['class' => 'btn']) ?>
+        <?= Html::a(Yii::t('app', 'Home Update'), ['/admin/setting/home'], ['class' => 'd-btn d-btn-primary']) ?>
     <?php endif; ?>
 </section>
