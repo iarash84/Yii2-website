@@ -69,12 +69,15 @@ class UiCompletenessTest extends DatabaseTestCase
         self::assertSame([], $unused, 'Unused fa_IR translations: ' . implode(', ', $unused));
     }
 
-    public function testThemeToggleUsesIconsWithoutVisibleLabel(): void
+    public function testThemeSelectorProvidesCuratedAccessibleOptions(): void
     {
         Yii::$app->user->logout(false);
         $output = Yii::$app->runAction('site/index');
-        self::assertStringContainsString('theme-icon-moon', $output);
-        self::assertStringContainsString('theme-icon-sun', $output);
-        self::assertStringNotContainsString('data-theme-label', $output);
+        self::assertStringContainsString('data-theme-selector', $output);
+        foreach (['system', 'site-light', 'site-dark', 'corporate', 'nord', 'business'] as $theme) {
+            self::assertStringContainsString('value="' . $theme . '"', $output);
+        }
+        self::assertStringNotContainsString('value="light"', $output);
+        self::assertStringNotContainsString('value="dark"', $output);
     }
 }

@@ -35,6 +35,24 @@ jobs:
       - name: دریافت سورس
         uses: actions/checkout@v6.0.2
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          cache: npm
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Audit frontend dependencies
+        run: npm audit --audit-level=moderate
+
+      - name: Build production CSS
+        run: npm run build
+
+      - name: Verify compiled CSS is current
+        run: git diff --exit-code -- frontend/web/css/app.css
+
       - name: راه‌اندازی PHP
         uses: shivammathur/setup-php@2.35.3
         with:

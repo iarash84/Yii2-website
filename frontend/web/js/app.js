@@ -2,21 +2,24 @@
     'use strict';
 
     const root = document.documentElement;
-    const themeButton = document.querySelector('[data-theme-toggle]');
-    const savedTheme = localStorage.getItem('color-theme');
-    const preferredTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    const applyTheme = function (theme) {
-        root.dataset.theme = theme;
-        if (themeButton) {
-            themeButton.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
-        }
+    const themeSelector = document.querySelector('[data-theme-selector]');
+    const themeMedia = window.matchMedia('(prefers-color-scheme: dark)');
+    const allowedThemes = ['system', 'site-light', 'site-dark', 'corporate', 'nord', 'business'];
+    const legacyThemes = {light: 'site-light', dark: 'site-dark'};
+    const applyTheme = function (preference, persist) {
+        preference = legacyThemes[preference] || preference;
+        if (!allowedThemes.includes(preference)) preference = 'system';
+        const resolved = preference === 'system' ? (themeMedia.matches ? 'site-dark' : 'site-light') : preference;
+        root.dataset.theme = resolved;
+        root.dataset.themePreference = preference;
+        if (themeSelector) themeSelector.value = preference;
+        if (persist) localStorage.setItem('color-theme', preference);
     };
-    applyTheme(savedTheme || preferredTheme);
-    if (themeButton) themeButton.addEventListener('click', function () {
-        const theme = root.dataset.theme === 'dark' ? 'light' : 'dark';
-        localStorage.setItem('color-theme', theme);
-        applyTheme(theme);
-    });
+    applyTheme(localStorage.getItem('color-theme') || 'system', false);
+    if (themeSelector) themeSelector.addEventListener('change', function () { applyTheme(themeSelector.value, true); });
+    const handleSystemTheme = function () { if (root.dataset.themePreference === 'system') applyTheme('system', false); };
+    if (themeMedia.addEventListener) themeMedia.addEventListener('change', handleSystemTheme);
+    else themeMedia.addListener(handleSystemTheme);
 
     const toggle = document.querySelector('[data-nav-toggle]');
     const nav = document.querySelector('[data-primary-nav]');

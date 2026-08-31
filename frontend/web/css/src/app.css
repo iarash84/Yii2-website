@@ -1,0 +1,78 @@
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+
+@source "../../../views/**/*.php";
+@source "../../../modules/**/*.php";
+@source "../../../widgets/**/*.php";
+@source "../../js/**/*.js";
+
+@plugin "daisyui" {
+  themes: corporate, nord, business;
+  prefix: "d-";
+  logs: false;
+  exclude: rootscrollgutter;
+}
+
+@plugin "daisyui/theme" {
+  name: "site-light";
+  default: true;
+  prefersdark: false;
+  color-scheme: light;
+  --color-base-100: #ffffff;
+  --color-base-200: #faf9fc;
+  --color-base-300: #e8e4ef;
+  --color-base-content: #29263d;
+  --color-primary: #6757d1;
+  --color-primary-content: #ffffff;
+  --color-secondary: #e9775f;
+  --color-secondary-content: #ffffff;
+  --color-accent: #35a990;
+  --color-accent-content: #102b26;
+  --color-neutral: #29263d;
+  --color-neutral-content: #f0edf8;
+  --color-info: #5f71c7;
+  --color-info-content: #ffffff;
+  --color-success: #27886f;
+  --color-success-content: #ffffff;
+  --color-warning: #a86b22;
+  --color-warning-content: #ffffff;
+  --color-error: #c24f62;
+  --color-error-content: #ffffff;
+  --radius-selector: .5rem;
+  --radius-field: .5rem;
+  --radius-box: .85rem;
+  --border: 1px;
+}
+
+@plugin "daisyui/theme" {
+  name: "site-dark";
+  default: false;
+  prefersdark: true;
+  color-scheme: dark;
+  --color-base-100: #222130;
+  --color-base-200: #191824;
+  --color-base-300: #3b384c;
+  --color-base-content: #f0edf8;
+  --color-primary: #aaa0f2;
+  --color-primary-content: #191824;
+  --color-secondary: #f0907b;
+  --color-secondary-content: #191824;
+  --color-accent: #5bc5ad;
+  --color-accent-content: #112720;
+  --color-neutral: #15141f;
+  --color-neutral-content: #f0edf8;
+  --color-info: #8d9be5;
+  --color-info-content: #15141f;
+  --color-success: #58b99e;
+  --color-success-content: #10251f;
+  --color-warning: #d9a35e;
+  --color-warning-content: #2d1d09;
+  --color-error: #e17a8b;
+  --color-error-content: #2f1017;
+  --radius-selector: .5rem;
+  --radius-field: .5rem;
+  --radius-box: .85rem;
+  --border: 1px;
+}
+
+@custom-variant dark (&:where([data-theme="site-dark"], [data-theme="site-dark"] *));

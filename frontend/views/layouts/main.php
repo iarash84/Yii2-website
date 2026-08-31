@@ -43,8 +43,9 @@ $this->registerLinkTag([
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
-<html lang="<?= Html::encode($languageManager->getLocale()) ?>" dir="<?= $isRtl ? 'rtl' : 'ltr' ?>" data-theme="light">
+<html lang="<?= Html::encode($languageManager->getLocale()) ?>" dir="<?= $isRtl ? 'rtl' : 'ltr' ?>" data-theme="site-light">
 <head>
+    <script>(function(){try{var k='color-theme',v=localStorage.getItem(k)||'system',m={light:'site-light',dark:'site-dark'},d=v==='system'?(matchMedia('(prefers-color-scheme: dark)').matches?'site-dark':'site-light'):(m[v]||v);document.documentElement.dataset.theme=d;document.documentElement.dataset.themePreference=v;}catch(e){document.documentElement.dataset.theme='site-light';}}());</script>
     <meta charset="<?= Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#6757d1">
@@ -98,8 +99,8 @@ $this->registerLinkTag([
                     <?php endif; ?>
                     <?php if (!$isAdmin): ?>
                         <li><?= Html::a(Icon::show('posts') . Yii::t('app', 'Search'), ['/search/index']) ?></li>
-                        <li><button class="theme-toggle" type="button" data-theme-toggle aria-label="<?= Yii::t('app', 'Switch color theme') ?>"><span class="theme-icon theme-icon-moon"><?= Icon::show('moon') ?></span><span class="theme-icon theme-icon-sun"><?= Icon::show('sun') ?></span></button></li>
                     <?php endif; ?>
+                    <li class="theme-selector-item"><label class="sr-only" for="theme-selector"><?= Yii::t('app', 'Color theme') ?></label><select id="theme-selector" class="theme-selector d-select d-select-sm" data-theme-selector aria-label="<?= Yii::t('app', 'Color theme') ?>"><option value="system"><?= Yii::t('app', 'System theme') ?></option><option value="site-light"><?= Yii::t('app', 'Site light') ?></option><option value="site-dark"><?= Yii::t('app', 'Site dark') ?></option><option value="corporate">Corporate</option><option value="nord">Nord</option><option value="business">Business</option></select></li>
                     <?php if (Yii::$app->user->isGuest): ?>
                         <li><?= Html::a(Yii::t('app', 'Login'), ['/site/login']) ?></li>
                     <?php else: ?>
