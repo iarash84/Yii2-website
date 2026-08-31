@@ -5,6 +5,7 @@ namespace frontend\models;
 class DashboardPreference extends \yii\db\ActiveRecord
 {
     public const WIDGETS = ['metrics', 'analytics', 'quick_actions', 'recent_activity', 'system_status'];
+    public const QUICK_LINKS = ['create_post', 'create_sample', 'pages', 'media', 'menus', 'faqs', 'users', 'settings', 'system'];
     public static function tableName() { return '{{%dashboard_preference}}'; }
     public function rules() { return [[['user_id', 'layout_json', 'updated_at'], 'required'], [['user_id', 'updated_at'], 'integer'], [['layout_json'], 'string']]; }
     public static function layoutFor($userId)
@@ -21,6 +22,10 @@ class DashboardPreference extends \yii\db\ActiveRecord
             'order' => $order,
             'hidden' => array_values(array_unique(array_intersect($layout['hidden'] ?? [], self::WIDGETS))),
             'collapsed' => array_values(array_unique(array_intersect($layout['collapsed'] ?? [], self::WIDGETS))),
+            'quick_links' => array_values(array_unique(array_intersect(
+                $layout['quick_links'] ?? ['create_post', 'create_sample', 'settings'],
+                self::QUICK_LINKS
+            ))),
         ];
     }
 }

@@ -16,9 +16,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php
     if (!Yii::$app->user->isGuest && Yii::$app->user->can('manageContent')) { ?>
         <div class="page-actions">
-            <?= Html::a(Icon::show('edit') . Yii::t('app', 'Update'), ['/admin/blog/update', 'id' => $model->id], ['class' => 'd-btn d-btn-outline']) ?>
-            <?= Html::a(Icon::show('trash') . Yii::t('app', 'Delete'), ['/admin/blog/delete', 'id' => $model->id], [
-                'class' => 'd-btn d-btn-error d-btn-soft',
+            <?= Html::a(Icon::show('edit'), ['/admin/blog/update', 'id' => $model->id], ['class' => 'd-btn d-btn-sm d-btn-circle icon-button', 'title' => Yii::t('app', 'Update'), 'aria-label' => Yii::t('app', 'Update')]) ?>
+            <?= Html::a(Icon::show('trash'), ['/admin/blog/delete', 'id' => $model->id], [
+                'class' => 'd-btn d-btn-sm d-btn-circle d-btn-error d-btn-soft icon-button icon-button-danger',
+                'title' => Yii::t('app', 'Delete'),
+                'aria-label' => Yii::t('app', 'Delete'),
                 'data' => [
                     'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
                     'method' => 'post',

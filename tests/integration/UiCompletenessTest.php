@@ -107,6 +107,7 @@ class UiCompletenessTest extends DatabaseTestCase
         self::assertStringContainsString("data('yiiActiveForm')", $script);
         self::assertStringContainsString("confirmationDialog.returnValue = 'cancel'", $script);
         self::assertStringContainsString("confirmationDialog.returnValue === 'confirm'", $script);
+        self::assertStringContainsString("trigger.removeAttribute('data-confirm')", $script);
         self::assertStringContainsString("form.method === 'dialog'", $script);
     }
 
@@ -122,5 +123,25 @@ class UiCompletenessTest extends DatabaseTestCase
         Yii::$app->runAction('admin/contact/detail', ['id' => $contact->id]);
         $contact->refresh();
         self::assertNotNull($contact->read_at);
+    }
+
+    public function testNewAdminInteractionsAreRendered(): void
+    {
+        $admin = $this->createUser('superAdmin', 'admin-interactions');
+        self::assertTrue(Yii::$app->user->login($admin));
+
+        $dashboard = Yii::$app->runAction('admin/dashboard/index');
+        self::assertStringContainsString('data-quick-link="media"', $dashboard);
+        self::assertStringContainsString("action.classList.toggle('is-hidden', !input.checked)", file_get_contents(Yii::getAlias('@webroot/js/app.js')));
+
+        $about = Yii::$app->runAction('admin/setting/about');
+        self::assertStringContainsString('data-tab-target="about-preview"', $about);
+        self::assertStringContainsString('data-tab-target="about-edit"', $about);
+
+        $email = Yii::$app->runAction('admin/setting/email');
+        self::assertStringContainsString('name="test-email"', $email);
+
+        $media = Yii::$app->runAction('admin/media/index');
+        self::assertStringContainsString('data-image-preview', $media);
     }
 }

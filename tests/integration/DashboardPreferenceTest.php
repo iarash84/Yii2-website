@@ -13,9 +13,11 @@ class DashboardPreferenceTest extends TestCase
             'order' => ['analytics', 'unknown', 'analytics'],
             'hidden' => ['metrics', 'invalid'],
             'collapsed' => ['analytics', 'invalid'],
+            'quick_links' => ['media', 'invalid', 'media', 'users'],
         ]);
         self::assertSame(['analytics', 'metrics', 'quick_actions', 'recent_activity', 'system_status'], $layout['order']);
         self::assertSame(['metrics'], $layout['hidden']);
         self::assertSame(['analytics'], $layout['collapsed']);
+        self::assertSame(['media', 'users'], $layout['quick_links']);
     }
 }

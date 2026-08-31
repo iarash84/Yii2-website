@@ -44,6 +44,26 @@ class EmailSettingsForm extends Model
             } SystemSetting::put($key, $this->$property, $property === 'smtpPassword');
         } return true;
     }
+    public function testConnection()
+    {
+        if (!$this->smtpHost) {
+            throw new \RuntimeException(Yii::t('app', 'SMTP host is required for connection testing.'));
+        }
+        $password = $this->smtpPassword !== ''
+            ? $this->smtpPassword
+            : (string) SystemSetting::getValue('smtp_password', '');
+        $transport = new \Swift_SmtpTransport(
+            $this->smtpHost,
+            (int) $this->smtpPort,
+            $this->smtpEncryption ?: null
+        );
+        $transport->setUsername((string) $this->smtpUsername);
+        $transport->setPassword($password);
+        $transport->setTimeout(10);
+        $transport->start();
+        $transport->stop();
+        return true;
+    }
     private function map()
     {
         return ['smtpHost' => 'smtp_host','smtpPort' => 'smtp_port','smtpUsername' => 'smtp_username','smtpPassword' => 'smtp_password','smtpEncryption' => 'smtp_encryption','fromEmail' => 'mail_from_email','fromName' => 'mail_from_name','notificationEmail' => 'notification_email','fileTransport' => 'mail_file_transport','notifyContact' => 'notify_contact','notifyOrder' => 'notify_order','notifyOpportunity' => 'notify_opportunity'];

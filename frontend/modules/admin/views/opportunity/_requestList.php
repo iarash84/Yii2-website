@@ -1,6 +1,7 @@
 <?php
 
 use yii\grid\GridView;
+use frontend\widgets\AdminActionColumn;
 
 
 ?>
@@ -42,9 +43,7 @@ use yii\grid\GridView;
                 'format' => 'datetime',
             ],
             [
-                'class' => 'yii\grid\ActionColumn' ,
-                'headerOptions' => ['style'=>'text-align:center;'],
-                'contentOptions' => ['style'=>'text-align:center;'],
+                'class' => AdminActionColumn::class,
                 'template' => '{view} {delete}'
             ],
         ],

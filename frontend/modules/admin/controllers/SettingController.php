@@ -191,6 +191,18 @@ class SettingController extends Controller
     {
         $model = new EmailSettingsForm();
         $model->loadSettings();
+        if ($model->load(Yii::$app->request->post()) && Yii::$app->request->post('test-email') !== null) {
+            if ($model->validate()) {
+                try {
+                    $model->testConnection();
+                    Yii::$app->session->setFlash('success', Yii::t('app', 'SMTP connection was successful.'));
+                } catch (\Throwable $exception) {
+                    Yii::warning('SMTP connection test failed: ' . $exception->getMessage(), __METHOD__);
+                    Yii::$app->session->setFlash('error', Yii::t('app', 'SMTP connection failed. Check the server settings and credentials.'));
+                }
+            }
+            return $this->render('email', ['model' => $model]);
+        }
         if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->saveSettings()) {
             Yii::$app->session->setFlash('success', Yii::t('app', 'Email settings saved.'));
             return $this->redirect(['email']);

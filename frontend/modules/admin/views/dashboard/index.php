@@ -15,10 +15,22 @@ $cards = [
     ['help', 'faqs', Yii::t('app', 'FAQ management'), ['/admin/faqs/index']],
     ['users', 'users', Yii::t('app', 'Users'), ['/admin/user/index']],
 ];
+$quickActionCatalog = [
+    'create_post' => ['plus', Yii::t('app', 'Create Post'), ['/admin/blog/create'], Yii::$app->user->can('manageContent')],
+    'create_sample' => ['plus', Yii::t('app', 'Create Sample'), ['/admin/sample/create'], Yii::$app->user->can('manageContent')],
+    'pages' => ['pages', Yii::t('app', 'Dynamic pages'), ['/admin/page/index'], Yii::$app->user->can('managePages')],
+    'media' => ['image', Yii::t('app', 'Media library'), ['/admin/media/index'], Yii::$app->user->can('manageMedia')],
+    'menus' => ['menu', Yii::t('app', 'Menu management'), ['/admin/menu/index'], Yii::$app->user->can('manageMenus')],
+    'faqs' => ['help', Yii::t('app', 'FAQ management'), ['/admin/faqs/index'], Yii::$app->user->can('manageContent')],
+    'users' => ['users', Yii::t('app', 'User Management'), ['/admin/user/index'], Yii::$app->user->can('manageUsers')],
+    'settings' => ['settings', Yii::t('app', 'General settings'), ['/admin/setting/index'], Yii::$app->user->can('manageSettings')],
+    'system' => ['activity', Yii::t('app', 'System'), ['/admin/setting/system'], Yii::$app->user->can('manageSystem')],
+];
+$quickActionCatalog = array_filter($quickActionCatalog, static fn ($item) => $item[3]);
+$selectedQuickLinks = $dashboardLayout['quick_links'] ?? [];
 ?>
 <div class="page-header page-header-actions">
     <div><p class="text-overline"><?= Yii::t('app', 'Admin panel') ?></p><h1><?= Html::encode($this->title) ?></h1></div>
-    <?= Html::a(Icon::show('plus') . Yii::t('app', 'Create Post'), ['/admin/blog/create'], ['class' => 'btn']) ?>
 </div>
 <section class="card dashboard-customizer"><div><strong><?= Yii::t('app','Customize dashboard') ?></strong><p class="text-muted"><?= Yii::t('app','Drag widgets to reorder them, or show and hide each widget.') ?></p></div><button type="button" class="btn btn-secondary" data-dashboard-customize><?= Yii::t('app','Customize') ?></button><div class="dashboard-widget-picker" data-dashboard-picker hidden></div></section>
 <div class="dashboard-widgets" data-dashboard-widgets data-layout='<?= Html::encode(json_encode($dashboardLayout, JSON_UNESCAPED_SLASHES)) ?>' data-save-url="<?= \yii\helpers\Url::to(['/admin/dashboard/layout']) ?>" data-csrf-param="<?= Html::encode(Yii::$app->request->csrfParam) ?>" data-csrf-token="<?= Html::encode(Yii::$app->request->csrfToken) ?>" data-collapse-label="<?= Yii::t('app', 'Minimize widget') ?>" data-expand-label="<?= Yii::t('app', 'Expand widget') ?>">
@@ -90,12 +102,9 @@ $cards = [
 <section class="card section-shortcut">
     <div><h2><?= Yii::t('app', 'Quick actions') ?></h2><p class="text-muted"><?= Yii::t('app', 'Common management tasks are available here.') ?></p></div>
     <div class="action-row">
-        <?= Html::a(Icon::show('plus') . Yii::t('app', 'Create Post'), ['/admin/blog/create'], ['class' => 'btn']) ?>
-        <?= Html::a(Icon::show('plus') . Yii::t('app', 'Create Sample'), ['/admin/sample/create'], ['class' => 'btn btn-secondary']) ?>
-        <?php if (Yii::$app->user->can('manageSettings')): ?>
-            <?= Html::a(Icon::show('settings') . Yii::t('app', 'Setting'), ['/admin/setting/index'], ['class' => 'btn btn-secondary']) ?>
-        <?php endif; ?>
+        <?php foreach ($quickActionCatalog as $quickLink => [$icon, $label, $url]): ?><?php $isSelected = in_array($quickLink, $selectedQuickLinks, true); ?><?= Html::a(Icon::show($icon) . $label, $url, ['class' => 'btn btn-secondary' . ($isSelected ? '' : ' is-hidden'), 'data-quick-action' => $quickLink, 'hidden' => !$isSelected]) ?><?php endforeach; ?>
     </div>
+    <details class="quick-link-customizer"><summary class="btn btn-secondary"><?= Icon::show('settings') . Yii::t('app', 'Customize') ?></summary><div class="quick-link-picker"><?php foreach ($quickActionCatalog as $key => [$icon, $label]): ?><label><input type="checkbox" class="d-toggle d-toggle-sm" data-quick-link="<?= Html::encode($key) ?>" <?= in_array($key, $selectedQuickLinks, true) ? 'checked' : '' ?>><?= Icon::show($icon) ?><span><?= Html::encode($label) ?></span></label><?php endforeach; ?></div></details>
 </section>
 </div>
 <div class="dashboard-widget" data-widget="recent_activity" data-title="<?= Yii::t('app','Recent activity') ?>" draggable="true">

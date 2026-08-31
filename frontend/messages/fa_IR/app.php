@@ -379,4 +379,9 @@ return [
     'View full-size image' => 'مشاهده تصویر در اندازه اصلی', 'Image preview' => 'پیش‌نمایش تصویر',
     'View details' => 'مشاهده جزئیات', 'Unable to load details.' => 'بارگذاری جزئیات امکان‌پذیر نیست.',
     'Invalid FAQ order.' => 'ترتیب پرسش‌های متداول معتبر نیست.',
+    'Role' => 'نقش',
+    'Test connection' => 'آزمایش اتصال',
+    'SMTP host is required for connection testing.' => 'برای آزمایش اتصال، میزبان SMTP الزامی است.',
+    'SMTP connection was successful.' => 'اتصال SMTP با موفقیت برقرار شد.',
+    'SMTP connection failed. Check the server settings and credentials.' => 'اتصال SMTP ناموفق بود. تنظیمات سرور و اطلاعات ورود را بررسی کنید.',
 ];

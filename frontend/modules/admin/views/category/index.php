@@ -4,6 +4,7 @@ use yii\widgets\ActiveForm;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+use frontend\widgets\AdminActionColumn;
 
 /* @var $this yii\web\View */
 /* @var $searchModel frontend\models\CategorySearch */
@@ -58,9 +59,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'datetime',
             ],
             [
-                'class' => 'yii\grid\ActionColumn' ,
-                'headerOptions' => ['style'=>'text-align:center;'],
-                'contentOptions' => ['style'=>'text-align:center;'],
+                'class' => AdminActionColumn::class,
                 'template' => '{update} {delete}'
             ],
         ],

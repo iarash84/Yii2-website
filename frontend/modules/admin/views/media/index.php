@@ -17,7 +17,20 @@ $this->title = Yii::t('app', 'Media library'); $this->params['breadcrumbs'][] = 
         <?php ActiveForm::end(); ?>
     </div>
     <?= GridView::widget(['dataProvider' => $dataProvider, 'columns' => [
-        ['label' => Yii::t('app', 'Preview'), 'format' => 'raw', 'value' => static fn ($item) => $item->getIsImage() ? Html::img($item->getUrl(), ['class' => 'media-thumbnail', 'alt' => Html::encode($item->alt_text)]) : Icon::show('posts')],
+        ['label' => Yii::t('app', 'Preview'), 'format' => 'raw', 'value' => static function ($item) {
+            if (!$item->getIsImage()) {
+                return Icon::show('posts');
+            }
+            $alt = $item->alt_text ?: $item->original_name;
+            return Html::button(Html::img($item->getUrl(), ['class' => 'carousel-thumbnail-image', 'alt' => Html::encode($alt)]), [
+                'type' => 'button',
+                'class' => 'carousel-thumbnail media-preview-button',
+                'data-image-preview' => $item->getUrl(),
+                'data-image-alt' => $alt,
+                'title' => Yii::t('app', 'View full-size image'),
+                'aria-label' => Yii::t('app', 'View full-size image'),
+            ]);
+        }],
         'original_name', 'mime_type', ['attribute' => 'size', 'value' => static fn ($item) => Yii::$app->formatter->asShortSize($item->size)],
         ['label' => Yii::t('app', 'Public URL'), 'format' => 'raw', 'value' => static fn ($item) => Html::textInput('', $item->getUrl(), ['class' => 'form-control ltr', 'readonly' => true])],
         ['class' => AdminActionColumn::class, 'template' => '{delete}'],

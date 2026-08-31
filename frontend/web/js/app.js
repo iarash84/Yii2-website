@@ -19,6 +19,9 @@
         const resolved = preference === 'system' ? (themeMedia.matches ? 'site-dark' : 'site-light') : preference;
         root.dataset.theme = resolved;
         root.dataset.themePreference = preference;
+        document.querySelectorAll('[data-theme-current-icon]').forEach(function (icon) {
+            icon.dataset.activeTheme = resolved;
+        });
         themeOptions.forEach(function (option) {
             option.setAttribute('aria-pressed', option.dataset.themeOption === preference ? 'true' : 'false');
         });
@@ -119,8 +122,13 @@
                 const trigger = pendingConfirmation;
                 pendingConfirmation = null;
                 trigger.dataset.confirmApproved = 'true';
+                const confirmationMessage = trigger.getAttribute('data-confirm');
+                trigger.removeAttribute('data-confirm');
                 trigger.click();
                 delete trigger.dataset.confirmApproved;
+                window.setTimeout(function () {
+                    if (confirmationMessage) trigger.setAttribute('data-confirm', confirmationMessage);
+                }, 0);
             } else {
                 pendingConfirmation = null;
             }
@@ -267,12 +275,23 @@
             layout.order = Array.from(dashboard.querySelectorAll('[data-widget]')).map(el => el.dataset.widget);
             layout.hidden = widgets.filter(el => el.hidden).map(el => el.dataset.widget);
             layout.collapsed = widgets.filter(el => el.classList.contains('is-collapsed')).map(el => el.dataset.widget);
+            layout.quick_links = Array.from(dashboard.querySelectorAll('[data-quick-link]:checked')).map(el => el.dataset.quickLink);
             const body = new URLSearchParams(); body.set('layout', JSON.stringify(layout)); body.set(dashboard.dataset.csrfParam, dashboard.dataset.csrfToken);
             fetch(dashboard.dataset.saveUrl, {method: 'POST', headers: {'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'}, body: body.toString()});
         };
         layout.order.forEach(id => { const el=dashboard.querySelector('[data-widget="'+id+'"]'); if(el) dashboard.appendChild(el); });
         widgets.forEach(el => { el.hidden=(layout.hidden || []).includes(el.dataset.widget); el.classList.toggle('is-collapsed', (layout.collapsed || []).includes(el.dataset.widget)); const collapse=document.createElement('button'); collapse.type='button'; collapse.className='d-btn d-btn-sm d-btn-square d-btn-ghost dashboard-widget-toggle'; collapse.innerHTML='<span aria-hidden="true">−</span>'; const updateCollapseLabel=()=>collapse.setAttribute('aria-label',el.classList.contains('is-collapsed')?dashboard.dataset.expandLabel:dashboard.dataset.collapseLabel); updateCollapseLabel(); collapse.addEventListener('click',()=>{el.classList.toggle('is-collapsed'); updateCollapseLabel(); save();}); el.prepend(collapse); const label=document.createElement('label'); const input=document.createElement('input'); input.type='checkbox'; input.className='d-toggle d-toggle-sm'; input.checked=!el.hidden; input.addEventListener('change',()=>{el.hidden=!input.checked; save();}); label.append(input, document.createTextNode(' '+el.dataset.title)); picker.appendChild(label); el.addEventListener('dragstart',()=>el.classList.add('is-dragging')); el.addEventListener('dragend',()=>{el.classList.remove('is-dragging'); save();}); });
         dashboard.addEventListener('dragover', event => { event.preventDefault(); const moving=dashboard.querySelector('.is-dragging'); const target=event.target.closest('[data-widget]'); if(moving && target && moving!==target) dashboard.insertBefore(moving, target); });
+        dashboard.querySelectorAll('[data-quick-link]').forEach(function (input) {
+            input.addEventListener('change', function () {
+                const action = dashboard.querySelector('[data-quick-action="' + input.dataset.quickLink + '"]');
+                if (action) {
+                    action.hidden = !input.checked;
+                    action.classList.toggle('is-hidden', !input.checked);
+                }
+                save();
+            });
+        });
         const customize=document.querySelector('[data-dashboard-customize]'); if(customize) customize.addEventListener('click',()=>{picker.hidden=!picker.hidden;});
     }
 

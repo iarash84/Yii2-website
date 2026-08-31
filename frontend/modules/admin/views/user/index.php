@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use frontend\widgets\AdminActionColumn;
 
 /* @var $this yii\web\View */
 /* @var $searchModel frontend\models\UserSearch */
@@ -45,9 +46,16 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'created_at',
             ],
             [
-                'class' => 'yii\grid\ActionColumn' ,
-                'headerOptions' => ['style'=>'text-align:center;'],
-                'contentOptions' => ['style'=>'text-align:center;'],
+                'label' => Yii::t('app', 'Role'),
+                'format' => 'raw',
+                'value' => static function ($data) {
+                    $labels = ['superAdmin' => Yii::t('app', 'Super Admin'), 'admin' => Yii::t('app', 'Admin'), 'editor' => Yii::t('app', 'Editor')];
+                    $roles = array_keys(Yii::$app->authManager->getRolesByUser($data->id));
+                    return implode(' ', array_map(static fn ($role) => Html::tag('span', Html::encode($labels[$role] ?? $role), ['class' => 'status-pill']), $roles));
+                },
+            ],
+            [
+                'class' => AdminActionColumn::class,
                 'template' => '{update} {delete}'
             ]
         ],
