@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\helpers\HtmlPurifier;
+use frontend\widgets\Icon;
 
 $this->title = Yii::t('app', 'FAQS');
 $this->params['breadcrumbs'][] = $this->title;
@@ -13,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php endif; ?>
     <?php foreach ($models as $model): ?>
         <details class="card faq-item">
-            <summary><span><?= Html::encode($model->getLocalized('question')) ?></span><span class="faq-toggle" aria-hidden="true">+</span></summary>
+            <summary><span><?= Html::encode($model->getLocalized('question')) ?></span><span class="faq-toggle" aria-hidden="true"><?= Icon::show('chevron-down') ?></span></summary>
             <div class="faq-answer"><?= HtmlPurifier::process($model->getLocalized('answer')) ?></div>
         </details>
     <?php endforeach; ?>

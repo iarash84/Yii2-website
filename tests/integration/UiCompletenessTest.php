@@ -76,7 +76,7 @@ class UiCompletenessTest extends DatabaseTestCase
         Yii::$app->user->logout(false);
         $output = Yii::$app->runAction('site/index');
         self::assertStringContainsString('data-theme-option', $output);
-        foreach (['system', 'site-light', 'site-dark', 'corporate', 'nord', 'business'] as $theme) {
+        foreach (['system', 'site-light', 'site-dark'] as $theme) {
             self::assertStringContainsString('data-theme-option="' . $theme . '"', $output);
         }
         self::assertStringNotContainsString('data-theme-option="light"', $output);

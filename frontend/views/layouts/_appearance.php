@@ -7,9 +7,6 @@ $options = [
     ['system', 'settings', Yii::t('app', 'System theme')],
     ['site-light', 'sun', Yii::t('app', 'Site light')],
     ['site-dark', 'moon', Yii::t('app', 'Site dark')],
-    ['corporate', 'briefcase', 'Corporate'],
-    ['nord', 'image', 'Nord'],
-    ['business', 'dashboard', 'Business'],
 ];
 ?>
 <div class="appearance-control<?= !empty($inSidebar) ? ' appearance-control-sidebar' : '' ?>">

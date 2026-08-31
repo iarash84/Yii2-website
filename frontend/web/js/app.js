@@ -1,10 +1,17 @@
 (function () {
     'use strict';
 
+    const siteHeader = document.querySelector('.site-header');
+    if (siteHeader) {
+        const updateHeader = function () { siteHeader.classList.toggle('is-scrolled', window.scrollY > 12); };
+        window.addEventListener('scroll', updateHeader, {passive: true});
+        updateHeader();
+    }
+
     const root = document.documentElement;
     const themeOptions = Array.from(document.querySelectorAll('[data-theme-option]'));
     const themeMedia = window.matchMedia('(prefers-color-scheme: dark)');
-    const allowedThemes = ['system', 'site-light', 'site-dark', 'corporate', 'nord', 'business'];
+    const allowedThemes = ['system', 'site-light', 'site-dark'];
     const legacyThemes = {light: 'site-light', dark: 'site-dark'};
     const applyTheme = function (preference, persist) {
         preference = legacyThemes[preference] || preference;
