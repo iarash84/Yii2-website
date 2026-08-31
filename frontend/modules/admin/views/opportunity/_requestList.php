@@ -2,6 +2,7 @@
 
 use yii\grid\GridView;
 use frontend\widgets\AdminActionColumn;
+use yii\helpers\Html;
 
 
 ?>
@@ -10,11 +11,25 @@ use frontend\widgets\AdminActionColumn;
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'tableOptions' => ['class' => 'striped responsive-table' ],
+        'rowOptions' => static function ($model) {
+            return ['class' => $model->read_at === null ? 'submission-row-unread' : null];
+        },
         'columns' => [
             [
                 'class' => 'yii\grid\SerialColumn',
                 'headerOptions' => ['style'=>'text-align:center;'],
                 'contentOptions' => ['style'=>'text-align:center;'],
+            ],
+            [
+                'label' => Yii::t('app', 'Status'),
+                'format' => 'raw',
+                'value' => static function ($model) {
+                    $unread = $model->read_at === null;
+                    $label = $unread ? Yii::t('app', 'Unread') : Yii::t('app', 'Read');
+                    return Html::tag('span', $label, [
+                        'class' => 'submission-status ' . ($unread ? 'is-unread' : 'is-read'),
+                    ]);
+                },
             ],
             [
                 'class' => 'yii\grid\DataColumn',

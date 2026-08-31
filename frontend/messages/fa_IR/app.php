@@ -6,6 +6,8 @@ return [
     'Home' => 'خانه',
     'Title' => 'عنوان',
     'Contact' => 'ارتباط با ما',
+    'Unread' => 'خوانده‌نشده',
+    'Read' => 'خوانده‌شده',
     'Company Name' => 'نام شرکت',
     'Website' => 'وب‌سایت',
     'Site structure' => 'ساختار سایت',

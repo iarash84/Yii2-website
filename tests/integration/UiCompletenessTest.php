@@ -118,8 +118,16 @@ class UiCompletenessTest extends DatabaseTestCase
         $admin = $this->createUser('superAdmin', 'notification-admin');
         self::assertTrue(Yii::$app->user->login($admin));
 
+        $homepage = Yii::$app->runAction('site/index');
+        self::assertStringContainsString('notification-badge', $homepage);
+        $opportunityUrl = '/' . Yii::$app->languageManager->activeLanguage . '/opportunity';
+        self::assertStringContainsString($opportunityUrl, $homepage);
+
         $dashboard = Yii::$app->runAction('admin/dashboard/index');
         self::assertStringContainsString('notification-badge', $dashboard);
+        $contactIndex = Yii::$app->runAction('admin/contact/index');
+        self::assertStringContainsString('submission-row-unread', $contactIndex);
+        self::assertStringContainsString('submission-status is-unread', $contactIndex);
         Yii::$app->runAction('admin/contact/detail', ['id' => $contact->id]);
         $contact->refresh();
         self::assertNotNull($contact->read_at);
