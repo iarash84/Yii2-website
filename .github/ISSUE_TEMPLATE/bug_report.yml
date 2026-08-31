@@ -1,0 +1,48 @@
+name: گزارش اشکال
+description: گزارش خطای قابل بازتولید در برنامه
+title: "[Bug]: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: "پیش از ثبت، Issueهای موجود را جست‌وجو کنید. مشکلات امنیتی را طبق SECURITY.md خصوصی گزارش دهید."
+  - type: textarea
+    id: description
+    attributes:
+      label: شرح مشکل
+      description: چه اتفاقی افتاد و انتظار داشتید چه اتفاقی بیفتد؟
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: مراحل بازتولید
+      placeholder: "1. به مسیر ... بروید\n2. روی ... کلیک کنید\n3. خطا نمایش داده می‌شود"
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: نسخه یا commit
+      placeholder: شناسه commit یا نسخه انتشار
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: محیط اجرا
+      placeholder: PHP، سیستم‌عامل، مرورگر و دیتابیس
+  - type: textarea
+    id: logs
+    attributes:
+      label: log یا تصویر
+      description: اطلاعات حساس، رمزها و داده کاربران را حذف کنید.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: تأیید
+      options:
+        - label: این موضوع یک گزارش امنیتی محرمانه نیست.
+          required: true
+        - label: Issueهای موجود را برای موضوع مشابه بررسی کرده‌ام.
+          required: true

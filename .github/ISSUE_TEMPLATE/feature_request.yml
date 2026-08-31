@@ -1,0 +1,35 @@
+name: پیشنهاد قابلیت
+description: پیشنهاد یک بهبود یا قابلیت تازه
+title: "[Feature]: "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: مسئله
+      description: این پیشنهاد چه نیاز یا مشکلی را حل می‌کند؟
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: راه‌حل پیشنهادی
+      description: رفتار مورد انتظار و تجربه کاربر را توضیح دهید.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: راه‌های جایگزین
+  - type: textarea
+    id: impact
+    attributes:
+      label: اثر فنی
+      description: در صورت اطلاع، اثر روی دیتابیس، RBAC، ترجمه، رابط یا سازگاری را بنویسید.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: تأیید
+      options:
+        - label: پیشنهاد مشابهی در Issueهای موجود پیدا نکردم.
+          required: true
