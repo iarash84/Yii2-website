@@ -24,6 +24,10 @@ return [
         ],
     ],
     'components' => [
+        'mutex' => [
+            'class' => yii\mutex\FileMutex::class,
+            'mutexPath' => '@runtime/mutex',
+        ],
         'languageManager' => [
             'class' => 'frontend\components\LanguageManager',
             'languages' => $params['languages'],

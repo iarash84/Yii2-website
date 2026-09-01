@@ -50,5 +50,25 @@ class AdminFormSubmissionTest extends DatabaseTestCase
                 self::assertMatchesRegularExpression('/^[a-z][a-z0-9_]*$/', $column, "Non-standard column: {$table}.{$column}");
             }
         }
+        $siteSetting = Yii::$app->db->schema->getTableSchema('site_setting', true);
+        $uniqueTypeIndexes = array_filter(Yii::$app->db->schema->findUniqueIndexes($siteSetting), static function ($columns) {
+
+                return $columns === ['type'];
+        });
+        self::assertNotEmpty($uniqueTypeIndexes);
+    }
+
+    public function testUserProfileFieldsCanBeMassAssignedAndValidated(): void
+    {
+
+        $user = $this->createUser('editor', 'old-username');
+        self::assertTrue($user->load(['User' => [
+            'username' => 'new-username',
+            'email' => 'new@example.test',
+            'role' => 'editor',
+        ]]));
+        self::assertTrue($user->validate(), json_encode($user->errors));
+        self::assertSame('new-username', $user->username);
+        self::assertSame('new@example.test', $user->email);
     }
 }

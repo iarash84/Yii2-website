@@ -40,6 +40,9 @@ class InstallerServiceTest extends TestCase
         $environment = file_get_contents($this->root . '/.env');
         self::assertStringContainsString('DB_PASSWORD="db\\"secret"', $environment);
         self::assertStringNotContainsString('ADMIN_PASSWORD', $environment);
+        preg_match_all('/^APP_(?:COOKIE_VALIDATION|DATA_ENCRYPTION|ANALYTICS)_KEY="([a-f0-9]{64})"$/m', $environment, $matches);
+        self::assertCount(3, $matches[1]);
+        self::assertCount(3, array_unique($matches[1]));
         self::assertFalse($installer->isInstalled());
 
         $installer->lock(['language' => 'fa']);

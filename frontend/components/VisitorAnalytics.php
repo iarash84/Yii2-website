@@ -35,7 +35,10 @@ class VisitorAnalytics implements BootstrapInterface
             $path = '/' . ltrim((string) parse_url($request->url, PHP_URL_PATH), '/');
             $path = mb_substr($path === '/' ? '/' : rtrim($path, '/'), 0, 500);
             $country = $this->countryCode($request);
-            $secret = (string) ($request->cookieValidationKey ?: $app->id);
+            $secret = trim((string) getenv('APP_ANALYTICS_KEY'));
+            if ($secret === '') {
+                throw new \RuntimeException('APP_ANALYTICS_KEY is not configured.');
+            }
             $visitorHash = hash_hmac('sha256', $date . '|' . $request->userIP . '|' . $userAgent, $secret);
 
             $transaction = $app->db->beginTransaction();

@@ -14,9 +14,20 @@ use yii\widgets\Breadcrumbs;
 AppAsset::register($this);
 $languageManager = Yii::$app->languageManager;
 $isRtl = $languageManager->isRtl();
-$settings = new Setting();
-$socialLinks = $settings->socialLinks;
-$siteName = trim((string) $settings->companyName) ?: Yii::t('app', 'Website');
+$settingTypes = ['CompanyName', 'Address', 'Email', 'PhoneNumber', 'Facebook', 'Twitter', 'Linkedin', 'Instagram', 'Youtube', 'Telegram', 'Aparat'];
+$settingRows = Setting::find()->with('translations')->where(['type' => $settingTypes])->indexBy('type')->all();
+$settingValue = static function ($type) use ($settingRows) {
+    return isset($settingRows[$type]) ? $settingRows[$type]->getLocalizedContent() : '';
+};
+$socialLinks = [];
+foreach (['Facebook', 'Twitter', 'Linkedin', 'Instagram', 'Youtube', 'Telegram', 'Aparat'] as $network) {
+    $url = trim((string) $settingValue($network));
+    if ($url !== '' && filter_var($url, FILTER_VALIDATE_URL)
+        && in_array(parse_url($url, PHP_URL_SCHEME), ['http', 'https'], true)) {
+        $socialLinks[$network] = $url;
+    }
+}
+$siteName = trim((string) $settingValue('CompanyName')) ?: Yii::t('app', 'Website');
 $route = Yii::$app->controller->route;
 $isAdmin = Yii::$app->controller->module !== null
     && Yii::$app->controller->module->id === 'admin';
@@ -227,8 +238,8 @@ $this->registerLinkTag([
             <div class="footer-grid">
                 <section>
                     <h2><?= Html::encode($siteName) ?></h2>
-                    <p><?= Html::encode($settings->address) ?></p>
-                    <p class="ltr"><?= Html::encode($settings->email) ?><br><?= Html::encode($settings->phoneNumber) ?></p>
+                    <p><?= Html::encode($settingValue('Address')) ?></p>
+                    <p class="ltr"><?= Html::encode($settingValue('Email')) ?><br><?= Html::encode($settingValue('PhoneNumber')) ?></p>
                     <?php if ($socialLinks): ?><ul class="social-links" aria-label="<?= Yii::t('app', 'Social Network') ?>"><?php foreach ($socialLinks as $network => $url): ?><li><?= Html::a(Icon::show(strtolower($network)) . Html::tag('span', Html::encode(Yii::t('app', $network)), ['class' => 'sr-only']), $url, ['class' => 'social-link', 'target' => '_blank', 'rel' => 'noopener noreferrer', 'aria-label' => Yii::t('app', $network)]) ?></li><?php endforeach; ?></ul><?php endif; ?>
                 </section>
                 <nav aria-label="<?= Yii::t('app', 'Useful links') ?>">

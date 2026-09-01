@@ -45,6 +45,10 @@ class SystemSetting extends ActiveRecord
     }
     private static function secret()
     {
-        return hash('sha256', Yii::$app->request->cookieValidationKey ?: Yii::$app->id);
+        $secret = trim((string) getenv('APP_DATA_ENCRYPTION_KEY'));
+        if ($secret === '') {
+            throw new \RuntimeException('APP_DATA_ENCRYPTION_KEY is not configured.');
+        }
+        return hash('sha256', $secret);
     }
 }

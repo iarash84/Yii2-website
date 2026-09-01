@@ -11,10 +11,18 @@ class PublicRateLimiter
     {
         $ip = (string) Yii::$app->request->userIP;
         $key = 'public-rate:' . hash('sha256', $scope . '|' . $ip);
-        $count = (int) Yii::$app->cache->get($key);
-        if ($count >= $limit) {
+        $mutexKey = 'rate-limit-' . hash('sha256', $key);
+        if (!Yii::$app->mutex->acquire($mutexKey, 3)) {
             throw new TooManyRequestsHttpException(Yii::t('app', 'Too many requests. Please try again later.'));
         }
-        Yii::$app->cache->set($key, $count + 1, $period);
+        try {
+            $count = (int) Yii::$app->cache->get($key);
+            if ($count >= $limit) {
+                throw new TooManyRequestsHttpException(Yii::t('app', 'Too many requests. Please try again later.'));
+            }
+            Yii::$app->cache->set($key, $count + 1, $period);
+        } finally {
+            Yii::$app->mutex->release($mutexKey);
+        }
     }
 }

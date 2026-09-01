@@ -68,30 +68,30 @@ class UserController extends Controller
 
                 $this->guardLastSuperAdmin($model->id, $model->role);
 
-                $userModel = User::find()->where(['id' => $model->id])->one();
-                $userModel->username = $model->username;
-                $userModel->email = $model->email;
                 if(!empty($model->password)){
-                    $userModel->setPassword($model->password);
-                    $userModel->generateAuthKey();
+                    $model->setPassword($model->password);
+                    $model->generateAuthKey();
                 }
 
-                if ($userModel->save()) {
-                    $auth = Yii::$app->authManager;
+                $auth = Yii::$app->authManager;
+                $role = $auth->getRole($model->role);
+                if ($role === null) {
+                    $model->addError('role', Yii::t('app', 'Invalid role.'));
+                } elseif ($model->save()) {
                     $auth->revokeAll($model->id);
-                    $auth->assign($auth->getRole($model->role), $model->id);
+                    $auth->assign($role, $model->id);
+                    return $this->redirect(['index']);
                 }
-
-
-                return $this->redirect(['user/index']);
-            } else {
-                $roles = Yii::$app->authManager->getRolesByUser($model->id);
-                $model->role = empty($roles) ? 'editor' : array_keys($roles)[0];
-
-                return $this->render('update', [
-                    'model' => $model,
-                ]);
             }
+
+            $roles = Yii::$app->authManager->getRolesByUser($model->id);
+            if ($model->role === null) {
+                $model->role = empty($roles) ? 'editor' : array_keys($roles)[0];
+            }
+
+            return $this->render('update', [
+                'model' => $model,
+            ]);
     }
 
     /**

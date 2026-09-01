@@ -18,7 +18,7 @@ class SecurityHeaders implements BootstrapInterface
             $headers->set('Referrer-Policy', 'strict-origin-when-cross-origin');
             $headers->set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
             $headers->set('Content-Security-Policy', "default-src 'self'; img-src 'self' data: https:; "
-                . "style-src 'self' 'unsafe-inline' https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; "
+                . "style-src 'self' 'unsafe-inline' https:; script-src 'self' 'unsafe-inline' https:; "
                 . "font-src 'self' data: https:; frame-ancestors 'self'; base-uri 'self'; form-action 'self'");
             if ($app->request->isSecureConnection) {
                 $headers->set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');

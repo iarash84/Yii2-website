@@ -38,12 +38,28 @@ trait TranslatableContent
         }
         $key = $language . ':' . $attribute;
         if (!array_key_exists($key, $this->translationCache)) {
-            $this->translationCache[$key] = ContentTranslation::find()
-                ->select('value')
-                ->where($this->translationIdentity($attribute, $language))
-                ->scalar();
+            if ($this->isRelationPopulated('translations')) {
+                $this->translationCache[$key] = false;
+                foreach ($this->translations as $translation) {
+                    if ($translation->language === $language && $translation->attribute === $attribute) {
+                        $this->translationCache[$key] = $translation->value;
+                        break;
+                    }
+                }
+            } else {
+                $this->translationCache[$key] = ContentTranslation::find()
+                    ->select('value')
+                    ->where($this->translationIdentity($attribute, $language))
+                    ->scalar();
+            }
         }
         return $this->translationCache[$key] === false ? null : $this->translationCache[$key];
+    }
+
+    public function getTranslations()
+    {
+        return $this->hasMany(ContentTranslation::class, ['entity_id' => 'id'])
+            ->andOnCondition(['entity_type' => $this->translationEntityType()]);
     }
 
     public function saveTranslations(array $translations)

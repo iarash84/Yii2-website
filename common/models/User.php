@@ -53,6 +53,11 @@ class User extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
+            [['username', 'email'], 'filter', 'filter' => 'trim'],
+            [['username', 'email'], 'required'],
+            [['username', 'email'], 'string', 'max' => 255],
+            ['email', 'email'],
+            [['username', 'email'], 'unique'],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
             ['isSuperAdmin', 'boolean'],

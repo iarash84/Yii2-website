@@ -57,14 +57,13 @@ class SmokeTest extends DatabaseTestCase
     {
         self::assertTrue((new HomeSection(['type' => 'portfolio', 'title' => 'Portfolio', 'status' => 1]))->save());
         self::assertTrue((new Sample(['title' => 'Sample', 'content' => '<p>Sample content</p>']))->save());
-        foreach (
-            [
+        $settings = [
             'CompanyName' => 'سایت آزمایشی',
             'About' => '<p>درباره ما</p>',
             'Opportunity' => '<p>همکاری</p>',
             'Home' => '<p>خانه</p>',
-            ] as $type => $content
-        ) {
+        ];
+        foreach ($settings as $type => $content) {
             self::assertTrue((new Setting(['type' => $type, 'content' => $content]))->save());
         }
 
@@ -82,8 +81,7 @@ class SmokeTest extends DatabaseTestCase
         $admin = $this->createUser('superAdmin', 'ui-smoke-admin');
         self::assertTrue(Yii::$app->user->login($admin));
 
-        foreach (
-            [
+        $adminRoutes = [
             'admin/dashboard/index',
             'admin/setting/index',
             'admin/setting/about',
@@ -106,8 +104,8 @@ class SmokeTest extends DatabaseTestCase
             'admin/order/index',
             'admin/opportunity/index',
             'admin/user/index',
-            ] as $route
-        ) {
+        ];
+        foreach ($adminRoutes as $route) {
             Yii::$app->response->clear();
             $output = Yii::$app->runAction($route);
             self::assertIsString($output, "Admin route did not render: {$route}");
@@ -118,6 +116,7 @@ class SmokeTest extends DatabaseTestCase
 
     public function testCarouselAdminShowsManagedFieldsAndDragSorter(): void
     {
+
         $admin = $this->createUser('superAdmin', 'carousel-admin');
         self::assertTrue(Yii::$app->user->login($admin));
         self::assertTrue((new Carousel([
@@ -131,7 +130,6 @@ class SmokeTest extends DatabaseTestCase
             'sort_order' => 10,
             'status' => 1,
         ]))->save());
-
         $output = Yii::$app->runAction('admin/carousel/index');
         self::assertStringContainsString('data-carousel-sorter', $output);
         self::assertStringContainsString('draggable="true"', $output);
@@ -144,12 +142,12 @@ class SmokeTest extends DatabaseTestCase
 
     public function testOnlyOneCarouselCanBeSelectedAsContentSlide(): void
     {
+
         $user = $this->createUser('editor', 'carousel-content-editor');
         $first = new Carousel(['user_id' => $user->id, 'image' => 'first.webp', 'show_content' => 1, 'status' => 1]);
         $second = new Carousel(['user_id' => $user->id, 'image' => 'second.webp', 'show_content' => 1, 'status' => 1]);
         self::assertTrue($first->save());
         self::assertTrue($second->save());
-
         self::assertTrue($first->refresh());
         self::assertTrue($second->refresh());
         self::assertSame(0, (int) $first->show_content);

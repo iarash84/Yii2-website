@@ -20,7 +20,7 @@ class BackupController extends Controller
     }
     public function actionCreate()
     {
-        return Yii::$app->response->sendContentAsFile(BackupService::create(), 'backup-' . date('Ymd-His') . '.json', ['mimeType' => 'application/json']);
+        return Yii::$app->response->sendContentAsFile(BackupService::create(), 'database-backup-' . date('Ymd-His') . '.json', ['mimeType' => 'application/json']);
     }
     public function actionRestore()
     {

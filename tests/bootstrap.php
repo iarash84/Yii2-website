@@ -2,6 +2,9 @@
 
 defined('YII_DEBUG') or define('YII_DEBUG', false);
 defined('YII_ENV') or define('YII_ENV', 'test');
+putenv('APP_COOKIE_VALIDATION_KEY=test-cookie-validation-key-32-bytes');
+putenv('APP_DATA_ENCRYPTION_KEY=test-data-encryption-key-32-bytes');
+putenv('APP_ANALYTICS_KEY=test-analytics-key-32-bytes');
 
 $root = dirname(__DIR__);
 require $root . '/vendor/autoload.php';

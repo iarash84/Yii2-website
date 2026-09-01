@@ -28,11 +28,20 @@ class ExportController extends Controller
         if ($rows) {
             fputcsv($stream, array_keys($rows[0]));
             foreach ($rows as $row) {
-                fputcsv($stream, $row);
+                fputcsv($stream, array_map([$this, 'safeCsvValue'], $row));
             }
         } rewind($stream);
         $content = stream_get_contents($stream);
         fclose($stream);
         return Yii::$app->response->sendContentAsFile($content, $type . '-' . date('Ymd-His') . '.csv', ['mimeType' => 'text/csv']);
+    }
+
+    private function safeCsvValue($value)
+    {
+        $value = (string) $value;
+        if (preg_match('/^[=+\-@\t\r]/u', $value) === 1) {
+            return "'" . $value;
+        }
+        return $value;
     }
 }

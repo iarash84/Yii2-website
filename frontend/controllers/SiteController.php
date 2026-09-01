@@ -172,7 +172,18 @@ class SiteController extends Controller
             $opportunity->name = $model->name;
             $opportunity->email = $model->email;
             $opportunity->phone_number = $model->phoneNumber;
-            $opportunity->save();
+            if (!$opportunity->save()) {
+                if ($opportunity->resume) {
+                    $resumePath = Yii::getAlias('@storage/resumes/' . basename((string) $opportunity->resume));
+                    if (is_file($resumePath)) {
+                        unlink($resumePath);
+                    }
+                }
+                Yii::error(['errors' => $opportunity->getErrors()], __METHOD__);
+                Yii::$app->session->setFlash('error', Yii::t('app', 'Your request could not be saved. Please try again.'));
+                return $this->render('opportunity', ['model' => $model]);
+            }
+
             NotificationService::formSubmitted('opportunity', $model->attributes);
             Yii::$app->session->setFlash('success', Yii::t('app', 'Your resume uploaded successfully. We will respond to you as soon as possible.'));
 

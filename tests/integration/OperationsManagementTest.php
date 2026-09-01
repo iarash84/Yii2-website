@@ -42,8 +42,9 @@ class OperationsManagementTest extends DatabaseTestCase
     {
         $backup = json_decode(BackupService::create(), true);
         self::assertSame('yii2-kamancms-backup', $backup['format']);
-        self::assertSame(2, $backup['version']);
+        self::assertSame(3, $backup['version']);
         self::assertArrayHasKey('system_setting', $backup['tables']);
+        self::assertArrayHasKey('dashboard_preference', $backup['tables']);
         $this->expectException(\RuntimeException::class);
         BackupService::restore('{"format":"invalid"}');
     }

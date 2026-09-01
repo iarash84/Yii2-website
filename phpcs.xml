@@ -8,6 +8,8 @@
         <!-- Yii migration class names intentionally follow timestamp naming. -->
         <exclude name="PSR1.Classes.ClassDeclaration.MissingNamespace"/>
         <exclude name="Squiz.Classes.ValidClassName.NotCamelCaps"/>
+        <!-- Line endings are normalized by .gitattributes; do not make local checks OS-dependent. -->
+        <exclude name="Generic.Files.LineEndings.InvalidEOLChar"/>
     </rule>
     <file>common/components</file>
     <file>common/validators</file>

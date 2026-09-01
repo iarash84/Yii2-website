@@ -74,9 +74,9 @@ class MenuItem extends ActiveRecord
 
     public static function activeRoots($location = 'main')
     {
-        return self::find()->with(['children' => function ($query) {
+        return self::find()->with(['translations', 'children' => function ($query) {
             $query->andWhere(['status' => 1]);
-        }])->where(['location' => $location, 'status' => 1, 'parent_id' => null])
+        }, 'children.translations'])->where(['location' => $location, 'status' => 1, 'parent_id' => null])
             ->orderBy(['sort_order' => SORT_ASC, 'id' => SORT_ASC])->all();
     }
 
