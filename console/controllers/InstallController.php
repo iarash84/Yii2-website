@@ -34,7 +34,7 @@ class InstallController extends Controller
         $database = [
             'host' => $this->readValue('DB_HOST', 'Database host', '127.0.0.1'),
             'port' => $this->readValue('DB_PORT', 'Database port', '3306'),
-            'name' => $this->readValue('DB_NAME', 'Database name', 'yii2_website'),
+            'name' => $this->readValue('DB_NAME', 'Database name', 'yii2_kamancms'),
             'user' => $this->readValue('DB_USER', 'Database user', 'root'),
             'password' => $this->readSecret('DB_PASSWORD', 'Database password'),
         ];

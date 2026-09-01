@@ -1,15 +1,13 @@
 {
-    "name": "yiisoft/yii2-app-advanced",
-    "description": "Yii 2 Advanced Project Template",
-    "keywords": ["yii2", "framework", "advanced", "project template"],
-    "homepage": "https://www.yiiframework.com/",
+    "name": "iarash84/yii2-kamancms",
+    "description": "Yii2-KamanCms multilingual content management system",
+    "keywords": ["yii2", "cms", "content-management", "multilingual"],
+    "homepage": "https://github.com/iarash84/Yii2-KamanCms",
     "type": "project",
     "license": "BSD-3-Clause",
     "support": {
-        "issues": "https://github.com/yiisoft/yii2/issues",
-        "forum": "https://forum.yiiframework.com/",
-        "wiki": "https://www.yiiframework.com/wiki",
-        "source": "https://github.com/yiisoft/yii2"
+        "issues": "https://github.com/iarash84/Yii2-KamanCms/issues",
+        "source": "https://github.com/iarash84/Yii2-KamanCms"
     },
     "repositories": [
         {

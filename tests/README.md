@@ -2,7 +2,7 @@
 
 مجموعه تست فعال پروژه با PHPUnit 10 در پوشه‌های `tests/unit` و
 `tests/integration` قرار دارد. تست‌ها همیشه از دیتابیس مستقل
-`yii2_website_test` استفاده می‌کنند و اطلاعات محیط توسعه را تغییر نمی‌دهند.
+`yii2_kamancms_test` استفاده می‌کنند و اطلاعات محیط توسعه را تغییر نمی‌دهند.
 
 ```powershell
 php init --env=Development --overwrite=All

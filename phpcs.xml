@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<ruleset name="Yii2 Website">
+<ruleset name="Yii2-KamanCms">
     <description>PSR-12 checks for maintained and newly added project code.</description>
     <arg name="colors"/>
     <arg name="extensions" value="php"/>

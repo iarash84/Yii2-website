@@ -41,7 +41,7 @@ class OperationsManagementTest extends DatabaseTestCase
     public function testBackupHasValidatedFormat(): void
     {
         $backup = json_decode(BackupService::create(), true);
-        self::assertSame('yii2-website-backup', $backup['format']);
+        self::assertSame('yii2-kamancms-backup', $backup['format']);
         self::assertSame(2, $backup['version']);
         self::assertArrayHasKey('system_setting', $backup['tables']);
         $this->expectException(\RuntimeException::class);

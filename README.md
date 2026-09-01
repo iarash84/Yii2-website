@@ -1,4 +1,4 @@
-# وب‌سایت شرکتی مبتنی بر Yii2
+# [Yii2-KamanCms](https://github.com/iarash84/Yii2-KamanCms)
 
 این پروژه یک وب‌سایت شرکتی و سامانه مدیریت محتوا بر پایه Yii2 است. هدف آن این است که راه‌اندازی یک سایت حرفه‌ای به دانش فنی پیچیده نیاز نداشته باشد و کارهای روزمره، از انتشار محتوا تا بررسی درخواست‌های کاربران، از یک پنل مدیریت ساده و منظم انجام شود.
 
@@ -128,7 +128,7 @@ php yii install
 ```dotenv
 DB_HOST=127.0.0.1
 DB_PORT=3306
-DB_NAME=yii2_website
+DB_NAME=yii2_kamancms
 DB_USER=root
 DB_PASSWORD=
 ADMIN_USERNAME=admin

@@ -3,7 +3,7 @@
 $root = dirname(__DIR__, 2);
 $host = getenv('TEST_DB_HOST') ?: '127.0.0.1';
 $port = getenv('TEST_DB_PORT') ?: '3306';
-$database = getenv('TEST_DB_NAME') ?: 'yii2_website_test';
+$database = getenv('TEST_DB_NAME') ?: 'yii2_kamancms_test';
 $username = getenv('TEST_DB_USER') ?: 'root';
 $password = getenv('TEST_DB_PASSWORD') !== false ? getenv('TEST_DB_PASSWORD') : '';
 $keep = in_array('--keep', $argv, true);

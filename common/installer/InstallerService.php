@@ -59,6 +59,19 @@ class InstallerService
         $this->pdo($database)->query('SELECT 1')->fetchColumn();
     }
 
+    public function databaseExists(array $database): bool
+    {
+        $name = $this->databaseName($database['name'] ?? '');
+        $pdo = new PDO($this->serverDsn($database), (string) ($database['user'] ?? ''), (string) ($database['password'] ?? ''), [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_TIMEOUT => 5,
+        ]);
+        $statement = $pdo->prepare('SELECT 1 FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = :name');
+        $statement->execute(['name' => $name]);
+
+        return $statement->fetchColumn() !== false;
+    }
+
     public function migrate(array $database): string
     {
         return $this->runYii(['migrate', '--interactive=0'], $this->databaseEnvironment($database));
