@@ -44,7 +44,6 @@ class InstallerServiceTest extends TestCase
         self::assertCount(3, $matches[1]);
         self::assertCount(3, array_unique($matches[1]));
         self::assertFalse($installer->isInstalled());
-
         $installer->lock(['language' => 'fa']);
         self::assertTrue($installer->isInstalled());
         self::assertStringNotContainsString('secret', file_get_contents($installer->lockPath()));
@@ -57,6 +56,17 @@ class InstallerServiceTest extends TestCase
         $installer->validateAdministrator(['username' => 'admin', 'email' => 'admin@example.test', 'password' => 'weak']);
     }
 
+    public function testDatabaseConfigurationRejectsDsnInjectionAndInvalidPorts(): void
+    {
+        $installer = new InstallerService($this->root);
+        $this->expectException(RuntimeException::class);
+        $installer->validateDatabase([
+            'host' => '127.0.0.1;dbname=other',
+            'port' => 70000,
+            'name' => 'website',
+            'user' => 'root',
+        ]);
+    }
     public function testPhpCliBinaryIsDetectedWithoutUsingWebServerBinary(): void
     {
         $installer = new InstallerService($this->root);

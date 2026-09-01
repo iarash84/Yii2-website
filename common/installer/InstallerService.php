@@ -50,6 +50,7 @@ class InstallerService
 
     public function ensureDatabase(array $database): void
     {
+        $this->validateDatabase($database);
         $name = $this->databaseName($database['name'] ?? '');
         $pdo = new PDO($this->serverDsn($database), (string) ($database['user'] ?? ''), (string) ($database['password'] ?? ''), [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
@@ -61,6 +62,7 @@ class InstallerService
 
     public function databaseExists(array $database): bool
     {
+        $this->validateDatabase($database);
         $name = $this->databaseName($database['name'] ?? '');
         $pdo = new PDO($this->serverDsn($database), (string) ($database['user'] ?? ''), (string) ($database['password'] ?? ''), [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
@@ -70,6 +72,18 @@ class InstallerService
         $statement->execute(['name' => $name]);
 
         return $statement->fetchColumn() !== false;
+    }
+
+    public function databaseSchemaExists(array $database): bool
+    {
+        $pdo = $this->pdo($database);
+        $statement = $pdo->prepare(
+            'SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES '
+            . 'WHERE TABLE_SCHEMA = :database AND TABLE_NAME IN (\'migration\', \'user\')'
+        );
+        $statement->execute(['database' => $this->databaseName($database['name'] ?? '')]);
+
+        return (int) $statement->fetchColumn() === 2;
     }
 
     public function migrate(array $database): string
@@ -159,6 +173,25 @@ class InstallerService
         }
         if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z\d]).{12,72}$/', (string) ($admin['password'] ?? ''))) {
             throw new RuntimeException('Administrator password must contain upper and lower case letters, a number and a symbol, and be at least 12 characters.');
+        }
+    }
+
+    public function validateDatabase(array $database): void
+    {
+        $host = trim((string) ($database['host'] ?? ''));
+        $port = filter_var($database['port'] ?? null, FILTER_VALIDATE_INT, [
+            'options' => ['min_range' => 1, 'max_range' => 65535],
+        ]);
+        $user = trim((string) ($database['user'] ?? ''));
+        $this->databaseName((string) ($database['name'] ?? ''));
+        if ($host === '' || preg_match('/^[a-zA-Z0-9.-]+$/', $host) !== 1) {
+            throw new RuntimeException('Database host is invalid.');
+        }
+        if ($port === false) {
+            throw new RuntimeException('Database port must be between 1 and 65535.');
+        }
+        if ($user === '' || mb_strlen($user) > 128) {
+            throw new RuntimeException('Database user is invalid.');
         }
     }
 
