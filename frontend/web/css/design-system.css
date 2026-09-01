@@ -283,6 +283,14 @@ p { margin-block: 0 var(--space-4); }
 .confirmation-title { padding-inline-end: var(--space-7); font-size: 1.3rem; }
 .carousel-thumbnail { display: block; width: 9rem; padding: 0; overflow: hidden; border: 1px solid var(--color-border); border-radius: var(--radius-sm); background: var(--color-surface-muted); cursor: zoom-in; }
 .carousel-thumbnail-image { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
+.carousel-admin-table td { vertical-align: middle; }
+.carousel-admin-table td small, .carousel-links-cell { display: grid; gap: .3rem; }
+.carousel-admin-table .drag-column { width: 2.5rem; }
+.carousel-sort-row { cursor: grab; }
+.carousel-sort-row.is-dragging { opacity: .5; outline: 2px dashed var(--color-primary-500); }
+.carousel-links-cell a { max-width: 18rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.carousel-form-preview { max-width: 28rem; margin-block-end: var(--space-5); overflow: hidden; border: 1px solid var(--color-border); border-radius: var(--radius-md); }
+.carousel-form-preview img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
 .image-preview-dialog .d-modal-box { position: relative; width: min(64rem, calc(100vw - 2rem)); max-width: none; padding: var(--space-4); }
 .image-preview-dialog img { width: 100%; max-height: calc(100dvh - 8rem); object-fit: contain; border-radius: var(--radius-sm); }
 .remote-detail-dialog .d-modal-box { position: relative; width: min(48rem, calc(100vw - 2rem)); max-width: none; }
@@ -485,7 +493,10 @@ p { margin-block: 0 var(--space-4); }
 .form-control, .form-group input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]), .form-group select, .form-group textarea { min-height: 3rem; border-color: var(--color-border-strong); border-radius: .625rem; background: var(--color-surface); transition: border-color var(--transition), box-shadow var(--transition); }
 .form-group textarea { min-height: 8rem; }
 .form-control:focus, .form-group input:not([type="checkbox"]):not([type="radio"]):focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--color-primary-500); box-shadow: 0 0 0 4px color-mix(in oklab,var(--color-primary-500) 14%,transparent); outline: 0; }
-.form-group input[type="checkbox"], .form-group input[type="radio"] { width: 1.1rem; height: 1.1rem; min-height: 0; margin: 0; accent-color: var(--color-primary-600); vertical-align: middle; }
+.form-group input[type="checkbox"] { appearance: none; width: 1.2rem; height: 1.2rem; min-height: 0; margin: 0; border: 2px solid var(--color-border-strong); border-radius: .25rem; background-color: var(--color-surface); background-position: center; background-repeat: no-repeat; background-size: .8rem; vertical-align: middle; cursor: pointer; }
+.form-group input[type="checkbox"]:checked { border-color: var(--color-primary-600); background-color: var(--color-primary-600); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='white' stroke-linecap='round' stroke-linejoin='round' stroke-width='2.2' d='m3 8 3 3 7-7'/%3E%3C/svg%3E"); }
+.form-group input[type="checkbox"]:focus-visible { outline: 3px solid color-mix(in oklab,var(--color-primary-500) 22%,transparent); outline-offset: 2px; box-shadow: none; }
+.form-group input[type="radio"] { width: 1.1rem; height: 1.1rem; min-height: 0; margin: 0; accent-color: var(--color-primary-600); vertical-align: middle; }
 .form-group input[type="checkbox"] + label, .form-group input[type="radio"] + label { margin-block: 0; margin-inline-start: .45rem; vertical-align: middle; cursor: pointer; }
 .control-label { margin-block-end: .4rem; color: var(--color-text-secondary); font-size: .9rem; font-weight: 700; }
 .help-block { min-height: 1.3em; color: var(--color-danger); font-size: .82rem; }
@@ -496,7 +507,7 @@ p { margin-block: 0 var(--space-4); }
 .hero::before { content:""; position:absolute; inset-block:-25%; inset-inline-start:-14%; z-index:-1; width:55%; border-radius:50%; background:radial-gradient(circle,color-mix(in oklab,var(--color-primary-500) 25%,transparent),transparent 68%); filter:blur(25px); }
 .hero::after { inset-inline-start:auto; width:58%; background:linear-gradient(90deg,var(--color-surface) 2%,color-mix(in oklab,var(--color-surface) 45%,transparent) 38%,transparent 75%); }
 [dir="rtl"] .hero::after { background:linear-gradient(270deg,var(--color-surface) 2%,color-mix(in oklab,var(--color-surface) 45%,transparent) 38%,transparent 75%); }
-.hero img { inset-inline-start:auto; width:57%; height:calc(100% - clamp(2rem,5vw,5rem)); margin-block:clamp(1rem,2.5vw,2.5rem); margin-inline-end:clamp(1rem,2.5vw,2.5rem); border-radius:1rem; opacity:1; box-shadow:var(--shadow-md); }
+.hero img { inset-inline-start:auto; width:57%; height:calc(100% - clamp(2rem,5vw,5rem)); margin-block:clamp(1rem,2.5vw,2.5rem); margin-inline-end:clamp(1rem,2.5vw,2.5rem); border-radius:1rem; object-fit:contain; opacity:1; box-shadow:var(--shadow-md); }
 .hero-content { width:57%; max-width:45rem; padding:clamp(2rem,6vw,5.5rem); color:var(--color-text); }
 .hero-content h1, .hero-content h2 { max-width:13ch; font-size:clamp(2.75rem,5.8vw,5.3rem); line-height:1.05; }
 .hero-content p { max-width:37rem; color:var(--color-text-secondary); font-size:clamp(1rem,1.5vw,1.18rem); }
@@ -506,6 +517,8 @@ p { margin-block: 0 var(--space-4); }
 .hero-slider-dots button { width:.55rem; height:.55rem; border:0; background:var(--color-border-strong); transition:width var(--transition),background var(--transition); }
 .hero-slider-dots button[aria-current="true"] { width:1.5rem; border-radius:1rem; background:var(--color-primary-600); }
 [dir="rtl"] [data-hero-previous] .icon, [dir="rtl"] [data-hero-next] .icon { transform: scaleX(-1); }
+.hero-slide-image-only::after { display: none; }
+.hero-slide-image-only img { inset: 1.5rem; width: calc(100% - 3rem); height: calc(100% - 3rem); margin: 0; object-fit: contain; }
 
 .home-section { position:relative; padding-block:var(--space-9); }
 .home-section + .home-section { border-block-start:1px solid var(--color-border); }

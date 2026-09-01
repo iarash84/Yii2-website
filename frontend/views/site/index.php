@@ -13,24 +13,31 @@ use yii\helpers\HtmlPurifier;
 
 $siteSettings = new Setting();
 $this->title = trim((string) $siteSettings->companyName) ?: Yii::t('app', 'Website');
-$slides = Carousel::find()->where(['status' => 1])->orderBy('sort_order')->all();
+$slides = Carousel::find()->where(['status' => 1])->orderBy(['sort_order' => SORT_ASC, 'id' => SORT_ASC])->all();
 $home = Setting::findOne(['type' => 'Home']);
 $sections = HomeSection::find()->where(['status' => 1])->orderBy(['sort_order' => SORT_ASC, 'id' => SORT_ASC])->all();
 ?>
+<h1 class="sr-only"><?= Html::encode($this->title) ?></h1>
 <section class="hero-slider" data-hero-slider aria-roledescription="carousel" aria-label="<?= Yii::t('app', 'Carousel') ?>">
     <div class="hero-slides">
         <?php foreach ($slides ?: [null] as $index => $slide): ?>
-            <article class="hero hero-slide<?= $index === 0 ? ' is-active' : '' ?>" data-hero-slide aria-hidden="<?= $index === 0 ? 'false' : 'true' ?>">
+            <article class="hero hero-slide<?= $index === 0 ? ' is-active' : '' ?><?= !$slide || !$slide->show_content ? ' hero-slide-image-only' : '' ?>" data-hero-slide aria-hidden="<?= $index === 0 ? 'false' : 'true' ?>">
                 <?= Html::img(MediaUrl::image($slide ? $slide->image : null, 'img/portfolio/hero-studio.webp'), ['alt' => $slide ? Html::encode($slide->title) : '', 'loading' => $index === 0 ? 'eager' : 'lazy']) ?>
-                <div class="hero-content">
-                    <p class="text-overline"><?= Yii::t('app', 'Welcome') ?></p>
-                    <h<?= $index === 0 ? '1 id="home-hero-title"' : '2' ?>><?= Html::encode($slide && $slide->title ? $slide->title : $this->title) ?></h<?= $index === 0 ? '1' : '2' ?>>
-                    <?= $slide && $slide->text ? HtmlPurifier::process($slide->text) : Html::tag('p', Yii::t('app', 'We build reliable digital products for growing businesses.')) ?>
-                    <div class="hero-actions">
-                        <?php if ($slide && preg_match('~^(https?://|/)~i', (string) $slide->link)): ?><?= Html::a(Yii::t('app', 'View more'), $slide->link, ['class' => 'd-btn d-btn-primary']) ?><?php else: ?><?= Html::a(Yii::t('app', 'Order app'), ['/site/order'], ['class' => 'd-btn d-btn-primary']) ?><?php endif; ?>
-                        <?= Html::a(Yii::t('app', 'Contact'), ['/site/contact'], ['class' => 'd-btn d-btn-outline hero-secondary-action']) ?>
+                <?php if ($slide && $slide->show_content): ?>
+                    <div class="hero-content">
+                        <?php if (trim((string) $slide->eyebrow) !== ''): ?><p class="text-overline"><?= Html::encode($slide->eyebrow) ?></p><?php endif; ?>
+                        <?php if (trim((string) $slide->title) !== ''): ?><h2><?= Html::encode($slide->title) ?></h2><?php endif; ?>
+                        <?php if (trim((string) $slide->text) !== ''): ?><?= HtmlPurifier::process($slide->text) ?><?php endif; ?>
+                        <?php
+                        $hasPrimary = trim((string) $slide->primary_button_label) !== '' && preg_match('~^(?:https?://|/|#|mailto:).+~i', (string) $slide->link);
+                        $hasSecondary = trim((string) $slide->secondary_button_label) !== '' && preg_match('~^(?:https?://|/|#|mailto:).+~i', (string) $slide->secondary_link);
+                        ?>
+                        <?php if ($hasPrimary || $hasSecondary): ?><div class="hero-actions">
+                            <?php if ($hasPrimary): ?><?= Html::a(Html::encode($slide->primary_button_label), $slide->link, ['class' => 'd-btn d-btn-primary']) ?><?php endif; ?>
+                            <?php if ($hasSecondary): ?><?= Html::a(Html::encode($slide->secondary_button_label), $slide->secondary_link, ['class' => 'd-btn d-btn-outline hero-secondary-action']) ?><?php endif; ?>
+                        </div><?php endif; ?>
                     </div>
-                </div>
+                <?php endif; ?>
             </article>
         <?php endforeach; ?>
     </div>

@@ -14,13 +14,31 @@ class SmokeTest extends DatabaseTestCase
     public function testHomepageRendersManagedSlidesAndPortfolioImages(): void
     {
         $user = $this->createUser('editor', 'homepage-editor');
-        self::assertTrue((new Carousel(['user_id' => $user->id, 'image' => 'img/portfolio/hero-studio.webp', 'title' => 'Managed slide', 'sort_order' => 10, 'status' => 1]))->save());
+        self::assertTrue((new Carousel([
+            'user_id' => $user->id,
+            'image' => 'img/portfolio/hero-studio.webp',
+            'title' => 'Managed slide',
+            'text' => '<p>Managed hero copy</p>',
+            'eyebrow' => 'Selected content',
+            'link' => '/site/order',
+            'primary_button_label' => 'Request product',
+            'secondary_link' => '/site/contact',
+            'secondary_button_label' => 'Talk to us',
+            'show_content' => 1,
+            'sort_order' => 10,
+            'status' => 1,
+        ]))->save());
+        self::assertTrue((new Carousel(['user_id' => $user->id, 'image' => 'img/portfolio/mobile-banking.webp', 'title' => 'Image only slide', 'text' => 'Must stay hidden', 'sort_order' => 20, 'status' => 1]))->save());
         self::assertTrue((new HomeSection(['type' => 'portfolio', 'title' => 'Portfolio', 'status' => 1]))->save());
         self::assertTrue((new Sample(['title' => 'Image item', 'content' => '<p>Content</p>', 'image' => 'img/portfolio/commerce-experience.webp']))->save());
 
         $output = Yii::$app->runAction('site/index');
         self::assertStringContainsString('data-hero-slider', $output);
         self::assertStringContainsString('Managed slide', $output);
+        self::assertStringContainsString('Request product', $output);
+        self::assertStringContainsString('Talk to us', $output);
+        self::assertSame(1, substr_count($output, 'class="hero-content"'));
+        self::assertStringNotContainsString('Must stay hidden', $output);
         self::assertStringContainsString('home-portfolio-image', $output);
         self::assertStringContainsString('commerce-experience.webp', $output);
     }
@@ -96,5 +114,46 @@ class SmokeTest extends DatabaseTestCase
             self::assertNotSame('', trim($output), "Admin route returned empty output: {$route}");
             self::assertLessThan(500, Yii::$app->response->statusCode, "Admin route failed: {$route}");
         }
+    }
+
+    public function testCarouselAdminShowsManagedFieldsAndDragSorter(): void
+    {
+        $admin = $this->createUser('superAdmin', 'carousel-admin');
+        self::assertTrue(Yii::$app->user->login($admin));
+        self::assertTrue((new Carousel([
+            'user_id' => $admin->id,
+            'image' => 'img/portfolio/hero-studio.webp',
+            'title' => 'Visible admin title',
+            'text' => 'Visible admin text',
+            'link' => '/site/order',
+            'primary_button_label' => 'Visible link label',
+            'show_content' => 1,
+            'sort_order' => 10,
+            'status' => 1,
+        ]))->save());
+
+        $output = Yii::$app->runAction('admin/carousel/index');
+        self::assertStringContainsString('data-carousel-sorter', $output);
+        self::assertStringContainsString('draggable="true"', $output);
+        self::assertStringContainsString('Visible admin title', $output);
+        self::assertStringContainsString('Visible admin text', $output);
+        self::assertStringContainsString('Visible link label', $output);
+        self::assertStringNotContainsString('href="/admin/carousel/up?id=', $output);
+        self::assertStringNotContainsString('href="/admin/carousel/down?id=', $output);
+    }
+
+    public function testOnlyOneCarouselCanBeSelectedAsContentSlide(): void
+    {
+        $user = $this->createUser('editor', 'carousel-content-editor');
+        $first = new Carousel(['user_id' => $user->id, 'image' => 'first.webp', 'show_content' => 1, 'status' => 1]);
+        $second = new Carousel(['user_id' => $user->id, 'image' => 'second.webp', 'show_content' => 1, 'status' => 1]);
+        self::assertTrue($first->save());
+        self::assertTrue($second->save());
+
+        self::assertTrue($first->refresh());
+        self::assertTrue($second->refresh());
+        self::assertSame(0, (int) $first->show_content);
+        self::assertSame(1, (int) $second->show_content);
+        self::assertSame(1, (int) Carousel::find()->where(['show_content' => 1])->count());
     }
 }

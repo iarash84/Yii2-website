@@ -7,6 +7,7 @@ use frontend\models\Carousel;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\BadRequestHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
 use common\components\SecureUpload;
@@ -23,8 +24,7 @@ class CarouselController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['post'],
-                    'up' => ['post'],
-                    'down' => ['post'],
+                    'reorder' => ['post'],
                 ],
             ],
         ];
@@ -37,7 +37,8 @@ class CarouselController extends Controller
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => Carousel::find()->orderBy('sort_order'),
+            'query' => Carousel::find()->orderBy(['sort_order' => SORT_ASC, 'id' => SORT_ASC]),
+            'pagination' => false,
         ]);
 
         return $this->render('index', [
@@ -52,34 +53,24 @@ class CarouselController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Carousel;
+        $model = new Carousel(['status' => 1]);
 
         if ($model->load(Yii::$app->request->post())) {
+            $upload = UploadedFile::getInstance($model, 'image');
+            if ($upload !== null) {
+                $model->image = SecureUpload::storeImage($upload);
+                $model->user_id = Yii::$app->user->id;
+                $model->sort_order = ((int) Carousel::find()->max('sort_order')) + 10;
 
-
-            $model->image = UploadedFile::getInstance($model, 'image');
-
-            if (!empty($model->image)) {
-                // generate a unique file name
-                $file_upload_path = SecureUpload::storeImage($model->image);
-                $model->image =  $file_upload_path;
-                $model->status = "1";
-                $model->user_id = Yii::$app->user->identity->getId();
-                $maxOrder = Carousel::find()->select('MAX([[sort_order]])')->scalar();
-                $model->sort_order = ++$maxOrder;
-
-                $model->save();
+                if ($this->saveModel($model)) {
                 Yii::$app->session->setFlash('success', Yii::t('app', 'Carousel created'));
                 return $this->redirect(['index']);
-
+                }
+            } else {
+                $model->addError('image', Yii::t('app', 'Image is required.'));
             }
-
-            return $this->refresh();
-        } else {
-            return $this->render('create', [
-                'model' => $model
-            ]);
         }
+        return $this->render('create', ['model' => $model]);
     }
 
     /**
@@ -91,85 +82,47 @@ class CarouselController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $image = $model->image;
+        $oldImage = $model->image;
         if ($model->load(Yii::$app->request->post())) {
-
-            if (!empty(UploadedFile::getInstance($model, 'image'))) {
-                if(!empty($image) && file_exists(Yii::getAlias('@webroot/' . $image)))
-                    unlink(Yii::getAlias('@webroot/' . $image));
-
-                $model->image = UploadedFile::getInstance($model, 'image');
-
-
-                $file_upload_path = SecureUpload::storeImage($model->image);
-                $model->image =  $file_upload_path;
-            }else{
-                $model->image = $image;
-            }
-
-            $model->save();
-            Yii::$app->session->setFlash('success', Yii::t('app', 'Carousel updated Successfully'));
-            return $this->redirect(['index']);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
-        }
-    }
-
-    /**
-     * @param $id
-     * @return \yii\web\Response
-     */
-    public function actionUp($id)
-    {
-        return $this->move($id, 'up');
-    }
-
-    /**
-     * @param $id
-     * @return \yii\web\Response
-     */
-    public function actionDown($id)
-    {
-        return $this->move($id, 'down');
-    }
-
-    /**
-     * @param $id
-     * @param $direction
-     * @return \yii\web\Response
-     */
-    private function move($id, $direction)
-    {
-
-        if (($model = Carousel::findOne($id))) {
-            if ($direction === 'up') {
-                $eq = '<';
-                $orderDir = 'DESC';
-            } else {
-                $eq = '>';
-                $orderDir = 'ASC';
-            }
-
-            $query = Carousel::find()->orderBy('sort_order ' . $orderDir)->limit(1);
-
-            $where = [$eq, 'sort_order', $model->sort_order];
-
-            $modelSwap = $query->where($where)->one();
-
-            if (!empty($modelSwap)) {
-
-                $newOrderNum = $modelSwap->sort_order;
-
-                $modelSwap->sort_order = $model->sort_order;
-                $modelSwap->save();
-
-                $model->sort_order = $newOrderNum;
-                $model->save();
+            $upload = UploadedFile::getInstance($model, 'image');
+            $model->image = $upload === null ? $oldImage : SecureUpload::storeImage($upload);
+            if ($this->saveModel($model)) {
+                if ($upload !== null) {
+                    $this->deleteImage($oldImage);
+                }
+                Yii::$app->session->setFlash('success', Yii::t('app', 'Carousel updated Successfully'));
+                return $this->redirect(['index']);
             }
         }
-        return $this->redirect(['index']);
+        return $this->render('update', ['model' => $model]);
+    }
+
+    /**
+     * @param $id
+     * @return \yii\web\Response
+     */
+    public function actionReorder()
+    {
+        $ids = json_decode((string) Yii::$app->request->post('ids'), true);
+        if (!is_array($ids) || $ids === [] || count($ids) !== count(array_unique(array_map('strval', $ids)))) {
+            throw new BadRequestHttpException(Yii::t('app', 'Invalid carousel order.'));
+        }
+        $ids = array_map('intval', $ids);
+        $models = Carousel::find()->where(['id' => $ids])->indexBy('id')->all();
+        if (count($models) !== count($ids) || (int) Carousel::find()->count() !== count($ids)) {
+            throw new BadRequestHttpException(Yii::t('app', 'Invalid carousel order.'));
+        }
+        $transaction = Yii::$app->db->beginTransaction();
+        try {
+            foreach ($ids as $position => $id) {
+                $models[$id]->updateAttributes(['sort_order' => ($position + 1) * 10]);
+            }
+            $transaction->commit();
+        } catch (\Throwable $exception) {
+            $transaction->rollBack();
+            throw $exception;
+        }
+        return $this->asJson(['success' => true]);
     }
 
 
@@ -182,9 +135,7 @@ class CarouselController extends Controller
     public function actionDelete($id)
     {
         $model = $this->findModel($id);
-        $imagePath = Yii::getAlias('@webroot/upload/image/' . basename($model->image));
-        if (!empty($model->image) && file_exists($imagePath))
-            unlink($imagePath);
+        $this->deleteImage($model->image);
         $model->delete();
 
         return $this->redirect(['index']);
@@ -203,6 +154,33 @@ class CarouselController extends Controller
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+
+    private function saveModel(Carousel $model): bool
+    {
+        $transaction = Yii::$app->db->beginTransaction();
+        try {
+            if (!$model->save()) {
+                $transaction->rollBack();
+                return false;
+            }
+            $transaction->commit();
+            return true;
+        } catch (\Throwable $exception) {
+            $transaction->rollBack();
+            throw $exception;
+        }
+    }
+
+    private function deleteImage(?string $image): void
+    {
+        if ($image === null || $image === '') {
+            return;
+        }
+        $path = Yii::getAlias('@webroot/' . ltrim($image, '/'));
+        if (is_file($path)) {
+            unlink($path);
         }
     }
 }

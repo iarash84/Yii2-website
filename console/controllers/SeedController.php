@@ -171,8 +171,13 @@ class SeedController extends Controller
             'user_id' => $userId,
             'image' => 'img/portfolio/hero-studio.webp',
             'link' => '',
+            'primary_button_label' => '',
+            'secondary_link' => '',
+            'secondary_button_label' => '',
             'title' => $carouselTitle,
             'text' => '<p>طراحی و توسعه محصولاتی که برای رشد کسب‌وکار ساخته شده‌اند.</p>',
+            'show_content' => 1,
+            'eyebrow' => '',
             'sort_order' => 1,
             'status' => 1,
         ];

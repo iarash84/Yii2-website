@@ -336,6 +336,31 @@
         faqSorter.addEventListener('dragover', function (event) { event.preventDefault(); const target = event.target.closest('[data-faq-id]'); if (movingFaq && target && target !== movingFaq) faqSorter.insertBefore(movingFaq, target); });
     }
 
+    const carouselSorter = document.querySelector('[data-carousel-sorter]');
+    if (carouselSorter) {
+        const state = document.querySelector('[data-carousel-save-state]');
+        let movingSlide = null;
+        const saveCarouselOrder = function () {
+            const body = new URLSearchParams();
+            body.set('ids', JSON.stringify(Array.from(carouselSorter.querySelectorAll('[data-carousel-id]')).map(row => Number(row.dataset.carouselId))));
+            body.set(carouselSorter.dataset.csrfParam, carouselSorter.dataset.csrfToken);
+            if (state) state.textContent = '…';
+            fetch(carouselSorter.dataset.saveUrl, {method: 'POST', headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'}, body: body.toString()})
+                .then(function (response) { if (!response.ok) throw new Error(); return response.json(); })
+                .then(function () { if (state) state.textContent = '✓'; })
+                .catch(function () { if (state) state.textContent = '!'; });
+        };
+        carouselSorter.querySelectorAll('[data-carousel-id]').forEach(function (row) {
+            row.addEventListener('dragstart', function () { movingSlide = row; row.classList.add('is-dragging'); });
+            row.addEventListener('dragend', function () { row.classList.remove('is-dragging'); movingSlide = null; saveCarouselOrder(); });
+        });
+        carouselSorter.addEventListener('dragover', function (event) {
+            event.preventDefault();
+            const target = event.target.closest('[data-carousel-id]');
+            if (movingSlide && target && target !== movingSlide) carouselSorter.insertBefore(movingSlide, target);
+        });
+    }
+
     document.querySelectorAll('[data-admin-tabs]').forEach(function (tabs) {
         const buttons = Array.from(tabs.querySelectorAll('[data-tab-target]'));
         const panels = Array.from(tabs.querySelectorAll('[data-tab-panel]'));
