@@ -21,6 +21,7 @@
 - ساختار مدیریت در module مستقل `frontend/modules/admin` یکپارچه شد.
 - ساختار دیتابیس به migrationهای `utf8mb4` و نام‌گذاری `snake_case` منتقل شد.
 - ارسال ایمیل از SwiftMailer متروک به Symfony Mailer رسمی Yii منتقل شد.
+- تشخیص PHP CLI در Installer وب برای Apache ویندوز اصلاح و اجرای migration در برابر قفل‌شدن pipe مقاوم شد.
 
 ### حذف‌شده
 

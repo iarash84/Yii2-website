@@ -33,6 +33,7 @@ class InstallerService
             'OpenSSL' => extension_loaded('openssl'),
             'Fileinfo' => extension_loaded('fileinfo'),
             'Process execution' => function_exists('proc_open'),
+            'PHP CLI' => $this->phpCliBinary() !== null,
         ];
         foreach ($this->writablePaths() as $path) {
             $checks['Writable: ' . $this->relative($path)] = is_dir($path) && is_writable($path);
@@ -146,21 +147,64 @@ class InstallerService
         }
     }
 
+    public function phpCliBinary(): ?string
+    {
+        $configured = trim((string) getenv('PHP_CLI_BINARY'));
+        $executable = PHP_OS_FAMILY === 'Windows' ? 'php.exe' : 'php';
+        $loadedConfiguration = php_ini_loaded_file();
+        $extensionDirectory = (string) ini_get('extension_dir');
+        $candidates = array_filter([
+            $configured,
+            $loadedConfiguration ? dirname($loadedConfiguration) . DIRECTORY_SEPARATOR . $executable : null,
+            $extensionDirectory !== '' ? dirname($extensionDirectory) . DIRECTORY_SEPARATOR . $executable : null,
+            PHP_BINDIR . DIRECTORY_SEPARATOR . $executable,
+            PHP_SAPI === 'cli' ? PHP_BINARY : null,
+        ]);
+        foreach (array_unique($candidates) as $candidate) {
+            if (is_file($candidate) && (PHP_OS_FAMILY === 'Windows' || is_executable($candidate))) {
+                return $candidate;
+            }
+        }
+
+        return null;
+    }
+
     private function runYii(array $arguments, array $environment): string
     {
-        $command = array_merge([PHP_BINARY, $this->root . '/yii'], $arguments);
-        $pipes = [];
-        $process = proc_open($command, [1 => ['pipe', 'w'], 2 => ['pipe', 'w']], $pipes, $this->root, array_merge(getenv(), $environment, [
+        $binary = $this->phpCliBinary();
+        if ($binary === null) {
+            throw new RuntimeException('PHP CLI was not found. Set PHP_CLI_BINARY to the full path of the PHP CLI executable.');
+        }
+        $command = array_merge([$binary, $this->root . '/yii'], $arguments);
+        $outputFile = tempnam($this->root . '/console/runtime', 'installer-out-');
+        $errorFile = tempnam($this->root . '/console/runtime', 'installer-err-');
+        if ($outputFile === false || $errorFile === false) {
+            if ($outputFile !== false) {
+                @unlink($outputFile);
+            }
+            if ($errorFile !== false) {
+                @unlink($errorFile);
+            }
+            throw new RuntimeException('The installer could not create temporary command output files.');
+        }
+        $environmentVariables = getenv();
+        $environmentVariables = is_array($environmentVariables) ? $environmentVariables : [];
+        $process = proc_open($command, [
+            1 => ['file', $outputFile, 'w'],
+            2 => ['file', $errorFile, 'w'],
+        ], $pipes, $this->root, array_merge($environmentVariables, $environment, [
             'YII_ENV' => 'prod', 'YII_DEBUG' => '0',
         ]));
         if (!is_resource($process)) {
+            @unlink($outputFile);
+            @unlink($errorFile);
             throw new RuntimeException('The installation command could not be started.');
         }
-        $output = stream_get_contents($pipes[1]);
-        $error = stream_get_contents($pipes[2]);
-        fclose($pipes[1]);
-        fclose($pipes[2]);
         $exitCode = proc_close($process);
+        $output = (string) file_get_contents($outputFile);
+        $error = (string) file_get_contents($errorFile);
+        @unlink($outputFile);
+        @unlink($errorFile);
         if ($exitCode !== 0) {
             throw new RuntimeException(trim($error ?: $output) ?: 'The installation command failed.');
         }

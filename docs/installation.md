@@ -22,6 +22,12 @@ Document Root را روی `frontend/web` تنظیم و `/install.php` را با�
 
 پس از پایان، وجود `.install.lock` را بررسی کنید. این فایل نباید حذف یا در Git ثبت شود.
 
+در Apache ویندوز، Installer مسیر `php.exe` را از `PHP_BINDIR` پیدا می‌کند. اگر PHP وب و PHP خط فرمان در مسیرهای جدا نصب شده‌اند، مسیر کامل CLI را پیش از شروع در `.env` یا متغیر محیطی مشخص کنید:
+
+```dotenv
+PHP_CLI_BINARY="C:\xampp\php\php.exe"
+```
+
 ## نصب CLI
 
 ```powershell

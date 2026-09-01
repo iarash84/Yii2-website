@@ -53,4 +53,14 @@ class InstallerServiceTest extends TestCase
         $this->expectException(RuntimeException::class);
         $installer->validateAdministrator(['username' => 'admin', 'email' => 'admin@example.test', 'password' => 'weak']);
     }
+
+    public function testPhpCliBinaryIsDetectedWithoutUsingWebServerBinary(): void
+    {
+        $installer = new InstallerService($this->root);
+        $binary = $installer->phpCliBinary();
+
+        self::assertNotNull($binary);
+        self::assertFileExists($binary);
+        self::assertMatchesRegularExpression('/^php(?:\.exe)?$/i', basename($binary));
+    }
 }

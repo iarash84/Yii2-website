@@ -6,6 +6,7 @@ use common\installer\InstallerService;
 
 $root = dirname(__DIR__, 2);
 require $root . '/vendor/autoload.php';
+require $root . '/common/config/env.php';
 require $root . '/common/installer/InstallerService.php';
 
 $installer = new InstallerService($root);
@@ -21,6 +22,7 @@ if ($installer->isInstalled()) {
 session_name('website_installer');
 session_set_cookie_params(['httponly' => true, 'samesite' => 'Strict', 'secure' => !empty($_SERVER['HTTPS'])]);
 session_start();
+@set_time_limit(600);
 if (!isset($_SESSION['installer_csrf'])) {
     $_SESSION['installer_csrf'] = bin2hex(random_bytes(32));
 }
