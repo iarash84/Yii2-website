@@ -2,6 +2,7 @@
 
 namespace frontend\models;
 
+use common\components\SmtpTransportFactory;
 use Yii;
 use yii\base\Model;
 
@@ -52,14 +53,14 @@ class EmailSettingsForm extends Model
         $password = $this->smtpPassword !== ''
             ? $this->smtpPassword
             : (string) SystemSetting::getValue('smtp_password', '');
-        $transport = new \Swift_SmtpTransport(
+        $transport = SmtpTransportFactory::create(
             $this->smtpHost,
             (int) $this->smtpPort,
-            $this->smtpEncryption ?: null
+            (string) $this->smtpUsername,
+            $password,
+            (string) $this->smtpEncryption
         );
-        $transport->setUsername((string) $this->smtpUsername);
-        $transport->setPassword($password);
-        $transport->setTimeout(10);
+        $transport->getStream()->setTimeout(10);
         $transport->start();
         $transport->stop();
         return true;

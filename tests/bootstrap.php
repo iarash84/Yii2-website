@@ -36,7 +36,7 @@ $config = yii\helpers\ArrayHelper::merge(
                 'enableCsrfValidation' => false,
             ],
             'mailer' => [
-                'class' => yii\swiftmailer\Mailer::class,
+                'class' => yii\symfonymailer\Mailer::class,
                 'viewPath' => '@common/mail',
                 'useFileTransport' => true,
             ],

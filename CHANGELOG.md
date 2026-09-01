@@ -20,6 +20,7 @@
 - رابط عمومی و پنل با Tailwind CSS 4، daisyUI 5 و Design System داخلی بازطراحی شد.
 - ساختار مدیریت در module مستقل `frontend/modules/admin` یکپارچه شد.
 - ساختار دیتابیس به migrationهای `utf8mb4` و نام‌گذاری `snake_case` منتقل شد.
+- ارسال ایمیل از SwiftMailer متروک به Symfony Mailer رسمی Yii منتقل شد.
 
 ### حذف‌شده
 

@@ -2,6 +2,7 @@
 
 namespace frontend\services;
 
+use common\components\SmtpTransportFactory;
 use frontend\models\SystemSetting;
 use Yii;
 
@@ -37,6 +38,12 @@ class NotificationService
             return;
         }
         Yii::$app->mailer->useFileTransport = filter_var(SystemSetting::getValue('mail_file_transport', '1'), FILTER_VALIDATE_BOOLEAN);
-        Yii::$app->mailer->setTransport(['class' => 'Swift_SmtpTransport', 'host' => $host, 'username' => SystemSetting::getValue('smtp_username'), 'password' => SystemSetting::getValue('smtp_password'), 'port' => (int) SystemSetting::getValue('smtp_port', 587), 'encryption' => SystemSetting::getValue('smtp_encryption', 'tls') ?: null]);
+        Yii::$app->mailer->setTransport(SmtpTransportFactory::create(
+            $host,
+            (int) SystemSetting::getValue('smtp_port', 587),
+            SystemSetting::getValue('smtp_username'),
+            SystemSetting::getValue('smtp_password'),
+            SystemSetting::getValue('smtp_encryption', 'tls')
+        ));
     }
 }

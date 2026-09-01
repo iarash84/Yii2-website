@@ -9,7 +9,7 @@ return [
             'charset' => 'utf8mb4',
         ],
         'mailer' => [
-            'class' => 'yii\swiftmailer\Mailer',
+            'class' => 'yii\symfonymailer\Mailer',
             'viewPath' => '@common/mail',
             'useFileTransport' => filter_var(getenv('MAIL_USE_FILE_TRANSPORT') ?: '0', FILTER_VALIDATE_BOOLEAN),
         ],

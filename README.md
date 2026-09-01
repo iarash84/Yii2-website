@@ -78,6 +78,7 @@
 | Tailwind CSS 4 | تولید CSS بهینه و ابزارهای چیدمان |
 | daisyUI 5 | اجزایی مانند دکمه، کارت، Modal، Tab و Toggle |
 | Design System داخلی | رنگ، تایپوگرافی، فاصله و رفتار هماهنگ RTL/LTR |
+| Symfony Mailer | ارسال SMTP و ایمیل‌های سیستمی از طریق افزونه رسمی Yii |
 | JavaScript بدون فریم‌ورک | اسلایدشو، Drag & Drop، Modal و انتخاب پوسته |
 | PHPUnit 10 | تست‌های واحد و یکپارچه |
 | PHPStan و PHP_CodeSniffer | تحلیل ایستا و کنترل شیوه نگارش کد |
