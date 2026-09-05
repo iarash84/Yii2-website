@@ -16,7 +16,9 @@ class InstallerService
 
     public function lockPath(): string
     {
-        return $this->root . '/.install.lock';
+        $configured = trim((string) getenv('INSTALL_LOCK_FILE'));
+
+        return $configured !== '' ? $configured : $this->root . '/.install.lock';
     }
 
     public function isInstalled(): bool
@@ -38,8 +40,11 @@ class InstallerService
         foreach ($this->writablePaths() as $path) {
             $checks['Writable: ' . $this->relative($path)] = is_dir($path) && is_writable($path);
         }
-        $checks['Writable: project configuration'] = is_writable($this->root)
-            && (!is_file($this->root . '/.env') || is_writable($this->root . '/.env'));
+        $environmentFile = $this->environmentPath();
+        $configurationDirectory = dirname($environmentFile);
+        $checks['Writable: project configuration'] = is_dir($configurationDirectory)
+            && is_writable($configurationDirectory)
+            && (!is_file($environmentFile) || is_writable($environmentFile));
         return $checks;
     }
 
@@ -135,9 +140,9 @@ class InstallerService
         foreach ($values as $name => $value) {
             $lines[] = $name . '=' . $this->quoteEnvironmentValue((string) $value) . "\n";
         }
-        $temporary = $this->root . '/.env.installing';
-        $target = $this->root . '/.env';
-        $backup = $this->root . '/.env.installer-backup';
+        $target = $this->environmentPath();
+        $temporary = $target . '.installing';
+        $backup = $target . '.installer-backup';
         if (file_put_contents($temporary, implode('', $lines), LOCK_EX) === false) {
             throw new RuntimeException('The local environment file could not be written.');
         }
@@ -288,6 +293,13 @@ class InstallerService
     private function writablePaths(): array
     {
         return [$this->root . '/frontend/runtime', $this->root . '/console/runtime', $this->root . '/frontend/web/assets', $this->root . '/frontend/web/upload', $this->root . '/storage/resumes'];
+    }
+
+    private function environmentPath(): string
+    {
+        $configured = trim((string) getenv('APP_ENV_FILE'));
+
+        return $configured !== '' ? $configured : $this->root . '/.env';
     }
 
     private function quoteEnvironmentValue(string $value): string

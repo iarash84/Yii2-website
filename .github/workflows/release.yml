@@ -1,0 +1,149 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+  packages: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  validate-tag:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.release.outputs.version }}
+      image: ${{ steps.release.outputs.image }}
+      prerelease: ${{ steps.release.outputs.prerelease }}
+    steps:
+      - name: Validate semantic version tag
+        id: release
+        shell: bash
+        run: |
+          tag="${GITHUB_REF_NAME}"
+          if [[ ! "${tag}" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$ ]]; then
+            echo "Tag ${tag} is not a supported semantic version (for example v1.2.3)." >&2
+            exit 1
+          fi
+          image="ghcr.io/${GITHUB_REPOSITORY,,}"
+          echo "version=${tag#v}" >> "${GITHUB_OUTPUT}"
+          echo "image=${image}" >> "${GITHUB_OUTPUT}"
+          if [[ "${tag}" == *-* ]]; then
+            echo "prerelease=true" >> "${GITHUB_OUTPUT}"
+          else
+            echo "prerelease=false" >> "${GITHUB_OUTPUT}"
+          fi
+
+  quality:
+    needs: validate-tag
+    uses: ./.github/workflows/ci.yml
+
+  project-release:
+    needs: [validate-tag, quality]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout tagged source
+        uses: actions/checkout@v6.0.2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          cache: npm
+
+      - name: Build production CSS
+        run: |
+          npm ci
+          npm run build
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@2.35.3
+        with:
+          php-version: "8.2"
+          extensions: mbstring, intl, pdo_mysql, fileinfo, gd, zip
+          coverage: none
+          tools: composer:v2
+
+      - name: Install production dependencies
+        run: composer install --no-dev --no-interaction --no-progress --prefer-dist --optimize-autoloader
+
+      - name: Build release archives
+        env:
+          RELEASE_VERSION: ${{ needs.validate-tag.outputs.version }}
+        shell: bash
+        run: |
+          package="Yii2-KamanCms-${RELEASE_VERSION}"
+          mkdir -p "dist/${package}"
+          rsync -a ./ "dist/${package}/" \
+            --exclude '.git/' \
+            --exclude '.github/' \
+            --exclude '.env' \
+            --exclude '.install.lock' \
+            --exclude 'dist/' \
+            --exclude 'node_modules/' \
+            --exclude 'tests/'
+          printf '%s\n' "${RELEASE_VERSION}" > "dist/${package}/VERSION"
+          (cd dist && zip -q -r "${package}.zip" "${package}")
+          tar -C dist -czf "dist/${package}.tar.gz" "${package}"
+          (cd dist && sha256sum "${package}.zip" "${package}.tar.gz" > SHA256SUMS)
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v3
+        with:
+          name: Yii2-KamanCms ${{ github.ref_name }}
+          generate_release_notes: true
+          prerelease: ${{ needs.validate-tag.outputs.prerelease == 'true' }}
+          files: |
+            dist/Yii2-KamanCms-${{ needs.validate-tag.outputs.version }}.zip
+            dist/Yii2-KamanCms-${{ needs.validate-tag.outputs.version }}.tar.gz
+            dist/SHA256SUMS
+
+  container-release:
+    needs: [validate-tag, quality]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout tagged source
+        uses: actions/checkout@v6.0.2
+
+      - name: Setup QEMU
+        uses: docker/setup-qemu-action@v4
+
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generate image metadata
+        id: meta
+        uses: docker/metadata-action@v6
+        with:
+          images: ${{ needs.validate-tag.outputs.image }}
+          tags: |
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+            type=raw,value=latest,enable=${{ needs.validate-tag.outputs.prerelease == 'false' }}
+
+      - name: Build and publish container image
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: ./Containerfile
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          provenance: mode=max
+          sbom: true

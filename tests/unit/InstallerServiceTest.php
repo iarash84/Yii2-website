@@ -49,6 +49,36 @@ class InstallerServiceTest extends TestCase
         self::assertStringNotContainsString('secret', file_get_contents($installer->lockPath()));
     }
 
+    public function testEnvironmentAndLockPathsCanBeStoredOutsideProjectRoot(): void
+    {
+        $configurationDirectory = $this->root . '/persistent/config';
+        mkdir($configurationDirectory, 0777, true);
+        $environmentFile = $configurationDirectory . '/application.env';
+        $lockFile = $configurationDirectory . '/installation.lock';
+        putenv('APP_ENV_FILE=' . $environmentFile);
+        putenv('INSTALL_LOCK_FILE=' . $lockFile);
+
+        try {
+            $installer = new InstallerService($this->root);
+            self::assertSame($environmentFile, getenv('APP_ENV_FILE'));
+            self::assertSame($lockFile, $installer->lockPath());
+            $installer->writeEnvironment(
+                ['host' => 'db', 'port' => 3306, 'name' => 'website', 'user' => 'app', 'password' => 'secret'],
+                ['language' => 'fa', 'url' => 'https://example.test']
+            );
+            $installer->lock(['language' => 'fa']);
+            clearstatcache(true, $environmentFile);
+            clearstatcache(true, $lockFile);
+
+            self::assertFileExists($environmentFile);
+            self::assertTrue($installer->isInstalled());
+            self::assertTrue($installer->requirements()['Writable: project configuration']);
+        } finally {
+            putenv('APP_ENV_FILE');
+            putenv('INSTALL_LOCK_FILE');
+        }
+    }
+
     public function testAdministratorPasswordPolicyIsEnforced(): void
     {
         $installer = new InstallerService($this->root);

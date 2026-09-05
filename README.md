@@ -282,6 +282,7 @@ tests/                  تست‌های واحد و یکپارچه
 - [نصب](docs/installation.md)
 - [پیکربندی](docs/configuration.md)
 - [استقرار](docs/deployment.md)
+- [انتشار نسخه و کانتینر](docs/release.md)
 - [ارتقا](docs/update.md)
 - [امنیت](docs/security.md)
 - [چندزبانه‌سازی](docs/multilingual.md)

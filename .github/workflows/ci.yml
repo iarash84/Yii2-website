@@ -1,6 +1,7 @@
 name: CI
 
 on:
+  workflow_call:
   pull_request:
   push:
     branches: [main, master]
@@ -27,7 +28,7 @@ jobs:
     env:
       TEST_DB_HOST: 127.0.0.1
       TEST_DB_PORT: 3306
-      TEST_DB_NAME: yii2_website_test
+      TEST_DB_NAME: yii2_kamancms_test
       TEST_DB_USER: root
       TEST_DB_PASSWORD: ""
 
